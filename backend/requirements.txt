@@ -1,0 +1,20 @@
+# Framework
+Django==5.0.6
+djangorestframework==3.15.2
+djangorestframework-simplejwt==5.3.1
+django-cors-headers==4.4.0
+django-filter==24.2
+
+# Base de données
+psycopg2-binary==2.9.9
+
+# Utilitaires
+python-dotenv==1.0.1
+openpyxl==3.1.5
+
+# Dev
+pytest==8.3.5
+pytest-django==4.12.0
+
+# Prod
+gunicorn==22.0.0

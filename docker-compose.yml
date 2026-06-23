@@ -1,0 +1,46 @@
+version: '3.8'
+
+services:
+  db:
+    image: postgres:16
+    environment:
+      POSTGRES_DB: ekogrh
+      POSTGRES_USER: ekogrh_user
+      POSTGRES_PASSWORD: ekogrh_pass
+    volumes:
+      - ekogrh_db:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ekogrh_user -d ekogrh"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  backend:
+    build: ./backend
+    depends_on:
+      db:
+        condition: service_healthy
+    environment:
+      - DEBUG=False
+      - DB_HOST=db
+      - DB_NAME=ekogrh
+      - DB_USER=ekogrh_user
+      - DB_PASSWORD=ekogrh_pass
+      - DB_PORT=5432
+      - SECRET_KEY=change-me-in-production-xyz123
+      - ALLOWED_HOSTS=localhost,127.0.0.1,backend
+      - CORS_ALLOWED_ORIGINS=http://localhost:5173,http://localhost
+    ports:
+      - "8000:8000"
+
+  frontend:
+    build: ./frontend
+    depends_on:
+      - backend
+    ports:
+      - "5173:80"
+
+volumes:
+  ekogrh_db:
