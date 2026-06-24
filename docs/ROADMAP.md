@@ -70,13 +70,13 @@
 
 | # | Tâche | Statut |
 |---|-------|--------|
-| 28 | Regrouper la navigation par module | 📋 |
-| 29 | Feedback après sauvegarde sur toutes les pages | 📋 |
-| 30 | Boutons Supprimer sur CRUD | 📋 |
-| 31 | Filtres sur Logs, Missions, Historique | 📋 |
-| 32 | Formulaire édition Sites, Tâches, Missions | 📋 |
+| 28 | Regrouper la navigation par module | ✅ |
+| 29 | Feedback après sauvegarde sur toutes les pages | ✅ |
+| 30 | Boutons Supprimer sur CRUD | ✅ |
+| 31 | Filtres sur Logs, Missions, Historique | ✅ |
+| 32 | Formulaire édition Sites, Tâches, Missions | ✅ |
 | 33 | Skeleton loaders + états vides avec CTA | 📋 |
-| 34 | Correction login (icône SVG, design) | 📋 |
+| 34 | Correction login (icône SVG, design) | ✅ |
 
 ---
 
