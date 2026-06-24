@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { useParams, useNavigate } from "react-router-dom";
+import { useParams, useNavigate, Link } from "react-router-dom";
 import api from "../api/client";
 import { UserCircleIcon } from "../components/Icon";
 
@@ -132,12 +132,18 @@ export default function EmployeDetail() {
                         <h3 className="text-sm font-semibold text-sand-500 uppercase">
                             Actions
                         </h3>
-                        <button className="w-full px-4 py-2 bg-forest-500 hover:bg-forest-600 text-white text-sm font-medium rounded-lg transition-colors">
+                        <button
+                            className="w-full px-4 py-2 bg-forest-500 hover:bg-forest-600 text-white text-sm font-medium rounded-lg transition-colors"
+                            onClick={() => navigate(`/employes/nouveau`)}
+                        >
                             Modifier
                         </button>
-                        <button className="w-full px-4 py-2 border border-sand-200 hover:bg-sand-50 text-sand-700 text-sm font-medium rounded-lg transition-colors">
+                        <Link
+                            to="/historique"
+                            className="block w-full px-4 py-2 border border-sand-200 hover:bg-sand-50 text-sand-700 text-sm font-medium rounded-lg transition-colors text-center"
+                        >
                             Historique contrat
-                        </button>
+                        </Link>
                         <button className="w-full px-4 py-2 border border-sand-200 hover:bg-sand-50 text-sand-700 text-sm font-medium rounded-lg transition-colors">
                             Certifications
                         </button>
