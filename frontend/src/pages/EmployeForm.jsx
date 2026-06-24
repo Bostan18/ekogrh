@@ -54,10 +54,14 @@ export default function EmployeForm() {
         const payload = { ...form };
         payload.salaire_mensuel = payload.salaire_mensuel
             ? parseFloat(payload.salaire_mensuel)
-            : undefined;
+            : null;
         payload.taux_journalier = payload.taux_journalier
             ? parseFloat(payload.taux_journalier)
-            : undefined;
+            : null;
+        // Remove empty optional fields
+        Object.keys(payload).forEach((k) => {
+            if (payload[k] === "" || payload[k] === null) delete payload[k];
+        });
 
         try {
             const { data } = await api.post("/rh/employes/", payload);
