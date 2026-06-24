@@ -59,10 +59,10 @@
 
 | # | Tâche | Statut |
 |---|-------|--------|
-| 24 | Pointage mobile PWA | 📋 |
-| 25 | Bordereaux de paiement PDF | 📋 |
-| 26 | Gestion des utilisateurs | 📋 |
-| 27 | Historique des contrats | 📋 |
+| 24 | Pointage mobile PWA | ⏸️ En attente |
+| 25 | Bordereaux de paiement PDF | ✅ |
+| 26 | Gestion des utilisateurs | ⏸️ En attente |
+| 27 | Historique des contrats | ✅ |
 
 ---
 
