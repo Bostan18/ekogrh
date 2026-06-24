@@ -127,10 +127,9 @@ export default function SiteList() {
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
                         <div>
                             <label className="block text-xs font-semibold text-sand-500 uppercase mb-1">
-                                Code
+                                Code (auto si vide)
                             </label>
                             <input
-                                required
                                 value={form.code}
                                 onChange={(e) =>
                                     setForm({ ...form, code: e.target.value })

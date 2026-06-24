@@ -34,6 +34,17 @@ class Site(TimeStampedModel):
     def __str__(self):
         return f"{self.code} — {self.nom}"
 
+    @classmethod
+    def generate_code(cls):
+        last = cls.objects.order_by("-id").first()
+        num = (last.id + 1) if last else 1
+        return f"SIT-{num:03d}"
+
+    def save(self, *args, **kwargs):
+        if not self.code:
+            self.code = self.generate_code()
+        super().save(*args, **kwargs)
+
 
 class TacheCatalogue(TimeStampedModel):
     TYPE_OBJECTIF_CHOICES = [
@@ -58,6 +69,17 @@ class TacheCatalogue(TimeStampedModel):
 
     def __str__(self):
         return f"{self.code} — {self.libelle}"
+
+    @classmethod
+    def generate_code(cls):
+        last = cls.objects.order_by("-id").first()
+        num = (last.id + 1) if last else 1
+        return f"TAC-{num:03d}"
+
+    def save(self, *args, **kwargs):
+        if not self.code:
+            self.code = self.generate_code()
+        super().save(*args, **kwargs)
 
 
 class LogTravail(TimeStampedModel):

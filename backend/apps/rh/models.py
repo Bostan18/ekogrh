@@ -1,6 +1,7 @@
-from apps.core.models import SoftDeleteModel, TimeStampedModel
 from django.conf import settings
 from django.db import models
+
+from apps.core.models import SoftDeleteModel, TimeStampedModel
 
 
 class Employe(SoftDeleteModel):
@@ -51,6 +52,17 @@ class Employe(SoftDeleteModel):
     def nom_complet(self):
         return f"{self.nom} {self.prenom}"
 
+    @classmethod
+    def generate_code(cls):
+        last = cls.objects.order_by("-id").first()
+        num = (last.id + 1) if last else 1
+        return f"EMP-{num:03d}"
+
+    def save(self, *args, **kwargs):
+        if not self.code:
+            self.code = self.generate_code()
+        super().save(*args, **kwargs)
+
 
 class PresenceJournaliere(TimeStampedModel):
     """Pointage journalier — crucial pour les journaliers."""
@@ -72,7 +84,9 @@ class PresenceJournaliere(TimeStampedModel):
         default="brouillon",
     )
     # Références externes simplifiées (pas de FK vers d'autres apps)
-    projet_ref = models.CharField(max_length=100, blank=True, verbose_name="Projet / Chantier")
+    projet_ref = models.CharField(
+        max_length=100, blank=True, verbose_name="Projet / Chantier"
+    )
     site_ref = models.CharField(max_length=100, blank=True, verbose_name="Site / Lieu")
     notes = models.CharField(max_length=300, blank=True)
     paye_le = models.DateField(null=True, blank=True)
@@ -224,7 +238,9 @@ class MissionMoo(TimeStampedModel):
         related_name="missions_moo",
         limit_choices_to={"type_contrat": "moo"},
     )
-    projet_ref = models.CharField(max_length=100, blank=True, verbose_name="Projet / Chantier")
+    projet_ref = models.CharField(
+        max_length=100, blank=True, verbose_name="Projet / Chantier"
+    )
     description = models.CharField(max_length=300)
     date_debut = models.DateField()
     date_fin = models.DateField()
