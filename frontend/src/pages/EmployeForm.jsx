@@ -18,7 +18,15 @@ const INITIAL = {
     numero_cnps: "",
 };
 
-function InputField({ label, name, type, required, value, onChange }) {
+function InputField({
+    label,
+    name,
+    type,
+    required,
+    value,
+    onChange,
+    disabled,
+}) {
     return (
         <div>
             <label className="block text-xs font-semibold text-sand-500 uppercase mb-1">
@@ -30,7 +38,8 @@ function InputField({ label, name, type, required, value, onChange }) {
                 value={value}
                 onChange={onChange}
                 required={required}
-                className="w-full px-3 py-2 border border-sand-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-forest-500"
+                disabled={disabled}
+                className="w-full px-3 py-2 border border-sand-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-forest-500 disabled:bg-sand-50 disabled:text-sand-500"
             />
         </div>
     );
@@ -138,10 +147,11 @@ export default function EmployeForm() {
 
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
                     <InputField
-                        label="Code (auto si vide)"
+                        label="Code"
                         name="code"
                         value={form.code}
                         onChange={handleChange}
+                        disabled
                     />
                     <InputField
                         label="Nom"
