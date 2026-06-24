@@ -87,7 +87,6 @@ class LogTravail(TimeStampedModel):
         "rh.Employe",
         on_delete=models.CASCADE,
         related_name="logs_travail",
-        limit_choices_to={"type_contrat": "journalier"},
     )
     date = models.DateField()
     site = models.ForeignKey(
