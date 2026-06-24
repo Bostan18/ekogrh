@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import api from "../api/client";
 
 const INITIAL = {
+    code: "",
     nom: "",
     prenom: "",
     type_contrat: "cdi",
@@ -103,6 +104,13 @@ export default function EmployeForm() {
                 )}
 
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
+                    <InputField
+                        label="Code"
+                        name="code"
+                        value={form.code}
+                        onChange={handleChange}
+                        required
+                    />
                     <InputField
                         label="Nom"
                         name="nom"
