@@ -13,6 +13,7 @@ import BulletinList from "./pages/BulletinList";
 import BulletinDetail from "./pages/BulletinDetail";
 import CongesList from "./pages/CongesList";
 import Paiements from "./pages/Paiements";
+import MissionsMoo from "./pages/MissionsMoo";
 
 function ProtectedRoute({ children }) {
     const { isAuthenticated, loading } = useAuthStore();
@@ -58,6 +59,7 @@ export default function App() {
                     <Route path="bulletins/:id" element={<BulletinDetail />} />
                     <Route path="conges" element={<CongesList />} />
                     <Route path="paiements" element={<Paiements />} />
+                    <Route path="missions" element={<MissionsMoo />} />
                 </Route>
             </Routes>
         </BrowserRouter>
