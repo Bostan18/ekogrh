@@ -21,10 +21,16 @@ export default function Dashboard() {
                     api.get("/rh/presences/"),
                     api.get("/rh/presences/anomalies/"),
                 ]);
+                const results = employes.data.results || employes.data;
+                const masse = results.reduce(
+                    (sum, e) => sum + (parseFloat(e.salaire_mensuel) || 0),
+                    0,
+                );
                 setStats({
                     nbEmployes: employes.data.count,
                     nbPresences: presences.data.count,
                     nbAnomalies: anomalies.data.total,
+                    masseSalariale: masse,
                 });
             } catch (err) {
                 console.error("Erreur chargement dashboard", err);
@@ -56,7 +62,9 @@ export default function Dashboard() {
         },
         {
             label: "Masse salariale",
-            value: "— FCFA",
+            value: stats?.masseSalariale
+                ? `${stats.masseSalariale.toLocaleString()} FCFA`
+                : "— FCFA",
             Icon: CurrencyIcon,
             color: "bg-blue-50 text-blue-700",
         },
