@@ -1,5 +1,13 @@
 import { useState, useEffect } from "react";
 import api from "../api/client";
+import {
+    UsersIcon,
+    ClipboardIcon,
+    ExclamationIcon,
+    CurrencyIcon,
+    DocumentIcon,
+    UmbrellaIcon,
+} from "../components/Icon";
 
 export default function Dashboard() {
     const [stats, setStats] = useState(null);
@@ -31,25 +39,25 @@ export default function Dashboard() {
         {
             label: "Employés actifs",
             value: stats?.nbEmployes ?? "—",
-            icon: "👥",
+            Icon: UsersIcon,
             color: "bg-forest-50 text-forest-700",
         },
         {
             label: "Pointages du jour",
             value: stats?.nbPresences ?? "—",
-            icon: "📋",
+            Icon: ClipboardIcon,
             color: "bg-gold-50 text-gold-700",
         },
         {
             label: "Anomalies",
             value: stats?.nbAnomalies ?? "—",
-            icon: "⚠️",
+            Icon: ExclamationIcon,
             color: "bg-red-50 text-red-700",
         },
         {
             label: "Masse salariale",
             value: "— FCFA",
-            icon: "💰",
+            Icon: CurrencyIcon,
             color: "bg-blue-50 text-blue-700",
         },
     ];
@@ -76,9 +84,9 @@ export default function Dashboard() {
                     >
                         <div className="flex items-center justify-between mb-3">
                             <span
-                                className={`inline-block px-3 py-1 text-xl rounded-lg ${kpi.color || ""}`}
+                                className={`inline-flex items-center justify-center w-10 h-10 rounded-lg ${kpi.color || ""}`}
                             >
-                                {kpi.icon}
+                                <kpi.Icon className="w-5 h-5" />
                             </span>
                         </div>
                         <p className="text-2xl font-display font-bold text-ink">
@@ -102,26 +110,30 @@ export default function Dashboard() {
                             {
                                 label: "Pointage du jour",
                                 to: "/pointage",
-                                icon: "📋",
+                                Icon: ClipboardIcon,
                             },
                             {
                                 label: "Liste des employés",
                                 to: "/employes",
-                                icon: "👥",
+                                Icon: UsersIcon,
                             },
                             {
                                 label: "Bulletins de paie",
                                 to: "/bulletins",
-                                icon: "📄",
+                                Icon: DocumentIcon,
                             },
-                            { label: "Congés", to: "/conges", icon: "🏖" },
+                            {
+                                label: "Congés",
+                                to: "/conges",
+                                Icon: UmbrellaIcon,
+                            },
                         ].map((item) => (
                             <a
                                 key={item.to}
                                 href={item.to}
                                 className="flex items-center gap-2 p-3 rounded-lg bg-sand-50 hover:bg-forest-50 text-sm font-medium text-sand-700 hover:text-forest-700 transition-colors"
                             >
-                                <span>{item.icon}</span>
+                                <item.Icon className="w-4 h-4" />
                                 {item.label}
                             </a>
                         ))}

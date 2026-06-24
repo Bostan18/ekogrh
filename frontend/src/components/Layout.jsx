@@ -1,14 +1,24 @@
 import { useState } from "react";
 import { Outlet, NavLink, useNavigate } from "react-router-dom";
 import useAuthStore from "../store/authStore";
+import {
+    DashboardIcon,
+    UsersIcon,
+    ClipboardIcon,
+    DocumentIcon,
+    UmbrellaIcon,
+    CurrencyIcon,
+    LogoutIcon,
+    MenuIcon,
+} from "./Icon";
 
 const NAV_ITEMS = [
-    { to: "/", label: "Tableau de bord", icon: "📊" },
-    { to: "/employes", label: "Employés", icon: "👥" },
-    { to: "/pointage", label: "Pointage", icon: "📋" },
-    { to: "/bulletins", label: "Bulletins", icon: "📄" },
-    { to: "/conges", label: "Congés", icon: "🏖" },
-    { to: "/paiements", label: "Paiements", icon: "💰" },
+    { to: "/", label: "Tableau de bord", Icon: DashboardIcon },
+    { to: "/employes", label: "Employés", Icon: UsersIcon },
+    { to: "/pointage", label: "Pointage", Icon: ClipboardIcon },
+    { to: "/bulletins", label: "Bulletins", Icon: DocumentIcon },
+    { to: "/conges", label: "Congés", Icon: UmbrellaIcon },
+    { to: "/paiements", label: "Paiements", Icon: CurrencyIcon },
 ];
 
 export default function Layout() {
@@ -48,7 +58,7 @@ export default function Layout() {
                         className={linkClass}
                         onClick={closeSidebar}
                     >
-                        <span className="text-lg">{item.icon}</span>
+                        <item.Icon className="w-5 h-5 flex-shrink-0" />
                         {item.label}
                     </NavLink>
                 ))}
@@ -64,10 +74,10 @@ export default function Layout() {
                     </div>
                     <button
                         onClick={handleLogout}
-                        className="text-sand-400 hover:text-red-500 transition-colors text-lg"
+                        className="text-sand-400 hover:text-red-500 transition-colors"
                         title="Déconnexion"
                     >
-                        🚪
+                        <LogoutIcon className="w-5 h-5" />
                     </button>
                 </div>
             </div>
@@ -104,10 +114,10 @@ export default function Layout() {
                 <div className="lg:hidden flex items-center gap-3 p-4 border-b border-sand-200 bg-white">
                     <button
                         onClick={() => setSidebarOpen(true)}
-                        className="text-sand-600 hover:text-ink text-xl"
+                        className="text-sand-600 hover:text-ink"
                         aria-label="Menu"
                     >
-                        ☰
+                        <MenuIcon className="w-6 h-6" />
                     </button>
                     <h2 className="font-display font-bold text-forest-700 text-lg">
                         <span className="text-forest-500">EKO</span>GRH

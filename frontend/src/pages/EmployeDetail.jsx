@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import api from "../api/client";
+import { UserCircleIcon } from "../components/Icon";
 
 export default function EmployeDetail() {
     const { id } = useParams();
@@ -46,7 +47,7 @@ export default function EmployeDetail() {
                     <div>
                         <div className="flex items-center gap-3">
                             <div className="w-14 h-14 rounded-full bg-forest-100 flex items-center justify-center text-2xl">
-                                👤
+                                <UserCircleIcon className="w-8 h-8" />
                             </div>
                             <div>
                                 <h2 className="text-2xl font-display font-bold text-ink">
