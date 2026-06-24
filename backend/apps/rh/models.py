@@ -261,9 +261,11 @@ class Paiement(TimeStampedModel):
 
     MODE_CHOICES = [
         ("especes", "Espèces"),
-        ("virement", "Virement"),
+        ("orange", "Orange Money"),
+        ("mtn", "MTN Mobile Money"),
+        ("moov", "Moov Money"),
+        ("virement", "Virement bancaire"),
         ("cheque", "Chèque"),
-        ("mobile", "Mobile Money"),
     ]
 
     employe = models.ForeignKey(

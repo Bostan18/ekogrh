@@ -8,9 +8,11 @@ export default function Paiements() {
     const [tab, setTab] = useState("paiements");
     const modeColors = {
         especes: "bg-green-100 text-green-700",
-        virement: "bg-blue-100 text-blue-700",
-        cheque: "bg-purple-100 text-purple-700",
-        mobile: "bg-gold-100 text-gold-700",
+        orange: "bg-orange-100 text-orange-700",
+        mtn: "bg-yellow-100 text-yellow-700",
+        moov: "bg-blue-100 text-blue-700",
+        virement: "bg-purple-100 text-purple-700",
+        cheque: "bg-slate-100 text-slate-700",
     };
 
     useEffect(() => {
