@@ -30,6 +30,7 @@ export default function TacheCatalogueList() {
             libelle: t.libelle,
             tarif_reference: t.tarif_reference || "",
             unite_label: t.unite_label,
+            seuil: t.seuil || "",
         });
     }
 
@@ -83,6 +84,9 @@ export default function TacheCatalogueList() {
                             </th>
                             <th className="text-right px-4 py-3 text-xs font-semibold text-sand-500 uppercase">
                                 Tarif (FCFA)
+                            </th>
+                            <th className="text-right px-4 py-3 text-xs font-semibold text-sand-500 uppercase">
+                                Seuil
                             </th>
                             <th className="text-center px-4 py-3 text-xs font-semibold text-sand-500 uppercase">
                                 Action
@@ -139,6 +143,20 @@ export default function TacheCatalogueList() {
                                                 className="w-24 px-2 py-1 border border-sand-200 rounded text-sm text-right focus:outline-none focus:ring-1 focus:ring-forest-500"
                                             />
                                         </td>
+                                        <td className="px-4 py-3">
+                                            <input
+                                                type="number"
+                                                value={editForm.seuil}
+                                                onChange={(e) =>
+                                                    setEditForm({
+                                                        ...editForm,
+                                                        seuil: e.target.value,
+                                                    })
+                                                }
+                                                className="w-20 px-2 py-1 border border-sand-200 rounded text-sm text-right focus:outline-none focus:ring-1 focus:ring-forest-500"
+                                                placeholder="0"
+                                            />
+                                        </td>
                                         <td className="px-4 py-3 text-center">
                                             <button
                                                 onClick={saveEdit}
@@ -171,6 +189,13 @@ export default function TacheCatalogueList() {
                                                       t.tarif_reference,
                                                   ).toLocaleString()
                                                 : "—"}
+                                        </td>
+                                        <td className="px-4 py-3 text-sm text-right text-sand-500">
+                                            {t.seuil
+                                                ? parseFloat(
+                                                      t.seuil,
+                                                  ).toLocaleString()
+                                                : 0}
                                         </td>
                                         <td className="px-4 py-3 text-center">
                                             <button
