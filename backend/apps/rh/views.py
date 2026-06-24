@@ -304,14 +304,11 @@ class PresenceJournaliereViewSet(viewsets.ModelViewSet):
             type_contrat="journalier", statut="actif", is_deleted=False
         )
         derniers_pointages = {}
-        for p in (
-            PresenceJournaliere.objects.filter(
-                employe__in=journaliers_actifs, date__gte=seuil
-            )
-            .order_by("employe", "-date")
-            .distinct("employe")
-        ):
-            derniers_pointages[p.employe_id] = p.date
+        for p in PresenceJournaliere.objects.filter(
+            employe__in=journaliers_actifs, date__gte=seuil
+        ).order_by("employe", "-date"):
+            if p.employe_id not in derniers_pointages:
+                derniers_pointages[p.employe_id] = p.date
 
         for emp in journaliers_actifs:
             dernier = derniers_pointages.get(emp.id)
