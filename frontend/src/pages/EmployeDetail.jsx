@@ -8,6 +8,17 @@ export default function EmployeDetail() {
     const navigate = useNavigate();
     const [employe, setEmploye] = useState(null);
     const [loading, setLoading] = useState(true);
+    const [msg, setMsg] = useState(null);
+
+    async function handleDelete() {
+        if (!confirm("Supprimer définitivement cet employé ?")) return;
+        try {
+            await api.delete(`/rh/employes/${id}/`);
+            navigate("/employes");
+        } catch {
+            setMsg({ type: "error", text: "Erreur lors de la suppression." });
+        }
+    }
 
     useEffect(() => {
         async function load() {
@@ -146,6 +157,12 @@ export default function EmployeDetail() {
                         </Link>
                         <button className="w-full px-4 py-2 border border-sand-200 hover:bg-sand-50 text-sand-700 text-sm font-medium rounded-lg transition-colors">
                             Certifications
+                        </button>
+                        <button
+                            className="w-full px-4 py-2 border border-red-200 hover:bg-red-50 text-red-600 text-sm font-medium rounded-lg transition-colors"
+                            onClick={handleDelete}
+                        >
+                            Supprimer
                         </button>
                     </div>
                 </div>

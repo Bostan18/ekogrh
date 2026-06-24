@@ -24,6 +24,17 @@ export default function LogTravailList() {
         loadAll();
     }, []);
 
+    async function handleDelete(id) {
+        if (!confirm("Supprimer ce log ?")) return;
+        try {
+            await api.delete(`/operations/logs-travail/${id}/`);
+            setMsg({ type: "success", text: "Log supprimé." });
+            loadAll();
+        } catch {
+            setMsg({ type: "error", text: "Erreur lors de la suppression." });
+        }
+    }
+
     async function loadAll() {
         setLoading(true);
         try {
@@ -304,6 +315,14 @@ export default function LogTravailList() {
                                 <td className="px-4 py-3 text-sm text-right font-medium text-forest-600">
                                     {parseFloat(l.rendement).toFixed(2)}{" "}
                                     {l.tache_unite}/h
+                                </td>
+                                <td className="px-4 py-3">
+                                    <button
+                                        onClick={() => handleDelete(l.id)}
+                                        className="text-red-400 hover:text-red-600 text-xs font-medium transition-colors"
+                                    >
+                                        Suppr.
+                                    </button>
                                 </td>
                             </tr>
                         ))}

@@ -14,6 +14,17 @@ export default function SiteList() {
     const [saving, setSaving] = useState(false);
     const [msg, setMsg] = useState(null);
 
+    async function handleDelete(id) {
+        if (!confirm("Supprimer ce site ?")) return;
+        try {
+            await api.delete(`/operations/sites/${id}/`);
+            setMsg({ type: "success", text: "Site supprimé." });
+            load();
+        } catch {
+            setMsg({ type: "error", text: "Erreur lors de la suppression." });
+        }
+    }
+
     useEffect(() => {
         load();
     }, []);
@@ -193,6 +204,14 @@ export default function SiteList() {
                                 </td>
                                 <td className="px-4 py-3 text-sm text-sand-600">
                                     {s.localisation || "—"}
+                                </td>
+                                <td className="px-4 py-3">
+                                    <button
+                                        onClick={() => handleDelete(s.id)}
+                                        className="text-red-400 hover:text-red-600 text-xs font-medium transition-colors"
+                                    >
+                                        Suppr.
+                                    </button>
                                 </td>
                             </tr>
                         ))}
