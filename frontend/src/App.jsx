@@ -8,6 +8,7 @@ import EmployeList from "./pages/EmployeList";
 import EmployeForm from "./pages/EmployeForm";
 import EmployeDetail from "./pages/EmployeDetail";
 import Pointage from "./pages/Pointage";
+import PointageSemaine from "./pages/PointageSemaine";
 import BulletinList from "./pages/BulletinList";
 import BulletinDetail from "./pages/BulletinDetail";
 import CongesList from "./pages/CongesList";
@@ -49,6 +50,10 @@ export default function App() {
                     <Route path="employes/nouveau" element={<EmployeForm />} />
                     <Route path="employes/:id" element={<EmployeDetail />} />
                     <Route path="pointage" element={<Pointage />} />
+                    <Route
+                        path="pointage-semaine"
+                        element={<PointageSemaine />}
+                    />
                     <Route path="bulletins" element={<BulletinList />} />
                     <Route path="bulletins/:id" element={<BulletinDetail />} />
                     <Route path="conges" element={<CongesList />} />
