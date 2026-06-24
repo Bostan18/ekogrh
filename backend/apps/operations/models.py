@@ -12,7 +12,7 @@ class Site(TimeStampedModel):
         ("autre", "Autre"),
     ]
 
-    code = models.CharField(max_length=20, unique=True)
+    code = models.CharField(max_length=20, unique=True, blank=True)
     nom = models.CharField(max_length=200)
     type_site = models.CharField(
         max_length=20, choices=TYPE_CHOICES, default="chantier"
@@ -55,7 +55,7 @@ class TacheCatalogue(TimeStampedModel):
         ("forfait", "Forfait"),
     ]
 
-    code = models.CharField(max_length=20, unique=True)
+    code = models.CharField(max_length=20, unique=True, blank=True)
     libelle = models.CharField(max_length=200)
     type_objectif = models.CharField(max_length=20, choices=TYPE_OBJECTIF_CHOICES)
     unite_label = models.CharField(max_length=50)

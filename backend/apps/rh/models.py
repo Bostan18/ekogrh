@@ -14,7 +14,7 @@ class Employe(SoftDeleteModel):
     ]
     STATUT_CHOICES = [("actif", "Actif"), ("inactif", "Inactif"), ("conge", "En congé")]
 
-    code = models.CharField(max_length=20, unique=True)  # EMP-001
+    code = models.CharField(max_length=20, unique=True, blank=True)
     nom = models.CharField(max_length=100)
     prenom = models.CharField(max_length=100)
     type_contrat = models.CharField(max_length=20, choices=TYPE_CHOICES)
