@@ -24,14 +24,13 @@ export default function TaskPayroll() {
     }
 
     async function loadPayroll() {
-        if (!siteId) return;
         setLoading(true);
         try {
+            const params = { mois, annee };
+            if (siteId) params.site = siteId;
             const { data } = await api.get(
                 "/operations/logs-travail/task_payroll/",
-                {
-                    params: { site: siteId, mois, annee },
-                },
+                { params },
             );
             setData(data);
         } catch (err) {
@@ -200,7 +199,7 @@ export default function TaskPayroll() {
                                     colSpan={4}
                                     className="px-4 py-3 text-sm font-semibold text-ink text-right"
                                 >
-                                    Total {data.site_nom}
+                                    Total {data.site_nom || "tous sites"}
                                 </td>
                                 <td className="px-4 py-3 text-sm font-bold text-forest-700 text-right">
                                     {data.total.toLocaleString()} F
@@ -216,7 +215,7 @@ export default function TaskPayroll() {
                 </div>
             ) : (
                 <div className="bg-white rounded-xl shadow-card border border-sand-100 p-8 text-center text-sand-500">
-                    Sélectionnez un site pour voir la paie à la tâche.
+                    Aucun log de travail pour cette période.
                 </div>
             )}
         </div>
