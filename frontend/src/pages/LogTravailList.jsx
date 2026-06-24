@@ -91,6 +91,21 @@ export default function LogTravailList() {
         }
     }
 
+    async function handlePayer(id) {
+        if (!confirm("Marquer ce log comme payé ? Un paiement sera créé."))
+            return;
+        try {
+            await api.post(`/operations/logs-travail/${id}/marquer_paye/`);
+            setMsg({
+                type: "success",
+                text: "Log marqué payé et paiement créé.",
+            });
+            loadAll();
+        } catch {
+            setMsg({ type: "error", text: "Erreur lors du paiement." });
+        }
+    }
+
     if (loading)
         return (
             <div className="flex items-center justify-center h-64">
@@ -296,6 +311,9 @@ export default function LogTravailList() {
                             <th className="text-right px-4 py-3 text-xs font-semibold text-sand-500 uppercase">
                                 Rendement
                             </th>
+                            <th className="text-center px-4 py-3 text-xs font-semibold text-sand-500 uppercase">
+                                Statut
+                            </th>
                         </tr>
                     </thead>
                     <tbody className="divide-y divide-sand-50">
@@ -330,6 +348,20 @@ export default function LogTravailList() {
                                 <td className="px-4 py-3 text-sm text-right font-medium text-forest-600">
                                     {parseFloat(l.rendement).toFixed(2)}{" "}
                                     {l.tache_unite}/h
+                                </td>
+                                <td className="px-4 py-3 text-center">
+                                    {l.paye_le ? (
+                                        <span className="inline-block px-2 py-0.5 text-xs font-medium rounded-full bg-green-100 text-green-700">
+                                            Payé le {l.paye_le}
+                                        </span>
+                                    ) : (
+                                        <button
+                                            onClick={() => handlePayer(l.id)}
+                                            className="px-3 py-1 text-xs font-medium rounded-lg bg-gold-100 text-gold-700 hover:bg-gold-200 transition-colors"
+                                        >
+                                            Payer
+                                        </button>
+                                    )}
                                 </td>
                                 <td className="px-4 py-3">
                                     <button

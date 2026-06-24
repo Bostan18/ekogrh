@@ -98,6 +98,7 @@ class LogTravail(TimeStampedModel):
     objectif_realise = models.DecimalField(max_digits=10, decimal_places=2)
     duree_heures = models.DecimalField(max_digits=4, decimal_places=1, default=8.0)
     rendement = models.DecimalField(max_digits=10, decimal_places=2, editable=False)
+    paye_le = models.DateField(null=True, blank=True)
     notes = models.TextField(blank=True)
 
     class Meta:
