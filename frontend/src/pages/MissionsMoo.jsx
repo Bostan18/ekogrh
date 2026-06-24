@@ -8,6 +8,7 @@ export default function MissionsMoo() {
     const [showForm, setShowForm] = useState(false);
     const [saving, setSaving] = useState(false);
     const [error, setError] = useState("");
+    const [editingId, setEditingId] = useState(null);
 
     async function handleDelete(id) {
         if (!confirm("Supprimer cette mission ?")) return;
@@ -62,8 +63,13 @@ export default function MissionsMoo() {
         else delete payload.montant_forfaitaire;
 
         try {
-            await api.post("/rh/missions-moo/", payload);
+            if (editingId) {
+                await api.put(`/rh/missions-moo/${editingId}/`, payload);
+            } else {
+                await api.post("/rh/missions-moo/", payload);
+            }
             setShowForm(false);
+            setEditingId(null);
             setForm({
                 employe: "",
                 description: "",

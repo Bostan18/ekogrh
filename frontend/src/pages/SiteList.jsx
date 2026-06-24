@@ -12,6 +12,7 @@ export default function SiteList() {
         localisation: "",
     });
     const [saving, setSaving] = useState(false);
+    const [editingId, setEditingId] = useState(null);
     const [msg, setMsg] = useState(null);
 
     async function handleDelete(id) {
@@ -46,21 +47,38 @@ export default function SiteList() {
         setSaving(true);
         setMsg(null);
         try {
-            await api.post("/operations/sites/", form);
+            if (editingId) {
+                await api.put(`/operations/sites/${editingId}/`, form);
+                setMsg({ type: "success", text: "Site modifié." });
+            } else {
+                await api.post("/operations/sites/", form);
+                setMsg({ type: "success", text: "Site créé avec succès." });
+            }
             setShowForm(false);
+            setEditingId(null);
             setForm({
                 code: "",
                 nom: "",
                 type_site: "chantier",
                 localisation: "",
             });
-            setMsg({ type: "success", text: "Site créé avec succès." });
             load();
         } catch (err) {
-            setMsg({ type: "error", text: "Erreur lors de la création." });
+            setMsg({ type: "error", text: "Erreur lors de l'enregistrement." });
         } finally {
             setSaving(false);
         }
+    }
+
+    function startEdit(site) {
+        setForm({
+            code: site.code,
+            nom: site.nom,
+            type_site: site.type_site,
+            localisation: site.localisation || "",
+        });
+        setEditingId(site.id);
+        setShowForm(true);
     }
 
     if (loading)
@@ -77,7 +95,16 @@ export default function SiteList() {
                     Sites
                 </h2>
                 <button
-                    onClick={() => setShowForm(!showForm)}
+                    onClick={() => {
+                        setShowForm(!showForm);
+                        setEditingId(null);
+                        setForm({
+                            code: "",
+                            nom: "",
+                            type_site: "chantier",
+                            localisation: "",
+                        });
+                    }}
                     className="px-4 py-2 bg-forest-500 hover:bg-forest-600 text-white text-sm font-medium rounded-lg transition-colors"
                 >
                     {showForm ? "Annuler" : "+ Nouveau site"}
@@ -206,6 +233,12 @@ export default function SiteList() {
                                     {s.localisation || "—"}
                                 </td>
                                 <td className="px-4 py-3">
+                                    <button
+                                        onClick={() => startEdit(s)}
+                                        className="text-forest-600 hover:text-forest-800 text-xs font-medium transition-colors mr-2"
+                                    >
+                                        Modifier
+                                    </button>
                                     <button
                                         onClick={() => handleDelete(s.id)}
                                         className="text-red-400 hover:text-red-600 text-xs font-medium transition-colors"
