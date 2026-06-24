@@ -15,6 +15,9 @@ import CongesList from "./pages/CongesList";
 import Paiements from "./pages/Paiements";
 import MissionsMoo from "./pages/MissionsMoo";
 import JournalierList from "./pages/JournalierList";
+import SiteList from "./pages/SiteList";
+import TacheCatalogueList from "./pages/TacheCatalogueList";
+import LogTravailList from "./pages/LogTravailList";
 
 function ProtectedRoute({ children }) {
     const { isAuthenticated, loading } = useAuthStore();
@@ -62,6 +65,9 @@ export default function App() {
                     <Route path="paiements" element={<Paiements />} />
                     <Route path="missions" element={<MissionsMoo />} />
                     <Route path="journaliers" element={<JournalierList />} />
+                    <Route path="sites" element={<SiteList />} />
+                    <Route path="taches" element={<TacheCatalogueList />} />
+                    <Route path="logs" element={<LogTravailList />} />
                 </Route>
             </Routes>
         </BrowserRouter>
