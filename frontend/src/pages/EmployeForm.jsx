@@ -54,6 +54,26 @@ export default function EmployeForm() {
     const isEdit = Boolean(id);
 
     useEffect(() => {
+        if (isEdit) return;
+        api.get("/rh/employes/")
+            .then(({ data }) => {
+                const items = data.results || data;
+                if (items.length > 0) {
+                    const last = items[items.length - 1];
+                    const num =
+                        parseInt((last.code || "").replace(/\D/g, "")) || 0;
+                    setForm((f) => ({
+                        ...f,
+                        code: `EMP-${String(num + 1).padStart(3, "0")}`,
+                    }));
+                } else {
+                    setForm((f) => ({ ...f, code: "EMP-001" }));
+                }
+            })
+            .catch(() => {});
+    }, []);
+
+    useEffect(() => {
         if (!isEdit) return;
         api.get(`/rh/employes/${id}/`)
             .then(({ data }) => {
