@@ -44,6 +44,11 @@ const NAV_SECTIONS = [
             { to: "/paiements", label: "Paiements", Icon: CurrencyIcon },
             { to: "/missions", label: "Missions MOO", Icon: CurrencyIcon },
             { to: "/journaliers", label: "Journaliers", Icon: UsersIcon },
+            {
+                to: "/task-payroll",
+                label: "Paie à la tâche",
+                Icon: CurrencyIcon,
+            },
         ],
     },
     {

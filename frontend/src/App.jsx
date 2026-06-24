@@ -19,6 +19,7 @@ import SiteList from "./pages/SiteList";
 import TacheCatalogueList from "./pages/TacheCatalogueList";
 import LogTravailList from "./pages/LogTravailList";
 import HistoriqueContrats from "./pages/HistoriqueContrats";
+import TaskPayroll from "./pages/TaskPayroll";
 
 function ProtectedRoute({ children }) {
     const { isAuthenticated, loading } = useAuthStore();
@@ -74,6 +75,7 @@ export default function App() {
                     <Route path="taches" element={<TacheCatalogueList />} />
                     <Route path="logs" element={<LogTravailList />} />
                     <Route path="historique" element={<HistoriqueContrats />} />
+                    <Route path="task-payroll" element={<TaskPayroll />} />
                 </Route>
             </Routes>
         </BrowserRouter>

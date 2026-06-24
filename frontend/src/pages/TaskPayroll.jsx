@@ -1,0 +1,119 @@
+import { useState, useEffect } from 'react'
+import api from '../api/client'
+import SearchableSelect from '../components/SearchableSelect'
+
+export default function TaskPayroll() {
+  const [sites, setSites] = useState([])
+  const [siteId, setSiteId] = useState('')
+  const [mois, setMois] = useState(new Date().getMonth() + 1)
+  const [annee, setAnnee] = useState(new Date().getFullYear())
+  const [data, setData] = useState(null)
+  const [loading, setLoading] = useState(false)
+
+  useEffect(() => { loadSites() }, [])
+
+  async function loadSites() {
+    try {
+      const { data } = await api.get('/operations/sites/')
+      setSites(data.results || data)
+    } catch (err) { console.error(err) }
+  }
+
+  async function loadPayroll() {
+    if (!siteId) return
+    setLoading(true)
+    try {
+      const { data } = await api.get('/operations/logs-travail/task_payroll/', {
+        params: { site: siteId, mois, annee },
+      })
+      setData(data)
+    } catch (err) { console.error(err) }
+    finally { setLoading(false) }
+  }
+
+  useEffect(() => { loadPayroll() }, [siteId, mois, annee])
+
+  return (
+    <div>
+      <h2 className="text-2xl font-display font-bold text-ink mb-6">Paie à la tâche</h2>
+
+      <div className="bg-white rounded-xl shadow-card border border-sand-100 p-4 mb-6">
+        <div className="flex items-center gap-4 flex-wrap">
+          <div className="w-64">
+            <label className="block text-xs font-semibold text-sand-500 uppercase mb-1">Site</label>
+            <SearchableSelect
+              value={siteId}
+              onChange={e => setSiteId(e.target.value)}
+              options={sites.map(s => ({ value: s.id, label: `${s.code} — ${s.nom}` }))}
+              placeholder="Sélectionner un site..."
+            />
+          </div>
+          <div>
+            <label className="block text-xs font-semibold text-sand-500 uppercase mb-1">Mois</label>
+            <select value={mois} onChange={e => setMois(parseInt(e.target.value))}
+              className="px-3 py-2 border border-sand-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-forest-500">
+              {['Janvier','Février','Mars','Avril','Mai','Juin','Juillet','Août','Septembre','Octobre','Novembre','Décembre']
+                .map((m, i) => <option key={i+1} value={i+1}>{m}</option>)}
+            </select>
+          </div>
+          <div>
+            <label className="block text-xs font-semibold text-sand-500 uppercase mb-1">Année</label>
+            <input type="number" value={annee} onChange={e => setAnnee(parseInt(e.target.value))}
+              className="w-24 px-3 py-2 border border-sand-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-forest-500" />
+          </div>
+        </div>
+      </div>
+
+      {loading ? (
+        <div className="flex items-center justify-center h-48">
+          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-forest-500"></div>
+        </div>
+      ) : data && data.lignes.length > 0 ? (
+        <div className="bg-white rounded-xl shadow-card border border-sand-100 overflow-hidden">
+          <table className="w-full">
+            <thead>
+              <tr className="border-b border-sand-100 bg-sand-50">
+                <th className="text-left px-4 py-3 text-xs font-semibold text-sand-500 uppercase">Employé</th>
+                <th className="text-left px-4 py-3 text-xs font-semibold text-sand-500 uppercase">Tâche</th>
+                <th className="text-right px-4 py-3 text-xs font-semibold text-sand-500 uppercase">Quantité</th>
+                <th className="text-right px-4 py-3 text-xs font-semibold text-sand-500 uppercase">PU</th>
+                <th className="text-right px-4 py-3 text-xs font-semibold text-sand-500 uppercase">Montant</th>
+                <th className="text-left px-4 py-3 text-xs font-semibold text-sand-500 uppercase">Contact</th>
+              </tr>
+            </thead>
+            <tbody className="divide-y divide-sand-50">
+              {data.lignes.map((l, i) => (
+                <tr key={i} className="hover:bg-sand-50">
+                  <td className="px-4 py-3">
+                    <div className="text-sm font-medium text-ink">{l.employe_nom}</div>
+                    <div className="text-xs text-sand-500">{l.employe_code}</div>
+                  </td>
+                  <td className="px-4 py-3 text-sm text-sand-700">{l.tache_libelle}</td>
+                  <td className="px-4 py-3 text-sm text-right">{l.quantite_totale.toLocaleString()} {l.tache_unite}</td>
+                  <td className="px-4 py-3 text-sm text-right">{l.tarif.toLocaleString()} F</td>
+                  <td className="px-4 py-3 text-sm text-right font-bold text-forest-700">{l.montant.toLocaleString()} F</td>
+                  <td className="px-4 py-3 text-sm text-sand-600">{l.employe_telephone || '—'}</td>
+                </tr>
+              ))}
+            </tbody>
+            <tfoot>
+              <tr className="border-t-2 border-sand-200 bg-sand-50">
+                <td colSpan={4} className="px-4 py-3 text-sm font-semibold text-ink text-right">Total {data.site_nom}</td>
+                <td className="px-4 py-3 text-sm font-bold text-forest-700 text-right">{data.total.toLocaleString()} F</td>
+                <td></td>
+              </tr>
+            </tfoot>
+          </table>
+        </div>
+      ) : siteId && data ? (
+        <div className="bg-white rounded-xl shadow-card border border-sand-100 p-8 text-center text-sand-500">
+          Aucun log de travail pour ce site ce mois-ci.
+        </div>
+      ) : (
+        <div className="bg-white rounded-xl shadow-card border border-sand-100 p-8 text-center text-sand-500">
+          Sélectionnez un site pour voir la paie à la tâche.
+        </div>
+      )}
+    </div>
+  )
+}
