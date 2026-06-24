@@ -45,7 +45,7 @@ export default function LogTravailList() {
             if (filterDate) params.date = filterDate;
             const [lRes, eRes, sRes, tRes] = await Promise.all([
                 api.get("/operations/logs-travail/", { params }),
-                api.get("/rh/employes/?type_contrat=journalier&statut=actif"),
+                api.get("/rh/employes/?statut=actif"),
                 api.get("/operations/sites/"),
                 api.get("/operations/taches-catalogue/"),
             ]);
