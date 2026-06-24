@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import api from "../api/client";
+import SearchableSelect from "../components/SearchableSelect";
 
 export default function LogTravailList() {
     const [logs, setLogs] = useState([]);
@@ -150,8 +151,7 @@ export default function LogTravailList() {
                             <label className="block text-xs font-semibold text-sand-500 uppercase mb-1">
                                 Employé
                             </label>
-                            <select
-                                required
+                            <SearchableSelect
                                 value={form.employe}
                                 onChange={(e) =>
                                     setForm({
@@ -159,15 +159,12 @@ export default function LogTravailList() {
                                         employe: e.target.value,
                                     })
                                 }
-                                className="w-full px-3 py-2 border border-sand-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-forest-500"
-                            >
-                                <option value="">Sélectionner...</option>
-                                {employes.map((e) => (
-                                    <option key={e.id} value={e.id}>
-                                        {e.nom_complet}
-                                    </option>
-                                ))}
-                            </select>
+                                options={employes.map((e) => ({
+                                    value: e.id,
+                                    label: e.nom_complet,
+                                }))}
+                                placeholder="Sélectionner un employé..."
+                            />
                         </div>
                         <div>
                             <label className="block text-xs font-semibold text-sand-500 uppercase mb-1">
@@ -187,41 +184,33 @@ export default function LogTravailList() {
                             <label className="block text-xs font-semibold text-sand-500 uppercase mb-1">
                                 Site
                             </label>
-                            <select
-                                required
+                            <SearchableSelect
                                 value={form.site}
                                 onChange={(e) =>
                                     setForm({ ...form, site: e.target.value })
                                 }
-                                className="w-full px-3 py-2 border border-sand-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-forest-500"
-                            >
-                                <option value="">Sélectionner...</option>
-                                {sites.map((s) => (
-                                    <option key={s.id} value={s.id}>
-                                        {s.nom}
-                                    </option>
-                                ))}
-                            </select>
+                                options={sites.map((s) => ({
+                                    value: s.id,
+                                    label: s.nom,
+                                }))}
+                                placeholder="Sélectionner un site..."
+                            />
                         </div>
                         <div>
                             <label className="block text-xs font-semibold text-sand-500 uppercase mb-1">
                                 Tâche
                             </label>
-                            <select
-                                required
+                            <SearchableSelect
                                 value={form.tache}
                                 onChange={(e) =>
                                     setForm({ ...form, tache: e.target.value })
                                 }
-                                className="w-full px-3 py-2 border border-sand-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-forest-500"
-                            >
-                                <option value="">Sélectionner...</option>
-                                {taches.map((t) => (
-                                    <option key={t.id} value={t.id}>
-                                        {t.libelle} ({t.unite_label})
-                                    </option>
-                                ))}
-                            </select>
+                                options={taches.map((t) => ({
+                                    value: t.id,
+                                    label: `${t.libelle} (${t.unite_label})`,
+                                }))}
+                                placeholder="Sélectionner une tâche..."
+                            />
                         </div>
                         <div>
                             <label className="block text-xs font-semibold text-sand-500 uppercase mb-1">
