@@ -8,43 +8,49 @@ Application RH autonome pour **EKO SARL**, société opérant dans les secteurs 
 | ------------------------ | ---------------------------------------------------------------------------- |
 | **Backend**              | Django 5.0, Django REST Framework, PostgreSQL 16, Gunicorn, JWT (Simple JWT) |
 | **Frontend**             | React 18, Vite 5, TailwindCSS 3, Zustand, React Router 6                     |
-| **Base de données**      | PostgreSQL 16                                                                |
-| **Infrastructure**       | Docker Compose (services `db`, `backend`, `frontend`)                        |
-| **Langue de l'interface**| Français (locale `fr-fr`, fuseau `Africa/Abidjan`)                           |
+| **Base de données**      | PostgreSQL 16 (Supabase)                                                     |
+| **Déploiement**          | Render (backend) + Vercel (frontend) + Supabase (DB)                         |
+| **Langue**               | Français (locale `fr-fr`, fuseau `Africa/Abidjan`)                           |
 
-## Fonctionnalités principales
+## Fonctionnalités
 
 ### 👥 Gestion des employés
-- Trois catégories de contrat : **CDI/CDD**, **Journaliers**, **MOO** (main-d'œuvre occasionnelle)
-- Fiche employé complète : identité, poste, type de contrat, salaire mensuel ou taux journalier, statut, historique des contrats, lien utilisateur
+- Trois catégories : **CDI/CDD**, **Journaliers**, **MOO**, **Stagiaires**
+- Fiche complète, création, modification, suppression
+- Historique des contrats
+- Lien utilisateur (compte d'accès)
 
 ### 📋 Pointage des présences
-- **Pointage journalier** : saisie rapide présent/absent par date, avec heures travaillées, projet et site
-- **Pointage hebdomadaire** : grille 7 jours pour une vue d'ensemble et une saisie en masse
-- Calcul automatique du montant dû pour les journaliers (`taux_journalier × jours présents`)
+- **Pointage journalier** : saisie présent/absent avec heures, projet, site, notes
+- **Pointage hebdomadaire** : grille 7 jours, clic ternaire, navigation semaines
+- Workflow : brouillon → validé → clôture
+- Alertes automatiques : 0h présentes, absence prolongée, seuil hebdo dépassé
+- Calcul automatique du montant dû
 
 ### 💰 Gestion de la paie
-- **Bulletins de paie** (CDI/CDD) : génération mensuelle en un clic, idempotent, marquage payé
-- **Paiements journaliers** : récapitulatif restant à payer, règlement par lot, export Excel
-- **Missions MOO** : suivi des missions à montant forfaitaire avec période et paiement
-- **Export paie** : fichier Excel formaté aux couleurs EKO
+- **Bulletins de paie** (CDI/CDD) : génération en masse, marquage payé
+- **Paiements journaliers** : récapitulatif restant à payer, règlement par lot
+- **Missions MOO** : suivi des missions forfaitaires, marquage payé
+- **Export Excel** : paie mensuelle, bordereaux journaliers
+- **Bordereau** par journalier (téléchargement Excel)
 
-### 📊 Tableau de bord & KPI
-- Effectif actif, masse salariale mensuelle, bulletins générés / payés
-- Comparaison mois en cours vs mois précédent
+### 📊 Tableau de bord
+- Effectif actif, pointages du jour, anomalies, masse salariale
+- Accès rapides vers les modules clés
 
-### 🏢 Référentiels opérationnels
-- **Sites d'intervention** : chantiers, parcelles, pépinières, dépôts
-- **Tâches catalogue** : référentiel métier avec type d'objectif et tarif de référence
-- **Logs de travail** *(en construction)* : suivi des quantités réalisées par employé, site et tâche
+### 🏢 Opérations terrain
+- **Sites d'intervention** : chantiers, parcelles, pépinières, dépôts (CRUD)
+- **Tâches catalogue** : référentiel métier avec type d'objectif et tarif
+- **Logs de travail** : quantité réalisée × tâche × site, rendement calculé auto
+- **Vue journaliers** : taux, jours non payés, restant à payer
 
-### 🔐 Multi-rôles
-- **ADMIN** : accès complet
-- **DIRECTION** : lecture + validation
-- **COMPTABLE** : bulletins, paiements, exports
-- **RH** : CRUD complet module RH
-- **CHEF_CHANTIER** : pointage, sites, logs
-- **LECTURE** : consultation seule
+### 🏖 Congés
+- CRUD des congés, calcul automatique du nombre de jours
+
+### 🔐 Sécurité
+- Authentification JWT avec refresh token
+- Superuser créé automatiquement au premier déploiement (via variables d'env)
+- Mot de passe administrateur jamais stocké dans le code
 
 ## Structure du projet
 
@@ -52,28 +58,32 @@ Application RH autonome pour **EKO SARL**, société opérant dans les secteurs 
 ekogrh/
 ├── backend/
 │   ├── apps/
-│   │   ├── core/              # Modèles partagés, API racine
-│   │   └── rh/                # Module RH : employés, paie, pointage, exports
+│   │   ├── core/              # Modèles partagés (TimeStampedModel, SoftDelete)
+│   │   ├── rh/                # Module RH : employés, paie, pointage, congés
+│   │   └── operations/        # Module Opérations : sites, tâches, logs
 │   ├── config/                # Settings Django, URLs, WSGI
 │   ├── Dockerfile
-│   ├── entrypoint.sh          # Migrations + lancement Gunicorn
+│   ├── entrypoint.sh          # Migrations + création superuser + Gunicorn
 │   ├── manage.py
 │   ├── pytest.ini
 │   └── requirements.txt
 ├── frontend/
 │   ├── src/
-│   │   ├── api/               # Client HTTP (Axios)
-│   │   ├── components/        # Layout partagé
-│   │   ├── pages/             # Dashboard, Employés, Pointage, Paie, Congés
+│   │   ├── api/               # Client HTTP Axios (JWT auto-refresh)
+│   │   ├── components/        # Layout, Icon (SVG), UI partagés
+│   │   ├── pages/             # 17 pages métier
 │   │   └── store/             # Auth store (Zustand)
 │   ├── Dockerfile             # Build React + serveur Nginx
 │   ├── nginx.conf             # Reverse proxy /api → backend
+│   ├── vercel.json            # SPA fallback pour Vercel
 │   ├── package.json
-│   ├── tailwind.config.js
+│   ├── tailwind.config.js     # Palette Forest / Sand / Gold
 │   └── vite.config.js
 ├── docs/
-│   └── specs/                 # Spécifications fonctionnelles détaillées
-├── docker-compose.yml
+│   ├── specs/                 # Spécifications fonctionnelles
+│   └── ROADMAP.md             # Suivi des fonctionnalités
+├── render.yaml                # Configuration Render
+├── docker-compose.yml         # Développement local
 └── .gitignore
 ```
 
@@ -82,53 +92,39 @@ ekogrh/
 ### Prérequis
 - [Docker](https://docs.docker.com/get-docker/) et Docker Compose
 
-### Lancement
+### Lancement local
 
 ```bash
-# Cloner le dépôt
-git clone <url-du-depot>
+git clone https://github.com/Bostan18/ekogrh.git
 cd ekogrh
-
-# Lancer tous les services
 docker compose up -d
+```
 
-# Créer un superutilisateur
+Puis :
+- **Frontend** : http://localhost:5173
+- **API** : http://localhost:8000/api/
+- **Admin Django** : http://localhost:8000/admin/
+
+### Superuser
+
+En local :
+```bash
 docker compose exec backend python manage.py createsuperuser
 ```
 
-L'application est ensuite accessible sur :
-- **Frontend** : [http://localhost:5173](http://localhost:5173)
-- **API** : [http://localhost:8000/api/](http://localhost:8000/api/)
-- **Admin Django** : [http://localhost:8000/admin/](http://localhost:8000/admin/)
+En production (Render), les variables `DJANGO_SUPERUSER_USERNAME` et `DJANGO_SUPERUSER_PASSWORD` créent automatiquement le superuser au déploiement.
 
-### Variables d'environnement
-
-Les principales variables sont définies dans `docker-compose.yml`. En production, modifiez a minima :
-
-| Variable              | Description                          | Défaut                       |
-| --------------------- | ------------------------------------ | ---------------------------- |
-| `SECRET_KEY`          | Clé secrète Django                   | `change-me-in-production...` |
-| `DEBUG`               | Mode debug                           | `False`                      |
-| `DB_PASSWORD`         | Mot de passe PostgreSQL              | `ekogrh_pass`                |
-| `CORS_ALLOWED_ORIGINS`| Origines autorisées (CORS)           | `http://localhost:5173`      |
-| `ALLOWED_HOSTS`       | Hôtes autorisés Django               | `localhost,127.0.0.1`        |
-
-## Développement local
-
-### Backend (sans Docker)
+## Développement local (sans Docker)
 
 ```bash
+# Backend
 cd backend
-python -m venv venv
-source venv/bin/activate    # Windows : venv\Scripts\activate
+python -m venv venv && source venv/bin/activate
 pip install -r requirements.txt
 python manage.py migrate
 python manage.py runserver
-```
 
-### Frontend (sans Docker)
-
-```bash
+# Frontend (autre terminal)
 cd frontend
 npm install
 npm run dev
@@ -136,7 +132,7 @@ npm run dev
 
 Le proxy Vite redirige `/api` vers `http://localhost:8000`.
 
-### Tests
+## Tests
 
 ```bash
 cd backend
@@ -145,94 +141,49 @@ pytest
 
 ## API
 
-L'API REST est documentée à la racine `/api/`. Authentification via JWT :
+Authentification JWT. Principaux endpoints :
 
-```bash
-# Obtenir un token
-curl -X POST http://localhost:8000/api/token/ \
-  -H "Content-Type: application/json" \
-  -d '{"username": "admin", "password": "..."}'
-
-# Utiliser le token
-curl http://localhost:8000/api/rh/employes/ \
-  -H "Authorization: Bearer <access_token>"
-```
-
-### Principaux endpoints
-
-| Module | Endpoint                  | Description                          |
-| ------ | ------------------------- | ------------------------------------ |
-| RH     | `/api/rh/employes/`       | CRUD des employés                    |
-| RH     | `/api/rh/bulletins/`      | Bulletins de paie                    |
-| RH     | `/api/rh/presences/`      | Pointage journalier / semaine        |
-| RH     | `/api/rh/missions-moo/`   | Missions main-d'œuvre occasionnelle  |
-| Auth   | `/api/token/`             | Login (JWT)                          |
-| Auth   | `/api/token/refresh/`     | Rafraîchir le token                  |
+| Module      | Endpoint                            | Description                     |
+| ----------- | ----------------------------------- | ------------------------------- |
+| RH          | `/api/rh/employes/`                 | CRUD employés                   |
+| RH          | `/api/rh/presences/`                | Pointages (jour/semaine)        |
+| RH          | `/api/rh/bulletins/`                | Bulletins de paie               |
+| RH          | `/api/rh/missions-moo/`             | Missions MOO                    |
+| RH          | `/api/rh/paiements/`                | Paiements                       |
+| RH          | `/api/rh/conges/`                   | Congés                          |
+| RH          | `/api/rh/historique-contrats/`      | Historique des contrats         |
+| RH          | `/api/rh/competences/`              | Compétences                     |
+| Opérations  | `/api/operations/sites/`            | CRUD sites                      |
+| Opérations  | `/api/operations/taches-catalogue/` | Référentiel tâches              |
+| Opérations  | `/api/operations/logs-travail/`     | Logs de travail                 |
+| Auth        | `/api/token/`                       | Login (JWT)                     |
+| Auth        | `/api/token/refresh/`               | Rafraîchir le token             |
 
 ## Déploiement
 
 L'application est déployée sur trois services gratuits :
 
-| Composant          | Service    | Fichier de config   |
-| ------------------ | ---------- | ------------------- |
-| **Frontend React** | Vercel     | `vercel.json`       |
-| **Backend Django** | Render     | `render.yaml`       |
-| **Base de données**| Supabase   | —                   |
+| Composant          | Service    | URL                                  |
+| ------------------ | ---------- | ------------------------------------ |
+| **Frontend React** | Vercel     | https://ekogrh.vercel.app            |
+| **Backend Django** | Render     | https://ekogrh.onrender.com          |
+| **Base de données**| Supabase   | —                                    |
 
-### Étapes de mise en place
-
-#### 1. Supabase — Base de données
-
-1. Crée un projet gratuit sur [supabase.com](https://supabase.com)
-2. Récupère les identifiants de connexion dans *Settings > Database* : `Host`, `Port` (5432), `Database name`, `User`, `Password`
-
-#### 2. Render — Backend
-
-1. Connecte le repo Git sur [render.com](https://render.com)
-2. Render détecte automatiquement `render.yaml` et crée le service `ekogrh-api`
-3. Dans le dashboard, renseigne les variables Supabase :
-   - `DB_HOST` → hôte Supabase
-   - `DB_NAME` → nom de la BDD Supabase
-   - `DB_USER` → utilisateur Supabase
-   - `DB_PASSWORD` → mot de passe Supabase
-
-#### 3. Vercel — Frontend
-
-1. Importe le repo sur [vercel.com](https://vercel.com)
-2. Configure le projet :
-   - **Root Directory** : `frontend`
-   - **Framework** : Vite
-   - **Build Command** : `npm run build`
-   - **Output Directory** : `dist`
-3. Ajoute la variable d'environnement :
-   - `VITE_API_URL` → `https://ekogrh-api.onrender.com/api` (l'URL du backend Render)
-
-Une fois le frontend déployé, récupère son URL (ex: `https://ekogrh.vercel.app`) et ajoute-la dans les variables d'environnement du backend Render :
-- `CORS_ALLOWED_ORIGINS` → `https://ekogrh.vercel.app`
-
-### Schéma de l'architecture
+### Schéma
 
 ```
-┌──────────────┐      HTTPS       ┌──────────────┐      SSL       ┌──────────────┐
-│   Vercel     │ ───────────────→ │    Render    │ ─────────────→ │   Supabase   │
-│  (React SPA) │ ←─ CORS allow ── │   (Django)   │               │ (PostgreSQL) │
-└──────────────┘                  └──────────────┘               └──────────────┘
+Navigateur ──→ Vercel (React) ──→ Render (Django) ──→ Supabase (PostgreSQL)
 ```
+
+### Configurations
+
+- `render.yaml` — déploiement Render (Docker, variables d'env)
+- `vercel.json` — SPA fallback pour React Router
+- `frontend/.env.production` — URL de l'API pour la production
 
 ## Roadmap
 
-- [x] Gestion des employés et contrats
-- [x] Pointage journalier et hebdomadaire
-- [x] Paie CDI/CDD (bulletins, génération en masse)
-- [x] Paiement journaliers et missions MOO
-- [x] Export Excel (paie)
-- [x] Dashboard et KPI
-- [x] Gestion des congés
-- [ ] Logs de travail à la tâche (quantité × rendement)
-- [ ] Workflow de validation des pointages (brouillon → validé → clôturé)
-- [ ] Pointage mobile avec mode hors-ligne (PWA)
-- [ ] Alertes et détection d'anomalies
-- [ ] Bordereaux de paiement
+Voir [ROADMAP.md](docs/ROADMAP.md) pour le suivi détaillé.
 
 ## Licence
 
