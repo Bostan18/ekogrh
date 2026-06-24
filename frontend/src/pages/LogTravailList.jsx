@@ -10,6 +10,8 @@ export default function LogTravailList() {
     const [showForm, setShowForm] = useState(false);
     const [saving, setSaving] = useState(false);
     const [msg, setMsg] = useState(null);
+    const [filterEmploye, setFilterEmploye] = useState("");
+    const [filterDate, setFilterDate] = useState("");
     const [form, setForm] = useState({
         employe: "",
         site: "",
@@ -22,7 +24,7 @@ export default function LogTravailList() {
 
     useEffect(() => {
         loadAll();
-    }, []);
+    }, [filterEmploye, filterDate]);
 
     async function handleDelete(id) {
         if (!confirm("Supprimer ce log ?")) return;
@@ -38,8 +40,11 @@ export default function LogTravailList() {
     async function loadAll() {
         setLoading(true);
         try {
+            const params = {};
+            if (filterEmploye) params.employe = filterEmploye;
+            if (filterDate) params.date = filterDate;
             const [lRes, eRes, sRes, tRes] = await Promise.all([
-                api.get("/operations/logs-travail/"),
+                api.get("/operations/logs-travail/", { params }),
                 api.get("/rh/employes/?type_contrat=journalier&statut=actif"),
                 api.get("/operations/sites/"),
                 api.get("/operations/taches-catalogue/"),
@@ -104,6 +109,27 @@ export default function LogTravailList() {
                 >
                     {showForm ? "Annuler" : "+ Nouveau log"}
                 </button>
+            </div>
+
+            <div className="flex gap-3 mb-4">
+                <select
+                    value={filterEmploye}
+                    onChange={(e) => setFilterEmploye(e.target.value)}
+                    className="px-3 py-2 border border-sand-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-forest-500"
+                >
+                    <option value="">Tous les employés</option>
+                    {employes.map((e) => (
+                        <option key={e.id} value={e.id}>
+                            {e.nom_complet}
+                        </option>
+                    ))}
+                </select>
+                <input
+                    type="date"
+                    value={filterDate}
+                    onChange={(e) => setFilterDate(e.target.value)}
+                    className="px-3 py-2 border border-sand-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-forest-500"
+                />
             </div>
 
             {msg && (
