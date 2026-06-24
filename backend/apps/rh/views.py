@@ -50,6 +50,7 @@ class EmployeViewSet(viewsets.ModelViewSet):
         return (
             super()
             .get_queryset()
+            .order_by("nom", "prenom")
             .annotate(
                 jours_non_payes=Count(
                     "presences",
