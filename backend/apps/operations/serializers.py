@@ -74,6 +74,7 @@ class LogTravailSerializer(serializers.ModelSerializer):
             "objectif_realise",
             "duree_heures",
             "rendement",
+            "prime",
             "paye_le",
             "notes",
             "created_at",

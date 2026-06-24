@@ -39,11 +39,13 @@ def _get_payroll_data(site_id=None, mois=None, annee=None):
                 "site_id": log.site_id,
                 "site_nom": log.site.nom,
                 "quantite_totale": 0,
+                "prime": 0,
                 "montant": 0,
             }
         g = grouped[key]
         g["quantite_totale"] += float(log.objectif_realise)
-        g["montant"] = g["quantite_totale"] * g["tarif"]
+        g["prime"] += float(log.prime or 0)
+        g["montant"] = g["quantite_totale"] * g["tarif"] + g["prime"]
 
     results = sorted(grouped.values(), key=lambda x: x["employe_nom"])
     total = sum(r["montant"] for r in results)
@@ -88,7 +90,7 @@ def _build_payroll_excel(results, total, site_nom, mois, annee):
         "Novembre",
         "Décembre",
     ]
-    ws.merge_cells("A1:G1")
+    ws.merge_cells("A1:H1")
     ws["A1"] = (
         f"ETAT DE PAIE À LA TÂCHE — {site_nom or 'Tous'} — {mois_fr[mois]} {annee}"
     )
@@ -102,6 +104,7 @@ def _build_payroll_excel(results, total, site_nom, mois, annee):
         "TÂCHE",
         "QUANTITÉ",
         "PU (FCFA)",
+        "PRIME",
         "MONTANT (FCFA)",
         "CONTACT",
     ]
@@ -122,22 +125,24 @@ def _build_payroll_excel(results, total, site_nom, mois, annee):
         qte.border = thin_border
         ws.cell(row=row, column=5, value=r["tarif"]).border = thin_border
         ws.cell(row=row, column=5).number_format = money_fmt
-        montant = ws.cell(row=row, column=6, value=r["montant"])
+        ws.cell(row=row, column=6, value=r.get("prime", 0)).border = thin_border
+        ws.cell(row=row, column=6).number_format = money_fmt
+        montant = ws.cell(row=row, column=7, value=r["montant"])
         montant.border = thin_border
         montant.number_format = money_fmt
         ws.cell(
-            row=row, column=7, value=r.get("employe_telephone", "")
+            row=row, column=8, value=r.get("employe_telephone", "")
         ).border = thin_border
 
     # Total row
     total_row = len(results) + 4
-    ws.merge_cells(f"A{total_row}:E{total_row}")
+    ws.merge_cells(f"A{total_row}:F{total_row}")
     ws.cell(row=total_row, column=1, value="TOTAL").font = total_font
     ws.cell(row=total_row, column=1).alignment = Alignment(horizontal="right")
     ws.cell(row=total_row, column=1).border = thin_border
-    for c in range(2, 6):
+    for c in range(2, 7):
         ws.cell(row=total_row, column=c).border = thin_border
-    total_cell = ws.cell(row=total_row, column=6, value=total)
+    total_cell = ws.cell(row=total_row, column=7, value=total)
     total_cell.font = total_font
     total_cell.number_format = money_fmt
     total_cell.border = thin_border
@@ -149,8 +154,9 @@ def _build_payroll_excel(results, total, site_nom, mois, annee):
     ws.column_dimensions["C"].width = 22
     ws.column_dimensions["D"].width = 12
     ws.column_dimensions["E"].width = 14
-    ws.column_dimensions["F"].width = 18
+    ws.column_dimensions["F"].width = 12
     ws.column_dimensions["G"].width = 18
+    ws.column_dimensions["H"].width = 18
 
     return wb
 
@@ -235,7 +241,9 @@ class LogTravailViewSet(viewsets.ModelViewSet):
         # Créer un paiement
         from apps.rh.models import Paiement
 
-        montant = float(log.objectif_realise) * float(log.tache.tarif_reference or 0)
+        montant = float(log.objectif_realise) * float(
+            log.tache.tarif_reference or 0
+        ) + float(log.prime or 0)
         Paiement.objects.create(
             employe=log.employe,
             date=log.paye_le,

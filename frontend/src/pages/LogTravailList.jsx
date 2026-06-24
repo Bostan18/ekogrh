@@ -20,6 +20,7 @@ export default function LogTravailList() {
         date: new Date().toISOString().slice(0, 10),
         objectif_realise: "",
         duree_heures: "8.0",
+        prime: "",
         notes: "",
     });
 
@@ -69,6 +70,7 @@ export default function LogTravailList() {
             ...form,
             objectif_realise: parseFloat(form.objectif_realise),
             duree_heures: parseFloat(form.duree_heures),
+            prime: parseFloat(form.prime) || 0,
         };
         try {
             await api.post("/operations/logs-travail/", payload);
@@ -80,6 +82,7 @@ export default function LogTravailList() {
                 date: new Date().toISOString().slice(0, 10),
                 objectif_realise: "",
                 duree_heures: "8.0",
+                prime: "",
                 notes: "",
             });
             setMsg({ type: "success", text: "Log de travail créé." });
@@ -260,6 +263,20 @@ export default function LogTravailList() {
                                         duree_heures: e.target.value,
                                     })
                                 }
+                                className="w-full px-3 py-2 border border-sand-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-forest-500"
+                            />
+                        </div>
+                        <div>
+                            <label className="block text-xs font-semibold text-sand-500 uppercase mb-1">
+                                Prime (FCFA)
+                            </label>
+                            <input
+                                type="number"
+                                value={form.prime}
+                                onChange={(e) =>
+                                    setForm({ ...form, prime: e.target.value })
+                                }
+                                placeholder="Bonus, carburant..."
                                 className="w-full px-3 py-2 border border-sand-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-forest-500"
                             />
                         </div>

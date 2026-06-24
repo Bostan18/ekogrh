@@ -148,6 +148,9 @@ export default function TaskPayroll() {
                                     PU
                                 </th>
                                 <th className="text-right px-4 py-3 text-xs font-semibold text-sand-500 uppercase">
+                                    Prime
+                                </th>
+                                <th className="text-right px-4 py-3 text-xs font-semibold text-sand-500 uppercase">
                                     Montant
                                 </th>
                                 <th className="text-left px-4 py-3 text-xs font-semibold text-sand-500 uppercase">
@@ -175,6 +178,12 @@ export default function TaskPayroll() {
                                     </td>
                                     <td className="px-4 py-3 text-sm text-right">
                                         {l.tarif.toLocaleString()} F
+                                    </td>
+                                    <td className="px-4 py-3 text-sm text-right">
+                                        {l.prime
+                                            ? l.prime.toLocaleString()
+                                            : "—"}{" "}
+                                        F
                                     </td>
                                     <td className="px-4 py-3 text-sm text-right font-bold text-forest-700">
                                         {l.montant.toLocaleString()} F
