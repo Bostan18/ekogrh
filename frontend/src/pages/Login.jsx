@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import useAuthStore from "../store/authStore";
 import { UserCircleIcon } from "../components/Icon";
 
 export default function Login() {
