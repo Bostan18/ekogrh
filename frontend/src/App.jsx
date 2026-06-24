@@ -54,6 +54,10 @@ export default function App() {
                     <Route index element={<Dashboard />} />
                     <Route path="employes" element={<EmployeList />} />
                     <Route path="employes/nouveau" element={<EmployeForm />} />
+                    <Route
+                        path="employes/:id/modifier"
+                        element={<EmployeForm />}
+                    />
                     <Route path="employes/:id" element={<EmployeDetail />} />
                     <Route path="pointage" element={<Pointage />} />
                     <Route

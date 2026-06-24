@@ -134,7 +134,7 @@ export default function EmployeDetail() {
                         </h3>
                         <button
                             className="w-full px-4 py-2 bg-forest-500 hover:bg-forest-600 text-white text-sm font-medium rounded-lg transition-colors"
-                            onClick={() => navigate(`/employes/nouveau`)}
+                            onClick={() => navigate(`/employes/${id}/modifier`)}
                         >
                             Modifier
                         </button>

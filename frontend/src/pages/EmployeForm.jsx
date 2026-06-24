@@ -1,5 +1,5 @@
-import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useState, useEffect } from "react";
+import { useNavigate, useParams } from "react-router-dom";
 import api from "../api/client";
 
 const INITIAL = {
@@ -37,10 +37,35 @@ function InputField({ label, name, type, required, value, onChange }) {
 }
 
 export default function EmployeForm() {
+    const { id } = useParams();
     const navigate = useNavigate();
     const [form, setForm] = useState(INITIAL);
     const [error, setError] = useState("");
     const [saving, setSaving] = useState(false);
+    const isEdit = Boolean(id);
+
+    useEffect(() => {
+        if (!isEdit) return;
+        api.get(`/rh/employes/${id}/`)
+            .then(({ data }) => {
+                setForm({
+                    code: data.code || "",
+                    nom: data.nom || "",
+                    prenom: data.prenom || "",
+                    type_contrat: data.type_contrat || "cdi",
+                    poste: data.poste || "",
+                    statut: data.statut || "actif",
+                    date_entree: data.date_entree || "",
+                    salaire_mensuel: data.salaire_mensuel || "",
+                    taux_journalier: data.taux_journalier || "",
+                    telephone: data.telephone || "",
+                    email: data.email || "",
+                    adresse: data.adresse || "",
+                    numero_cnps: data.numero_cnps || "",
+                });
+            })
+            .catch(() => navigate("/employes"));
+    }, [id]);
 
     const handleChange = (e) => {
         setForm({ ...form, [e.target.name]: e.target.value });
@@ -58,14 +83,18 @@ export default function EmployeForm() {
         payload.taux_journalier = payload.taux_journalier
             ? parseFloat(payload.taux_journalier)
             : null;
-        // Remove empty optional fields
         Object.keys(payload).forEach((k) => {
             if (payload[k] === "" || payload[k] === null) delete payload[k];
         });
 
         try {
-            const { data } = await api.post("/rh/employes/", payload);
-            navigate(`/employes/${data.id}`);
+            if (isEdit) {
+                await api.put(`/rh/employes/${id}/`, payload);
+                navigate(`/employes/${id}`);
+            } else {
+                const { data } = await api.post("/rh/employes/", payload);
+                navigate(`/employes/${data.id}`);
+            }
         } catch (err) {
             const msg = err.response?.data;
             if (typeof msg === "object") {
@@ -78,7 +107,7 @@ export default function EmployeForm() {
                         .join("\n"),
                 );
             } else {
-                setError("Erreur lors de la création");
+                setError("Erreur lors de l'enregistrement");
             }
         } finally {
             setSaving(false);
@@ -88,13 +117,13 @@ export default function EmployeForm() {
     return (
         <div>
             <button
-                onClick={() => navigate("/employes")}
+                onClick={() => navigate(-1)}
                 className="text-forest-600 hover:underline text-sm mb-4 inline-block"
             >
-                ← Retour à la liste
+                ← Retour
             </button>
             <h2 className="text-2xl font-display font-bold text-ink mb-6">
-                Nouvel employé
+                {isEdit ? "Modifier employé" : "Nouvel employé"}
             </h2>
 
             <form
@@ -223,11 +252,15 @@ export default function EmployeForm() {
                         disabled={saving}
                         className="px-6 py-2 bg-forest-500 hover:bg-forest-600 text-white text-sm font-medium rounded-lg transition-colors disabled:opacity-50"
                     >
-                        {saving ? "Enregistrement..." : "Enregistrer"}
+                        {saving
+                            ? "Enregistrement..."
+                            : isEdit
+                              ? "Mettre à jour"
+                              : "Enregistrer"}
                     </button>
                     <button
                         type="button"
-                        onClick={() => navigate("/employes")}
+                        onClick={() => navigate(-1)}
                         className="px-6 py-2 border border-sand-200 hover:bg-sand-50 text-sand-700 text-sm font-medium rounded-lg transition-colors"
                     >
                         Annuler
