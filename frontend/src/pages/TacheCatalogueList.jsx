@@ -1,12 +1,14 @@
 import { useState, useEffect } from "react";
 import api from "../api/client";
+import EmptyState from "../components/EmptyState";
+import { TableSkeleton } from "../components/Skeleton";
+import { toast } from "../store/toastStore";
 
 export default function TacheCatalogueList() {
     const [taches, setTaches] = useState([]);
     const [loading, setLoading] = useState(true);
     const [editId, setEditId] = useState(null);
     const [editForm, setEditForm] = useState({});
-    const [msg, setMsg] = useState(null);
 
     useEffect(() => {
         load();
@@ -38,33 +40,20 @@ export default function TacheCatalogueList() {
         try {
             await api.put(`/operations/taches-catalogue/${editId}/`, editForm);
             setEditId(null);
-            setMsg({ type: "success", text: "Tâche mise à jour." });
+            toast().success("Tâche mise à jour.");
             load();
         } catch {
-            setMsg({ type: "error", text: "Erreur lors de la mise à jour." });
+            toast().error("Erreur lors de la mise à jour.");
         }
     }
 
-    if (loading)
-        return (
-            <div className="flex items-center justify-center h-64">
-                <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-forest-500"></div>
-            </div>
-        );
+    if (loading) return <TableSkeleton rows={5} cols={7} />;
 
     return (
         <div>
             <h2 className="text-2xl font-display font-bold text-ink mb-6">
                 Tâches catalogue
             </h2>
-
-            {msg && (
-                <div
-                    className={`mb-4 p-3 rounded-lg text-sm ${msg.type === "success" ? "bg-green-50 text-green-700 border border-green-200" : "bg-red-50 text-red-700 border border-red-200"}`}
-                >
-                    {msg.text}
-                </div>
-            )}
 
             <div className="bg-white rounded-xl shadow-card border border-sand-100 overflow-hidden">
                 <table className="w-full">

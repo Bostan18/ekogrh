@@ -1,6 +1,10 @@
 import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import api from "../api/client";
+import EmptyState from "../components/EmptyState";
+import MonthYearPicker from "../components/MonthYearPicker";
+import { TableSkeleton } from "../components/Skeleton";
+import { toast } from "../store/toastStore";
 
 export default function BulletinList() {
     const [bulletins, setBulletins] = useState([]);
@@ -11,20 +15,20 @@ export default function BulletinList() {
     const [annee, setAnnee] = useState(new Date().getFullYear());
     const [selectedIds, setSelectedIds] = useState([]);
     const [showSelect, setShowSelect] = useState(false);
-    const moisNoms = [
+    const moisLabels = [
         "",
         "Janvier",
-        "Fevrier",
+        "Février",
         "Mars",
         "Avril",
         "Mai",
         "Juin",
         "Juillet",
-        "Aout",
+        "Août",
         "Septembre",
         "Octobre",
         "Novembre",
-        "Decembre",
+        "Décembre",
     ];
 
     useEffect(() => {
@@ -82,12 +86,12 @@ export default function BulletinList() {
 
     async function generer() {
         if (selectedIds.length === 0) {
-            alert("Veuillez sélectionner au moins un employé.");
+            toast().warning("Veuillez sélectionner au moins un employé.");
             return;
         }
         setGenerating(true);
         try {
-            await api.post("/rh/bulletins/generer/", {
+            const { data } = await api.post("/rh/bulletins/generer/", {
                 mois,
                 annee,
                 employe_ids: selectedIds,
@@ -95,8 +99,19 @@ export default function BulletinList() {
             setShowSelect(false);
             setSelectedIds([]);
             loadBulletins();
+            const created = data.created || selectedIds.length;
+            const existing = data.existing || 0;
+            if (existing > 0) {
+                toast().success(
+                    `${created} bulletin(s) généré(s), ${existing} existai(en)t déjà.`,
+                );
+            } else {
+                toast().success(
+                    `${created} bulletin(s) généré(s) avec succès.`,
+                );
+            }
         } catch (err) {
-            alert("Erreur lors de la génération");
+            toast().error("Erreur lors de la génération des bulletins.");
         } finally {
             setGenerating(false);
         }
@@ -116,26 +131,14 @@ export default function BulletinList() {
                 </button>
             </div>
 
-            <div className="flex gap-3 mb-4">
-                <select
-                    value={mois}
-                    onChange={(e) => setMois(Number(e.target.value))}
-                    className="px-3 py-2 border border-sand-200 rounded-lg text-sm"
-                >
-                    {moisNoms.map(
-                        (nom, i) =>
-                            i > 0 && (
-                                <option key={i} value={i}>
-                                    {nom}
-                                </option>
-                            ),
-                    )}
-                </select>
-                <input
-                    type="number"
-                    value={annee}
-                    onChange={(e) => setAnnee(Number(e.target.value))}
-                    className="px-3 py-2 border border-sand-200 rounded-lg text-sm w-24"
+            <div className="flex gap-3 mb-4 items-end">
+                <MonthYearPicker
+                    month={mois}
+                    year={annee}
+                    onChange={({ month, year }) => {
+                        setMois(month);
+                        setAnnee(year);
+                    }}
                 />
             </div>
 
@@ -144,7 +147,7 @@ export default function BulletinList() {
                 <div className="bg-white rounded-xl shadow-card border border-forest-200 p-4 mb-4">
                     <p className="text-sm font-medium text-ink mb-3">
                         Sélectionnez les employés pour lesquels générer le
-                        bulletin de {moisNoms[mois]} {annee} :
+                        bulletin de {moisLabels[mois]} {annee} :
                     </p>
                     <div className="max-h-48 overflow-y-auto border border-sand-100 rounded-lg mb-3">
                         <label className="flex items-center gap-2 px-3 py-2 border-b border-sand-50 bg-sand-50 cursor-pointer hover:bg-sand-100">
@@ -199,9 +202,7 @@ export default function BulletinList() {
             )}
 
             {loading ? (
-                <div className="flex items-center justify-center h-48">
-                    <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-forest-500"></div>
-                </div>
+                <TableSkeleton rows={4} cols={6} />
             ) : (
                 <div className="bg-white rounded-xl shadow-card border border-sand-100 overflow-hidden">
                     <table className="w-full">
@@ -273,11 +274,15 @@ export default function BulletinList() {
                             ))}
                             {bulletins.length === 0 && (
                                 <tr>
-                                    <td
-                                        colSpan={6}
-                                        className="px-4 py-8 text-center text-sand-500"
-                                    >
-                                        Aucun bulletin pour cette période.
+                                    <td colSpan={6}>
+                                        <EmptyState
+                                            icon="bulletins"
+                                            title="Aucun bulletin pour cette période"
+                                            description="Générez les bulletins de paie pour ce mois."
+                                            actionLabel="Générer des bulletins"
+                                            onAction={() => setShowSelect(true)}
+                                            className="border-0 shadow-none"
+                                        />
                                     </td>
                                 </tr>
                             )}

@@ -1,5 +1,8 @@
 import { useState, useEffect } from "react";
 import api from "../api/client";
+import EmptyState from "../components/EmptyState";
+import { TableSkeleton } from "../components/Skeleton";
+import { toast } from "../store/toastStore";
 
 export default function HistoriqueContrats() {
     const [contrats, setContrats] = useState([]);
@@ -7,7 +10,6 @@ export default function HistoriqueContrats() {
     const [loading, setLoading] = useState(true);
     const [showForm, setShowForm] = useState(false);
     const [saving, setSaving] = useState(false);
-    const [msg, setMsg] = useState(null);
     const [form, setForm] = useState({
         employe: "",
         type_contrat: "cdi",
@@ -43,7 +45,6 @@ export default function HistoriqueContrats() {
     async function handleSubmit(e) {
         e.preventDefault();
         setSaving(true);
-        setMsg(null);
         const payload = { ...form };
         if (payload.salaire_mensuel)
             payload.salaire_mensuel = parseFloat(payload.salaire_mensuel);
@@ -65,10 +66,10 @@ export default function HistoriqueContrats() {
                 motif_fin: "",
                 notes: "",
             });
-            setMsg({ type: "success", text: "Contrat créé." });
+            toast().success("Contrat créé.");
             loadAll();
         } catch (err) {
-            setMsg({ type: "error", text: "Erreur lors de la création." });
+            toast().error("Erreur lors de la création.");
         } finally {
             setSaving(false);
         }
@@ -76,8 +77,12 @@ export default function HistoriqueContrats() {
 
     if (loading)
         return (
-            <div className="flex items-center justify-center h-64">
-                <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-forest-500"></div>
+            <div>
+                <div className="flex items-center justify-between mb-6">
+                    <div className="h-8 bg-sand-100 rounded w-48 animate-shimmer" />
+                    <div className="h-9 bg-sand-100 rounded w-36 animate-shimmer" />
+                </div>
+                <TableSkeleton rows={4} cols={9} />
             </div>
         );
 
@@ -95,14 +100,8 @@ export default function HistoriqueContrats() {
                 </button>
             </div>
 
-            {msg && (
-                <div
-                    className={`mb-4 p-3 rounded-lg text-sm ${msg.type === "success" ? "bg-green-50 text-green-700 border border-green-200" : "bg-red-50 text-red-700 border border-red-200"}`}
-                >
-                    {msg.text}
-                </div>
-            )}
-
+            <div className="bg-white rounded-xl shadow-card border border-sand-100 overflow-hidden">
+                <table
             {showForm && (
                 <form
                     onSubmit={handleSubmit}
@@ -338,11 +337,15 @@ export default function HistoriqueContrats() {
                         ))}
                         {contrats.length === 0 && (
                             <tr>
-                                <td
-                                    colSpan={6}
-                                    className="px-4 py-8 text-center text-sand-500"
-                                >
-                                    Aucun contrat. Créez-en un avec le bouton +.
+                                <td colSpan={6}>
+                                    <EmptyState
+                                        icon="sites"
+                                        title="Aucun contrat dans l'historique"
+                                        description="Ajoutez un contrat pour suivre l'évolution des employés."
+                                        actionLabel="Nouveau contrat"
+                                        onAction={() => setShowForm(true)}
+                                        className="border-0 shadow-none"
+                                    />
                                 </td>
                             </tr>
                         )}

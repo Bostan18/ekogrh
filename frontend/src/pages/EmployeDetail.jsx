@@ -2,21 +2,24 @@ import { useState, useEffect } from "react";
 import { useParams, useNavigate, Link } from "react-router-dom";
 import api from "../api/client";
 import { UserCircleIcon } from "../components/Icon";
+import { toast } from "../store/toastStore";
 
 export default function EmployeDetail() {
     const { id } = useParams();
     const navigate = useNavigate();
     const [employe, setEmploye] = useState(null);
     const [loading, setLoading] = useState(true);
-    const [msg, setMsg] = useState(null);
 
     async function handleDelete() {
-        if (!confirm("Supprimer définitivement cet employé ?")) return;
+        const confirmed = await toast().confirm(
+            "Supprimer définitivement cet employé ?",
+        );
+        if (!confirmed) return;
         try {
             await api.delete(`/rh/employes/${id}/`);
             navigate("/employes");
         } catch {
-            setMsg({ type: "error", text: "Erreur lors de la suppression." });
+            toast().error("Erreur lors de la suppression.");
         }
     }
 

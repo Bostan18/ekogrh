@@ -1,3 +1,4 @@
+from apps.core.views import global_search, user_info
 from django.contrib import admin
 from django.http import JsonResponse
 from django.urls import include, path
@@ -29,4 +30,6 @@ urlpatterns = [
     path("api/token/refresh/", TokenRefreshView.as_view(), name="token_refresh"),
     path("api/rh/", include("apps.rh.urls")),
     path("api/operations/", include("apps.operations.urls")),
+    path("api/search/", global_search, name="global_search"),
+    path("api/user/", user_info, name="user_info"),
 ]

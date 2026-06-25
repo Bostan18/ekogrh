@@ -1,5 +1,8 @@
 import { useState, useEffect } from "react";
 import api from "../api/client";
+import EmptyState from "../components/EmptyState";
+import { TableSkeleton } from "../components/Skeleton";
+import { toast } from "../store/toastStore";
 
 export default function MissionsMoo() {
     const [missions, setMissions] = useState([]);
@@ -10,13 +13,15 @@ export default function MissionsMoo() {
     const [error, setError] = useState("");
     const [editingId, setEditingId] = useState(null);
 
-    async function handleDelete(id) {
-        if (!confirm("Supprimer cette mission ?")) return;
+    const [form
+        const confirmed = await toast().confirm("Supprimer cette mission ?");
+        if (!confirmed) return;
         try {
             await api.delete(`/rh/missions-moo/${id}/`);
+            toast().success("Mission supprimée.");
             loadAll();
         } catch (err) {
-            console.error(err);
+            toast().error("Erreur lors de la suppression.");
         }
     }
 
@@ -118,8 +123,12 @@ export default function MissionsMoo() {
 
     if (loading) {
         return (
-            <div className="flex items-center justify-center h-64">
-                <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-forest-500"></div>
+            <div>
+                <div className="flex items-center justify-between mb-6">
+                    <div className="h-8 bg-sand-100 rounded w-48 animate-shimmer" />
+                    <div className="h-9 bg-sand-100 rounded w-36 animate-shimmer" />
+                </div>
+                <TableSkeleton rows={4} cols={6} />
             </div>
         );
     }
@@ -226,9 +235,13 @@ export default function MissionsMoo() {
 
             {/* Missions list */}
             {missions.length === 0 ? (
-                <div className="bg-white rounded-xl shadow-card border border-sand-100 p-8 text-center text-sand-500">
-                    Aucune mission MOO enregistrée.
-                </div>
+                <EmptyState
+                    icon="missions"
+                    title="Aucune mission MOO"
+                    description="Créez une mission pour un employé MOO."
+                    actionLabel="Nouvelle mission"
+                    onAction={() => setShowForm(true)}
+                />
             ) : (
                 <div className="bg-white rounded-xl shadow-card border border-sand-100 overflow-hidden">
                     <table className="w-full">

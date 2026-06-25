@@ -1,5 +1,8 @@
 import { useState, useEffect } from "react";
 import api from "../api/client";
+import EmptyState from "../components/EmptyState";
+import { TableSkeleton } from "../components/Skeleton";
+import { toast } from "../store/toastStore";
 
 export default function SiteList() {
     const [sites, setSites] = useState([]);
@@ -13,16 +16,16 @@ export default function SiteList() {
     });
     const [saving, setSaving] = useState(false);
     const [editingId, setEditingId] = useState(null);
-    const [msg, setMsg] = useState(null);
 
     async function handleDelete(id) {
-        if (!confirm("Supprimer ce site ?")) return;
+        const confirmed = await toast().confirm("Supprimer ce site ?");
+        if (!confirmed) return;
         try {
             await api.delete(`/operations/sites/${id}/`);
-            setMsg({ type: "success", text: "Site supprimé." });
+            toast().success("Site supprimé.");
             load();
         } catch {
-            setMsg({ type: "error", text: "Erreur lors de la suppression." });
+            toast().error("Erreur lors de la suppression.");
         }
     }
 
@@ -45,14 +48,13 @@ export default function SiteList() {
     async function handleSubmit(e) {
         e.preventDefault();
         setSaving(true);
-        setMsg(null);
         try {
             if (editingId) {
                 await api.put(`/operations/sites/${editingId}/`, form);
-                setMsg({ type: "success", text: "Site modifié." });
+                toast().success("Site modifié.");
             } else {
                 await api.post("/operations/sites/", form);
-                setMsg({ type: "success", text: "Site créé avec succès." });
+                toast().success("Site créé avec succès.");
             }
             setShowForm(false);
             setEditingId(null);
@@ -64,7 +66,7 @@ export default function SiteList() {
             });
             load();
         } catch (err) {
-            setMsg({ type: "error", text: "Erreur lors de l'enregistrement." });
+            toast().error("Erreur lors de l'enregistrement.");
         } finally {
             setSaving(false);
         }
@@ -81,12 +83,7 @@ export default function SiteList() {
         setShowForm(true);
     }
 
-    if (loading)
-        return (
-            <div className="flex items-center justify-center h-64">
-                <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-forest-500"></div>
-            </div>
-        );
+    if (loading) return <TableSkeleton rows={4} cols={5} />;
 
     return (
         <div>
@@ -110,14 +107,6 @@ export default function SiteList() {
                     {showForm ? "Annuler" : "+ Nouveau site"}
                 </button>
             </div>
-
-            {msg && (
-                <div
-                    className={`mb-4 p-3 rounded-lg text-sm ${msg.type === "success" ? "bg-green-50 text-green-700 border border-green-200" : "bg-red-50 text-red-700 border border-red-200"}`}
-                >
-                    {msg.text}
-                </div>
-            )}
 
             {showForm && (
                 <form
@@ -250,11 +239,15 @@ export default function SiteList() {
                         ))}
                         {sites.length === 0 && (
                             <tr>
-                                <td
-                                    colSpan={4}
-                                    className="px-4 py-8 text-center text-sand-500"
-                                >
-                                    Aucun site. Créez-en un avec le bouton +.
+                                <td colSpan={5}>
+                                    <EmptyState
+                                        icon="sites"
+                                        title="Aucun site enregistré"
+                                        description="Ajoutez un site d'intervention."
+                                        actionLabel="Nouveau site"
+                                        onAction={() => setShowForm(true)}
+                                        className="border-0 shadow-none"
+                                    />
                                 </td>
                             </tr>
                         )}

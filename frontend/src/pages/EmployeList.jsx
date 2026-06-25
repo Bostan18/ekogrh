@@ -1,6 +1,8 @@
 import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import api from "../api/client";
+import EmptyState from "../components/EmptyState";
+import { TableSkeleton } from "../components/Skeleton";
 
 export default function EmployeList() {
     const [employes, setEmployes] = useState([]);
@@ -79,9 +81,7 @@ export default function EmployeList() {
             </div>
 
             {loading ? (
-                <div className="flex items-center justify-center h-48">
-                    <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-forest-500"></div>
-                </div>
+                <TableSkeleton rows={5} cols={6} />
             ) : (
                 <div className="bg-white rounded-xl shadow-card border border-sand-100 overflow-hidden">
                     <table className="w-full">
@@ -157,11 +157,27 @@ export default function EmployeList() {
                             ))}
                             {employes.length === 0 && (
                                 <tr>
-                                    <td
-                                        colSpan={6}
-                                        className="px-4 py-8 text-center text-sand-500"
-                                    >
-                                        Aucun employé trouvé.
+                                    <td colSpan={6}>
+                                        <EmptyState
+                                            icon="employes"
+                                            title="Aucun employé trouvé"
+                                            description={
+                                                search || typeFilter
+                                                    ? "Essayez de modifier vos filtres."
+                                                    : "Commencez par créer votre premier employé."
+                                            }
+                                            actionLabel={
+                                                !search && !typeFilter
+                                                    ? "Créer un employé"
+                                                    : ""
+                                            }
+                                            actionTo={
+                                                !search && !typeFilter
+                                                    ? "/employes/nouveau"
+                                                    : ""
+                                            }
+                                            className="border-0 shadow-none"
+                                        />
                                     </td>
                                 </tr>
                             )}

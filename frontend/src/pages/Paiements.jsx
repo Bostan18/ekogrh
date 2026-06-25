@@ -1,5 +1,7 @@
 import { useState, useEffect } from "react";
 import api from "../api/client";
+import EmptyState from "../components/EmptyState";
+import { TableSkeleton } from "../components/Skeleton";
 
 export default function Paiements() {
     const [paiements, setPaiements] = useState([]);
@@ -61,9 +63,7 @@ export default function Paiements() {
                 </button>
             </div>
             {loading ? (
-                <div className="flex items-center justify-center h-48">
-                    <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-forest-500"></div>
-                </div>
+                <TableSkeleton rows={4} cols={6} />
             ) : tab === "paiements" ? (
                 <div className="bg-white rounded-xl shadow-card border border-sand-100 overflow-hidden">
                     <table className="w-full">
@@ -124,11 +124,13 @@ export default function Paiements() {
                             ))}
                             {paiements.length === 0 && (
                                 <tr>
-                                    <td
-                                        colSpan={6}
-                                        className="px-4 py-8 text-center text-sand-500"
-                                    >
-                                        Aucun paiement enregistre.
+                                    <td colSpan={6}>
+                                        <EmptyState
+                                            icon="paiements"
+                                            title="Aucun paiement enregistré"
+                                            description="Consultez l'onglet « Restant à payer » pour effectuer des règlements."
+                                            className="border-0 shadow-none"
+                                        />
                                     </td>
                                 </tr>
                             )}
@@ -195,11 +197,13 @@ export default function Paiements() {
                             ))}
                             {restants.length === 0 && (
                                 <tr>
-                                    <td
-                                        colSpan={5}
-                                        className="px-4 py-8 text-center text-sand-500"
-                                    >
-                                        Aucun montant restant a payer.
+                                    <td colSpan={6}>
+                                        <EmptyState
+                                            icon="paiements"
+                                            title="Aucun montant restant à payer"
+                                            description="Tous les journaliers sont à jour."
+                                            className="border-0 shadow-none"
+                                        />
                                     </td>
                                 </tr>
                             )}

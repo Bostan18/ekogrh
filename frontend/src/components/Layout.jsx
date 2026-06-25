@@ -11,10 +11,14 @@ import {
     LogoutIcon,
     MenuIcon,
 } from "./Icon";
+import Breadcrumb from "./Breadcrumb";
+import GlobalSearch from "./GlobalSearch";
+import ToastContainer from "./Toast";
 
 const NAV_SECTIONS = [
     {
         label: "Principal",
+        roles: ["admin", "rh", "comptable", "chef_equipe", "lecture"],
         items: [
             {
                 to: "/",
@@ -26,6 +30,7 @@ const NAV_SECTIONS = [
     },
     {
         label: "Ressources Humaines",
+        roles: ["admin", "rh", "comptable"],
         items: [
             { to: "/employes", label: "Employés", Icon: UsersIcon },
             { to: "/pointage", label: "Pointage jour", Icon: ClipboardIcon },
@@ -39,6 +44,7 @@ const NAV_SECTIONS = [
     },
     {
         label: "Paie",
+        roles: ["admin", "comptable"],
         items: [
             { to: "/bulletins", label: "Bulletins", Icon: DocumentIcon },
             { to: "/paiements", label: "Paiements", Icon: CurrencyIcon },
@@ -58,6 +64,7 @@ const NAV_SECTIONS = [
     },
     {
         label: "Opérations",
+        roles: ["admin", "rh", "chef_equipe"],
         items: [
             { to: "/sites", label: "Sites", Icon: DashboardIcon },
             { to: "/taches", label: "Tâches catalogue", Icon: ClipboardIcon },
@@ -71,6 +78,14 @@ const NAV_SECTIONS = [
     },
 ];
 
+const ROLE_LABELS = {
+    admin: "Administrateur",
+    rh: "Ressources Humaines",
+    comptable: "Comptable",
+    chef_equipe: "Chef d'équipe",
+    lecture: "Lecture seule",
+};
+
 export default function Layout() {
     const { logout, user } = useAuthStore();
     const navigate = useNavigate();
@@ -80,6 +95,8 @@ export default function Layout() {
         logout();
         navigate("/login");
     };
+
+    const role = user?.role || "admin";
 
     const linkClass = ({ isActive }) =>
         isActive
@@ -100,7 +117,9 @@ export default function Layout() {
             </div>
 
             <nav className="flex-1 overflow-y-auto p-2 space-y-3">
-                {NAV_SECTIONS.map((section) => (
+                {NAV_SECTIONS.filter((section) =>
+                    section.roles.includes(role),
+                ).map((section) => (
                     <div key={section.label}>
                         <p className="px-3 py-1 text-xs font-semibold text-sand-400 uppercase tracking-wider">
                             {section.label}
@@ -129,7 +148,9 @@ export default function Layout() {
                         <p className="font-medium text-ink text-xs">
                             {user?.username || "Utilisateur"}
                         </p>
-                        <p className="text-xs text-sand-400">Administrateur</p>
+                        <p className="text-xs text-sand-400">
+                            {ROLE_LABELS[role] || "Utilisateur"}
+                        </p>
                     </div>
                     <button
                         onClick={handleLogout}
@@ -145,6 +166,8 @@ export default function Layout() {
 
     return (
         <div className="flex h-screen bg-sand-50">
+            <ToastContainer />
+
             {sidebarOpen && (
                 <div
                     className="fixed inset-0 bg-black/40 z-40 lg:hidden"
@@ -173,12 +196,20 @@ export default function Layout() {
                     >
                         <MenuIcon className="w-6 h-6" />
                     </button>
-                    <h2 className="font-display font-bold text-forest-700 text-lg">
+                    <h2 className="font-display font-bold text-forest-700 text-lg flex-1">
                         <span className="text-forest-500">EKO</span>GRH
                     </h2>
                 </div>
 
+                <div className="hidden lg:flex items-center justify-between px-6 py-3 border-b border-sand-200 bg-white">
+                    <Breadcrumb />
+                    <GlobalSearch />
+                </div>
+
                 <div className="p-4 lg:p-6 max-w-7xl mx-auto">
+                    <div className="lg:hidden mb-4">
+                        <Breadcrumb />
+                    </div>
                     <Outlet />
                 </div>
             </main>

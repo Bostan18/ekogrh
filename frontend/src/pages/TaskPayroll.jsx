@@ -1,6 +1,8 @@
 import { useState, useEffect } from "react";
 import api from "../api/client";
 import SearchableSelect from "../components/SearchableSelect";
+import MonthYearPicker from "../components/MonthYearPicker";
+import EmptyState from "../components/EmptyState";
 
 export default function TaskPayroll() {
     const [sites, setSites] = useState([]);
@@ -82,47 +84,14 @@ export default function TaskPayroll() {
                             />
                         </div>
                         <div>
-                            <label className="block text-xs font-semibold text-sand-500 uppercase mb-1">
-                                Mois
-                            </label>
-                            <select
-                                value={mois}
-                                onChange={(e) =>
-                                    setMois(parseInt(e.target.value))
-                                }
-                                className="px-3 py-2 border border-sand-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-forest-500"
-                            >
-                                {[
-                                    "Janvier",
-                                    "Février",
-                                    "Mars",
-                                    "Avril",
-                                    "Mai",
-                                    "Juin",
-                                    "Juillet",
-                                    "Août",
-                                    "Septembre",
-                                    "Octobre",
-                                    "Novembre",
-                                    "Décembre",
-                                ].map((m, i) => (
-                                    <option key={i + 1} value={i + 1}>
-                                        {m}
-                                    </option>
-                                ))}
-                            </select>
-                        </div>
-                        <div>
-                            <label className="block text-xs font-semibold text-sand-500 uppercase mb-1">
-                                Année
-                            </label>
-                            <input
-                                type="number"
-                                value={annee}
-                                onChange={(e) =>
-                                    setAnnee(parseInt(e.target.value))
-                                }
-                                className="w-24 px-3 py-2 border border-sand-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-forest-500"
+                            <MonthYearPicker
+                                month={mois}
+                                year={annee}
+                                onChange={({ month, year }) => {
+                                    setMois(month);
+                                    setAnnee(year);
+                                }}
+                                label="Période"
                             />
                         </div>
                     </div>
@@ -223,14 +192,17 @@ export default function TaskPayroll() {
                         </tfoot>
                     </table>
                 </div>
-            ) : siteId && data ? (
-                <div className="bg-white rounded-xl shadow-card border border-sand-100 p-8 text-center text-sand-500">
-                    Aucun log de travail pour ce site ce mois-ci.
-                </div>
             ) : (
-                <div className="bg-white rounded-xl shadow-card border border-sand-100 p-8 text-center text-sand-500">
-                    Aucun log de travail pour cette période.
-                </div>
+                <EmptyState
+                    icon="logs"
+                    title="Aucun log de travail"
+                    description={
+                        siteId
+                            ? "Aucun log pour ce site sur cette période."
+                            : "Sélectionnez un site et une période pour voir la paie à la tâche."
+                    }
+                    className="mt-4"
+                />
             )}
         </div>
     );

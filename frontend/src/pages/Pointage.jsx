@@ -1,14 +1,16 @@
 import { useState, useEffect, useCallback } from "react";
 import { Link } from "react-router-dom";
 import api from "../api/client";
+import { toast } from "../store/toastStore";
+import { TableSkeleton } from "../components/Skeleton";
 
 export default function Pointage() {
     const [date, setDate] = useState(new Date().toISOString().split("T")[0]);
     const [journaliers, setJournaliers] = useState([]);
     const [anomalies, setAnomalies] = useState([]);
+    const [sites, setSites] = useState([]);
     const [loading, setLoading] = useState(true);
     const [saving, setSaving] = useState(false);
-    const [message, setMessage] = useState(null);
 
     const loadFeuille = useCallback(async () => {
         setLoading(true);
@@ -29,6 +31,12 @@ export default function Pointage() {
     useEffect(() => {
         loadFeuille();
     }, [loadFeuille]);
+
+    useEffect(() => {
+        api.get("/operations/sites/")
+            .then(({ data }) => setSites(data.results || data))
+            .catch(() => {});
+    }, []);
 
     const togglePresence = (idx) => {
         const updated = [...journaliers];
@@ -57,7 +65,6 @@ export default function Pointage() {
 
     const save = async () => {
         setSaving(true);
-        setMessage(null);
         try {
             const presences = journaliers
                 .filter((j) => j.present !== null)
@@ -73,16 +80,10 @@ export default function Pointage() {
                 date,
                 presences,
             });
-            setMessage({
-                type: "success",
-                text: "Pointages enregistrés avec succès.",
-            });
+            toast().success("Pointages enregistrés avec succès.");
             loadFeuille();
         } catch (err) {
-            setMessage({
-                type: "error",
-                text: "Erreur lors de l'enregistrement.",
-            });
+            toast().error("Erreur lors de l'enregistrement.");
         } finally {
             setSaving(false);
         }
@@ -96,24 +97,21 @@ export default function Pointage() {
                 .map((j) => j.presence_id);
             if (ids.length > 0) {
                 await api.post("/rh/presences/valider/", { ids });
-                setMessage({
-                    type: "success",
-                    text: `${ids.length} pointage(s) validé(s).`,
-                });
+                toast().success(`${ids.length} pointage(s) validé(s).`);
                 loadFeuille();
             }
         } catch (err) {
-            setMessage({
-                type: "error",
-                text: "Erreur lors de la validation.",
-            });
+            toast().error("Erreur lors de la validation.");
         } finally {
             setSaving(false);
         }
     };
 
     const cloturer = async () => {
-        if (!confirm("Clôturer tous les pointages de ce mois ?")) return;
+        const confirmed = await toast().confirm(
+            "Clôturer tous les pointages de ce mois ?",
+        );
+        if (!confirmed) return;
         setSaving(true);
         try {
             const [annee, mois] = date.split("-");
@@ -121,13 +119,12 @@ export default function Pointage() {
                 mois: parseInt(mois),
                 annee: parseInt(annee),
             });
-            setMessage({
-                type: "success",
-                text: `${data.cloturees} pointage(s) clôturé(s) pour ${mois}/${annee}.`,
-            });
+            toast().success(
+                `${data.cloturees} pointage(s) clôturé(s) pour ${mois}/${annee}.`,
+            );
             loadFeuille();
         } catch (err) {
-            setMessage({ type: "error", text: "Erreur lors de la clôture." });
+            toast().error("Erreur lors de la clôture.");
         } finally {
             setSaving(false);
         }
@@ -228,23 +225,10 @@ export default function Pointage() {
                         </button>
                     </div>
                 </div>
-                {message && (
-                    <div
-                        className={
-                            message.type === "success"
-                                ? "mt-3 p-3 rounded-lg text-sm bg-green-50 text-green-700 border border-green-200"
-                                : "mt-3 p-3 rounded-lg text-sm bg-red-50 text-red-700 border border-red-200"
-                        }
-                    >
-                        {message.text}
-                    </div>
-                )}
             </div>
 
             {loading ? (
-                <div className="flex items-center justify-center h-48">
-                    <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-forest-500"></div>
-                </div>
+                <TableSkeleton rows={8} cols={5} />
             ) : (
                 <div className="bg-white rounded-xl shadow-card border border-sand-100 overflow-hidden">
                     <table className="w-full">
@@ -384,8 +368,7 @@ export default function Pointage() {
                                             />
                                         </td>
                                         <td className="px-4 py-2.5">
-                                            <input
-                                                type="text"
+                                            <select
                                                 value={j.site_ref || ""}
                                                 onChange={(e) =>
                                                     updateField(
@@ -394,9 +377,20 @@ export default function Pointage() {
                                                         e.target.value,
                                                     )
                                                 }
-                                                className="w-24 px-2 py-1 border border-sand-200 rounded text-sm"
-                                                placeholder="Site"
-                                            />
+                                                className="w-32 px-2 py-1 border border-sand-200 rounded text-sm bg-white"
+                                            >
+                                                <option value="">
+                                                    — Site —
+                                                </option>
+                                                {sites.map((s) => (
+                                                    <option
+                                                        key={s.id}
+                                                        value={s.nom}
+                                                    >
+                                                        {s.nom}
+                                                    </option>
+                                                ))}
+                                            </select>
                                         </td>
                                         <td className="px-4 py-2.5">
                                             <input

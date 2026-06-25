@@ -1,6 +1,9 @@
 import { useState, useEffect } from "react";
 import api from "../api/client";
 import SearchableSelect from "../components/SearchableSelect";
+import EmptyState from "../components/EmptyState";
+import { TableSkeleton } from "../components/Skeleton";
+import { toast } from "../store/toastStore";
 
 export default function LogTravailList() {
     const [logs, setLogs] = useState([]);
@@ -10,7 +13,6 @@ export default function LogTravailList() {
     const [loading, setLoading] = useState(true);
     const [showForm, setShowForm] = useState(false);
     const [saving, setSaving] = useState(false);
-    const [msg, setMsg] = useState(null);
     const [filterEmploye, setFilterEmploye] = useState("");
     const [filterDate, setFilterDate] = useState("");
     const [form, setForm] = useState({
@@ -29,13 +31,14 @@ export default function LogTravailList() {
     }, [filterEmploye, filterDate]);
 
     async function handleDelete(id) {
-        if (!confirm("Supprimer ce log ?")) return;
+        const confirmed = await toast().confirm("Supprimer ce log ?");
+        if (!confirmed) return;
         try {
             await api.delete(`/operations/logs-travail/${id}/`);
-            setMsg({ type: "success", text: "Log supprimé." });
+            toast().success("Log supprimé.");
             loadAll();
         } catch {
-            setMsg({ type: "error", text: "Erreur lors de la suppression." });
+            toast().error("Erreur lors de la suppression.");
         }
     }
 
@@ -65,7 +68,6 @@ export default function LogTravailList() {
     async function handleSubmit(e) {
         e.preventDefault();
         setSaving(true);
-        setMsg(null);
         const payload = {
             ...form,
             objectif_realise: parseFloat(form.objectif_realise),
@@ -85,34 +87,37 @@ export default function LogTravailList() {
                 prime: "",
                 notes: "",
             });
-            setMsg({ type: "success", text: "Log de travail créé." });
+            toast().success("Log de travail créé.");
             loadAll();
         } catch (err) {
-            setMsg({ type: "error", text: "Erreur lors de la création." });
+            toast().error("Erreur lors de la création.");
         } finally {
             setSaving(false);
         }
     }
 
     async function handlePayer(id) {
-        if (!confirm("Marquer ce log comme payé ? Un paiement sera créé."))
-            return;
+        const confirmed = await toast().confirm(
+            "Marquer ce log comme payé ? Un paiement sera créé.",
+        );
+        if (!confirmed) return;
         try {
             await api.post(`/operations/logs-travail/${id}/marquer_paye/`);
-            setMsg({
-                type: "success",
-                text: "Log marqué payé et paiement créé.",
-            });
+            toast().success("Log marqué payé et paiement créé.");
             loadAll();
         } catch {
-            setMsg({ type: "error", text: "Erreur lors du paiement." });
+            toast().error("Erreur lors du paiement.");
         }
     }
 
     if (loading)
         return (
-            <div className="flex items-center justify-center h-64">
-                <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-forest-500"></div>
+            <div>
+                <div className="flex items-center justify-between mb-6">
+                    <div className="h-8 bg-sand-100 rounded w-48 animate-shimmer" />
+                    <div className="h-9 bg-sand-100 rounded w-36 animate-shimmer" />
+                </div>
+                <TableSkeleton rows={4} cols={9} />
             </div>
         );
 
@@ -151,14 +156,9 @@ export default function LogTravailList() {
                 />
             </div>
 
-            {msg && (
-                <div
-                    className={`mb-4 p-3 rounded-lg text-sm ${msg.type === "success" ? "bg-green-50 text-green-700 border border-green-200" : "bg-red-50 text-red-700 border border-red-200"}`}
-                >
-                    {msg.text}
-                </div>
-            )}
+            </div>
 
+            <div className="bg-white rounded-xl shadow-card border border-sand-100 overflow-hidden">
             {showForm && (
                 <form
                     onSubmit={handleSubmit}
@@ -392,11 +392,15 @@ export default function LogTravailList() {
                         ))}
                         {logs.length === 0 && (
                             <tr>
-                                <td
-                                    colSpan={7}
-                                    className="px-4 py-8 text-center text-sand-500"
-                                >
-                                    Aucun log. Créez-en un avec le bouton +.
+                                <td colSpan={7}>
+                                    <EmptyState
+                                        icon="logs"
+                                        title="Aucun log de travail"
+                                        description={filterEmploye || filterDate ? "Essayez de modifier vos filtres." : "Ajoutez un premier log de travail."}
+                                        actionLabel={!filterEmploye && !filterDate ? "Nouveau log" : ""}
+                                        onAction={!filterEmploye && !filterDate ? () => setShowForm(true) : null}
+                                        className="border-0 shadow-none"
+                                    />
                                 </td>
                             </tr>
                         )}
