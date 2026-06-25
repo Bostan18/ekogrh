@@ -45,9 +45,7 @@ export default function Paiements() {
 
     return (
         <div>
-            <h2 className="text-2xl font-display font-bold text-ink mb-6">
-                Paiements
-            </h2>
+            <h2 className="text-page-title text-ink mb-6">Paiements</h2>
             <div className="flex gap-2 mb-4">
                 <button
                     onClick={() => setTab("paiements")}
@@ -65,28 +63,18 @@ export default function Paiements() {
             {loading ? (
                 <TableSkeleton rows={4} cols={6} />
             ) : tab === "paiements" ? (
-                <div className="bg-white rounded-xl shadow-card border border-sand-100 overflow-hidden">
+                <div className="card overflow-hidden">
                     <table className="w-full">
                         <thead>
-                            <tr className="border-b border-sand-100 bg-sand-50">
-                                <th className="text-left px-4 py-3 text-xs font-semibold text-sand-500 uppercase">
-                                    Date
-                                </th>
-                                <th className="text-left px-4 py-3 text-xs font-semibold text-sand-500 uppercase">
-                                    Employe
-                                </th>
-                                <th className="text-right px-4 py-3 text-xs font-semibold text-sand-500 uppercase">
+                            <tr className="border-b border-border-light bg-sand-50">
+                                <th className="table-header">Date</th>
+                                <th className="table-header">Employe</th>
+                                <th className="table-header text-right">
                                     Montant
                                 </th>
-                                <th className="text-left px-4 py-3 text-xs font-semibold text-sand-500 uppercase">
-                                    Mode
-                                </th>
-                                <th className="text-left px-4 py-3 text-xs font-semibold text-sand-500 uppercase">
-                                    Reference
-                                </th>
-                                <th className="text-left px-4 py-3 text-xs font-semibold text-sand-500 uppercase">
-                                    Notes
-                                </th>
+                                <th className="table-header">Mode</th>
+                                <th className="table-header">Reference</th>
+                                <th className="table-header">Notes</th>
                             </tr>
                         </thead>
                         <tbody className="divide-y divide-sand-50">
@@ -138,26 +126,24 @@ export default function Paiements() {
                     </table>
                 </div>
             ) : (
-                <div className="bg-white rounded-xl shadow-card border border-sand-100 overflow-hidden">
+                <div className="card overflow-hidden">
                     <table className="w-full">
                         <thead>
-                            <tr className="border-b border-sand-100 bg-sand-50">
-                                <th className="text-left px-4 py-3 text-xs font-semibold text-sand-500 uppercase">
-                                    Employe
-                                </th>
-                                <th className="text-right px-4 py-3 text-xs font-semibold text-sand-500 uppercase">
+                            <tr className="border-b border-border-light bg-sand-50">
+                                <th className="table-header">Employe</th>
+                                <th className="table-header text-right">
                                     Total du
                                 </th>
-                                <th className="text-right px-4 py-3 text-xs font-semibold text-sand-500 uppercase">
+                                <th className="table-header text-right">
                                     Total paye
                                 </th>
-                                <th className="text-right px-4 py-3 text-xs font-semibold text-sand-500 uppercase">
+                                <th className="table-header text-right">
                                     Restant
                                 </th>
-                                <th className="text-center px-4 py-3 text-xs font-semibold text-sand-500 uppercase">
+                                <th className="table-header text-center">
                                     Jours non payes
                                 </th>
-                                <th className="text-center px-4 py-3 text-xs font-semibold text-sand-500 uppercase">
+                                <th className="table-header text-center">
                                     Bordereau
                                 </th>
                             </tr>

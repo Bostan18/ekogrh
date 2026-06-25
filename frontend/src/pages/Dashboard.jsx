@@ -189,7 +189,7 @@ export default function Dashboard() {
                                     </svg>
                                 )}
                             </div>
-                            <p className="text-display-2 text-ink leading-none mb-1">
+                            <p className="text-2xl font-bold text-ink leading-none mb-1">
                                 {kpi.value}
                             </p>
                             <p className="text-body-sm text-ink-secondary">
@@ -329,7 +329,7 @@ export default function Dashboard() {
                             <span className="text-body-sm text-ink-secondary">
                                 Bulletins générés
                             </span>
-                            <span className="text-display-2 text-ink">
+                            <span className="text-2xl font-bold text-ink">
                                 {paieResume?.nbBulletins ?? "—"}
                             </span>
                         </div>
@@ -337,7 +337,7 @@ export default function Dashboard() {
                             <span className="text-body-sm text-ink-secondary">
                                 Masse salariale
                             </span>
-                            <span className="text-display-2 text-forest-600">
+                            <span className="text-2xl font-bold text-forest-600">
                                 {stats?.masseSalariale
                                     ? `${stats.masseSalariale.toLocaleString()} FCFA`
                                     : "—"}

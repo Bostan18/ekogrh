@@ -44,9 +44,7 @@ export default function CongesList() {
     return (
         <div>
             <div className="flex items-center justify-between mb-6">
-                <h2 className="text-2xl font-display font-bold text-ink">
-                    Conges & absences
-                </h2>
+                <h2 className="text-page-title text-ink">Conges & absences</h2>
                 <button className="px-4 py-2 bg-forest-500 hover:bg-forest-600 text-white text-sm font-medium rounded-lg transition-colors">
                     + Nouvelle demande
                 </button>
@@ -67,31 +65,19 @@ export default function CongesList() {
             {loading ? (
                 <TableSkeleton rows={4} cols={7} />
             ) : (
-                <div className="bg-white rounded-xl shadow-card border border-sand-100 overflow-hidden">
+                <div className="card overflow-hidden">
                     <table className="w-full">
                         <thead>
-                            <tr className="border-b border-sand-100 bg-sand-50">
-                                <th className="text-left px-4 py-3 text-xs font-semibold text-sand-500 uppercase">
-                                    Employe
-                                </th>
-                                <th className="text-left px-4 py-3 text-xs font-semibold text-sand-500 uppercase">
-                                    Type
-                                </th>
-                                <th className="text-left px-4 py-3 text-xs font-semibold text-sand-500 uppercase">
-                                    Du
-                                </th>
-                                <th className="text-left px-4 py-3 text-xs font-semibold text-sand-500 uppercase">
-                                    Au
-                                </th>
-                                <th className="text-center px-4 py-3 text-xs font-semibold text-sand-500 uppercase">
+                            <tr className="border-b border-border-light bg-sand-50">
+                                <th className="table-header">Employe</th>
+                                <th className="table-header">Type</th>
+                                <th className="table-header">Du</th>
+                                <th className="table-header">Au</th>
+                                <th className="table-header text-center">
                                     Jours
                                 </th>
-                                <th className="text-left px-4 py-3 text-xs font-semibold text-sand-500 uppercase">
-                                    Statut
-                                </th>
-                                <th className="text-left px-4 py-3 text-xs font-semibold text-sand-500 uppercase">
-                                    Actions
-                                </th>
+                                <th className="table-header">Statut</th>
+                                <th className="table-header">Actions</th>
                             </tr>
                         </thead>
                         <tbody className="divide-y divide-sand-50">

@@ -300,34 +300,20 @@ export default function LogTravailList() {
                 </form>
             )}
 
-            <div className="bg-white rounded-xl shadow-card border border-sand-100 overflow-hidden">
+            <div className="card overflow-hidden">
                 <table className="w-full">
                     <thead>
-                        <tr className="border-b border-sand-100 bg-sand-50">
-                            <th className="text-left px-4 py-3 text-xs font-semibold text-sand-500 uppercase">
-                                Employé
-                            </th>
-                            <th className="text-left px-4 py-3 text-xs font-semibold text-sand-500 uppercase">
-                                Date
-                            </th>
-                            <th className="text-left px-4 py-3 text-xs font-semibold text-sand-500 uppercase">
-                                Site
-                            </th>
-                            <th className="text-left px-4 py-3 text-xs font-semibold text-sand-500 uppercase">
-                                Tâche
-                            </th>
-                            <th className="text-right px-4 py-3 text-xs font-semibold text-sand-500 uppercase">
-                                Qté
-                            </th>
-                            <th className="text-right px-4 py-3 text-xs font-semibold text-sand-500 uppercase">
-                                Heures
-                            </th>
-                            <th className="text-right px-4 py-3 text-xs font-semibold text-sand-500 uppercase">
+                        <tr className="border-b border-border-light bg-sand-50">
+                            <th className="table-header">Employé</th>
+                            <th className="table-header">Date</th>
+                            <th className="table-header">Site</th>
+                            <th className="table-header">Tâche</th>
+                            <th className="table-header text-right">Qté</th>
+                            <th className="table-header text-right">Heures</th>
+                            <th className="table-header text-right">
                                 Rendement
                             </th>
-                            <th className="text-center px-4 py-3 text-xs font-semibold text-sand-500 uppercase">
-                                Statut
-                            </th>
+                            <th className="table-header text-center">Statut</th>
                         </tr>
                     </thead>
                     <tbody className="divide-y divide-sand-50">

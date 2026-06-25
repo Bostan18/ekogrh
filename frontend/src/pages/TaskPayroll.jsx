@@ -48,9 +48,7 @@ export default function TaskPayroll() {
 
     return (
         <div>
-            <h2 className="text-2xl font-display font-bold text-ink mb-6">
-                Paie à la tâche
-            </h2>
+            <h2 className="text-page-title text-ink mb-6">Paie à la tâche</h2>
 
             {data && (
                 <div className="flex gap-6 mb-4 text-sm">
@@ -113,31 +111,23 @@ export default function TaskPayroll() {
                     <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-forest-500"></div>
                 </div>
             ) : data && data.lignes.length > 0 ? (
-                <div className="bg-white rounded-xl shadow-card border border-sand-100 overflow-hidden">
+                <div className="card overflow-hidden">
                     <table className="w-full">
                         <thead>
-                            <tr className="border-b border-sand-100 bg-sand-50">
-                                <th className="text-left px-4 py-3 text-xs font-semibold text-sand-500 uppercase">
-                                    Employé
-                                </th>
-                                <th className="text-left px-4 py-3 text-xs font-semibold text-sand-500 uppercase">
-                                    Tâche
-                                </th>
-                                <th className="text-right px-4 py-3 text-xs font-semibold text-sand-500 uppercase">
+                            <tr className="border-b border-border-light bg-sand-50">
+                                <th className="table-header">Employé</th>
+                                <th className="table-header">Tâche</th>
+                                <th className="table-header text-right">
                                     Quantité
                                 </th>
-                                <th className="text-right px-4 py-3 text-xs font-semibold text-sand-500 uppercase">
-                                    PU
-                                </th>
-                                <th className="text-right px-4 py-3 text-xs font-semibold text-sand-500 uppercase">
+                                <th className="table-header text-right">PU</th>
+                                <th className="table-header text-right">
                                     Prime
                                 </th>
-                                <th className="text-right px-4 py-3 text-xs font-semibold text-sand-500 uppercase">
+                                <th className="table-header text-right">
                                     Montant
                                 </th>
-                                <th className="text-left px-4 py-3 text-xs font-semibold text-sand-500 uppercase">
-                                    Contact
-                                </th>
+                                <th className="table-header">Contact</th>
                             </tr>
                         </thead>
                         <tbody className="divide-y divide-sand-50">

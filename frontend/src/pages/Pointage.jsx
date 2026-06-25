@@ -147,8 +147,8 @@ export default function Pointage() {
     return (
         <div>
             <div className="flex items-center justify-between mb-6">
-                <h2 className="text-2xl font-display font-bold text-ink">
-                    Pointage journalier
+                <h2 className="text-page-title text-ink">
+                    Pointage — Journalier
                 </h2>
                 <Link
                     to="/pointage-semaine"

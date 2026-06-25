@@ -161,9 +161,7 @@ export default function PointageSemaine() {
         <div>
             {/* Header */}
             <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 mb-6">
-                <h2 className="text-2xl font-display font-bold text-ink">
-                    Pointage — Semaine
-                </h2>
+                <h2 className="text-page-title text-ink">Pointage — Semaine</h2>
                 <div className="flex items-center gap-2">
                     <button
                         onClick={prevWeek}
@@ -211,11 +209,11 @@ export default function PointageSemaine() {
 
             {/* Grid */}
             {data && (
-                <div className="bg-white rounded-xl shadow-card border border-sand-100 overflow-x-auto">
+                <div className="card overflow-x-auto">
                     <table className="w-full min-w-[700px]">
                         <thead>
-                            <tr className="border-b border-sand-100 bg-sand-50">
-                                <th className="text-left px-3 py-2 text-xs font-semibold text-sand-500 uppercase sticky left-0 bg-sand-50 z-10">
+                            <tr className="border-b border-border-light bg-sand-50">
+                                <th className="table-header sticky left-0 bg-sand-50 z-10">
                                     Employé
                                 </th>
                                 {data.jours.map((jour) => (

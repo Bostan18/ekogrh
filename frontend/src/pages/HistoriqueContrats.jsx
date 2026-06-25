@@ -265,28 +265,16 @@ export default function HistoriqueContrats() {
                 </form>
             )}
 
-            <div className="bg-white rounded-xl shadow-card border border-sand-100 overflow-hidden">
+            <div className="card overflow-hidden">
                 <table className="w-full">
                     <thead>
-                        <tr className="border-b border-sand-100 bg-sand-50">
-                            <th className="text-left px-4 py-3 text-xs font-semibold text-sand-500 uppercase">
-                                Employé
-                            </th>
-                            <th className="text-left px-4 py-3 text-xs font-semibold text-sand-500 uppercase">
-                                Type
-                            </th>
-                            <th className="text-left px-4 py-3 text-xs font-semibold text-sand-500 uppercase">
-                                Poste
-                            </th>
-                            <th className="text-left px-4 py-3 text-xs font-semibold text-sand-500 uppercase">
-                                Période
-                            </th>
-                            <th className="text-right px-4 py-3 text-xs font-semibold text-sand-500 uppercase">
-                                Salaire
-                            </th>
-                            <th className="text-center px-4 py-3 text-xs font-semibold text-sand-500 uppercase">
-                                Statut
-                            </th>
+                        <tr className="border-b border-border-light bg-sand-50">
+                            <th className="table-header">Employé</th>
+                            <th className="table-header">Type</th>
+                            <th className="table-header">Poste</th>
+                            <th className="table-header">Période</th>
+                            <th className="table-header text-right">Salaire</th>
+                            <th className="table-header text-center">Statut</th>
                         </tr>
                     </thead>
                     <tbody className="divide-y divide-sand-50">

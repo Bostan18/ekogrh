@@ -120,9 +120,7 @@ export default function BulletinList() {
     return (
         <div>
             <div className="flex items-center justify-between mb-6">
-                <h2 className="text-2xl font-display font-bold text-ink">
-                    Bulletins de paie
-                </h2>
+                <h2 className="text-page-title text-ink">Bulletins de paie</h2>
                 <button
                     onClick={() => setShowSelect(!showSelect)}
                     className="btn-primary"
