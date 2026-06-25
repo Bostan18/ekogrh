@@ -156,9 +156,6 @@ export default function LogTravailList() {
                 />
             </div>
 
-            </div>
-
-            <div className="bg-white rounded-xl shadow-card border border-sand-100 overflow-hidden">
             {showForm && (
                 <form
                     onSubmit={handleSubmit}
@@ -396,9 +393,21 @@ export default function LogTravailList() {
                                     <EmptyState
                                         icon="logs"
                                         title="Aucun log de travail"
-                                        description={filterEmploye || filterDate ? "Essayez de modifier vos filtres." : "Ajoutez un premier log de travail."}
-                                        actionLabel={!filterEmploye && !filterDate ? "Nouveau log" : ""}
-                                        onAction={!filterEmploye && !filterDate ? () => setShowForm(true) : null}
+                                        description={
+                                            filterEmploye || filterDate
+                                                ? "Essayez de modifier vos filtres."
+                                                : "Ajoutez un premier log de travail."
+                                        }
+                                        actionLabel={
+                                            !filterEmploye && !filterDate
+                                                ? "Nouveau log"
+                                                : ""
+                                        }
+                                        onAction={
+                                            !filterEmploye && !filterDate
+                                                ? () => setShowForm(true)
+                                                : null
+                                        }
                                         className="border-0 shadow-none"
                                     />
                                 </td>

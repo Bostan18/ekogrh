@@ -100,8 +100,6 @@ export default function HistoriqueContrats() {
                 </button>
             </div>
 
-            <div className="bg-white rounded-xl shadow-card border border-sand-100 overflow-hidden">
-                <table
             {showForm && (
                 <form
                     onSubmit={handleSubmit}

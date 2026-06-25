@@ -13,7 +13,7 @@ export default function MissionsMoo() {
     const [error, setError] = useState("");
     const [editingId, setEditingId] = useState(null);
 
-    const [form
+    async function handleDelete(id) {
         const confirmed = await toast().confirm("Supprimer cette mission ?");
         if (!confirmed) return;
         try {
