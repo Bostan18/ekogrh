@@ -51,13 +51,16 @@ export default function BulletinList() {
     async function loadEmployes() {
         try {
             const { data } = await api.get("/rh/employes/", {
-                params: {
-                    type_contrat: "cdi,cdd,stagiaire",
-                    statut: "actif",
-                    is_deleted: "false",
-                },
+                params: { statut: "actif" },
             });
-            setEmployes(data.results || data);
+            const all = data.results || data;
+            setEmployes(
+                all.filter(
+                    (e) =>
+                        ["cdi", "cdd", "stagiaire"].includes(e.type_contrat) &&
+                        e.salaire_mensuel,
+                ),
+            );
         } catch (err) {
             console.error(err);
         }
