@@ -1,25 +1,35 @@
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
-import { useEffect } from "react";
+import { useEffect, lazy, Suspense } from "react";
 import useAuthStore from "./store/authStore";
 import Layout from "./components/Layout";
 import Login from "./pages/Login";
-import Dashboard from "./pages/Dashboard";
-import EmployeList from "./pages/EmployeList";
-import EmployeForm from "./pages/EmployeForm";
-import EmployeDetail from "./pages/EmployeDetail";
-import Pointage from "./pages/Pointage";
-import PointageSemaine from "./pages/PointageSemaine";
-import BulletinList from "./pages/BulletinList";
-import BulletinDetail from "./pages/BulletinDetail";
-import CongesList from "./pages/CongesList";
-import Paiements from "./pages/Paiements";
-import MissionsMoo from "./pages/MissionsMoo";
-import JournalierList from "./pages/JournalierList";
-import SiteList from "./pages/SiteList";
-import TacheCatalogueList from "./pages/TacheCatalogueList";
-import LogTravailList from "./pages/LogTravailList";
-import HistoriqueContrats from "./pages/HistoriqueContrats";
-import TaskPayroll from "./pages/TaskPayroll";
+
+const Dashboard = lazy(() => import("./pages/Dashboard"));
+const EmployeList = lazy(() => import("./pages/EmployeList"));
+const EmployeForm = lazy(() => import("./pages/EmployeForm"));
+const EmployeDetail = lazy(() => import("./pages/EmployeDetail"));
+const Pointage = lazy(() => import("./pages/Pointage"));
+const PointageSemaine = lazy(() => import("./pages/PointageSemaine"));
+const BulletinList = lazy(() => import("./pages/BulletinList"));
+const BulletinDetail = lazy(() => import("./pages/BulletinDetail"));
+const CongesList = lazy(() => import("./pages/CongesList"));
+const Paiements = lazy(() => import("./pages/Paiements"));
+const MissionsMoo = lazy(() => import("./pages/MissionsMoo"));
+const JournalierList = lazy(() => import("./pages/JournalierList"));
+const SiteList = lazy(() => import("./pages/SiteList"));
+const TacheCatalogueList = lazy(() => import("./pages/TacheCatalogueList"));
+const LogTravailList = lazy(() => import("./pages/LogTravailList"));
+const HistoriqueContrats = lazy(() => import("./pages/HistoriqueContrats"));
+const TaskPayroll = lazy(() => import("./pages/TaskPayroll"));
+const RetenueCategorieList = lazy(() => import("./pages/RetenueCategorieList"));
+
+function PageLoader() {
+    return (
+        <div className="flex h-64 items-center justify-center">
+            <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-forest-500"></div>
+        </div>
+    );
+}
 
 function ProtectedRoute({ children }) {
     const { isAuthenticated, loading } = useAuthStore();
@@ -52,30 +62,158 @@ export default function App() {
                         </ProtectedRoute>
                     }
                 >
-                    <Route index element={<Dashboard />} />
-                    <Route path="employes" element={<EmployeList />} />
-                    <Route path="employes/nouveau" element={<EmployeForm />} />
+                    <Route
+                        index
+                        element={
+                            <Suspense fallback={<PageLoader />}>
+                                <Dashboard />
+                            </Suspense>
+                        }
+                    />
+                    <Route
+                        path="employes"
+                        element={
+                            <Suspense fallback={<PageLoader />}>
+                                <EmployeList />
+                            </Suspense>
+                        }
+                    />
+                    <Route
+                        path="employes/nouveau"
+                        element={
+                            <Suspense fallback={<PageLoader />}>
+                                <EmployeForm />
+                            </Suspense>
+                        }
+                    />
                     <Route
                         path="employes/:id/modifier"
-                        element={<EmployeForm />}
+                        element={
+                            <Suspense fallback={<PageLoader />}>
+                                <EmployeForm />
+                            </Suspense>
+                        }
                     />
-                    <Route path="employes/:id" element={<EmployeDetail />} />
-                    <Route path="pointage" element={<Pointage />} />
+                    <Route
+                        path="employes/:id"
+                        element={
+                            <Suspense fallback={<PageLoader />}>
+                                <EmployeDetail />
+                            </Suspense>
+                        }
+                    />
+                    <Route
+                        path="pointage"
+                        element={
+                            <Suspense fallback={<PageLoader />}>
+                                <Pointage />
+                            </Suspense>
+                        }
+                    />
                     <Route
                         path="pointage-semaine"
-                        element={<PointageSemaine />}
+                        element={
+                            <Suspense fallback={<PageLoader />}>
+                                <PointageSemaine />
+                            </Suspense>
+                        }
                     />
-                    <Route path="bulletins" element={<BulletinList />} />
-                    <Route path="bulletins/:id" element={<BulletinDetail />} />
-                    <Route path="conges" element={<CongesList />} />
-                    <Route path="paiements" element={<Paiements />} />
-                    <Route path="missions" element={<MissionsMoo />} />
-                    <Route path="journaliers" element={<JournalierList />} />
-                    <Route path="sites" element={<SiteList />} />
-                    <Route path="taches" element={<TacheCatalogueList />} />
-                    <Route path="logs" element={<LogTravailList />} />
-                    <Route path="historique" element={<HistoriqueContrats />} />
-                    <Route path="task-payroll" element={<TaskPayroll />} />
+                    <Route
+                        path="bulletins"
+                        element={
+                            <Suspense fallback={<PageLoader />}>
+                                <BulletinList />
+                            </Suspense>
+                        }
+                    />
+                    <Route
+                        path="bulletins/:id"
+                        element={
+                            <Suspense fallback={<PageLoader />}>
+                                <BulletinDetail />
+                            </Suspense>
+                        }
+                    />
+                    <Route
+                        path="conges"
+                        element={
+                            <Suspense fallback={<PageLoader />}>
+                                <CongesList />
+                            </Suspense>
+                        }
+                    />
+                    <Route
+                        path="paiements"
+                        element={
+                            <Suspense fallback={<PageLoader />}>
+                                <Paiements />
+                            </Suspense>
+                        }
+                    />
+                    <Route
+                        path="missions"
+                        element={
+                            <Suspense fallback={<PageLoader />}>
+                                <MissionsMoo />
+                            </Suspense>
+                        }
+                    />
+                    <Route
+                        path="journaliers"
+                        element={
+                            <Suspense fallback={<PageLoader />}>
+                                <JournalierList />
+                            </Suspense>
+                        }
+                    />
+                    <Route
+                        path="sites"
+                        element={
+                            <Suspense fallback={<PageLoader />}>
+                                <SiteList />
+                            </Suspense>
+                        }
+                    />
+                    <Route
+                        path="taches"
+                        element={
+                            <Suspense fallback={<PageLoader />}>
+                                <TacheCatalogueList />
+                            </Suspense>
+                        }
+                    />
+                    <Route
+                        path="logs"
+                        element={
+                            <Suspense fallback={<PageLoader />}>
+                                <LogTravailList />
+                            </Suspense>
+                        }
+                    />
+                    <Route
+                        path="historique"
+                        element={
+                            <Suspense fallback={<PageLoader />}>
+                                <HistoriqueContrats />
+                            </Suspense>
+                        }
+                    />
+                    <Route
+                        path="task-payroll"
+                        element={
+                            <Suspense fallback={<PageLoader />}>
+                                <TaskPayroll />
+                            </Suspense>
+                        }
+                    />
+                    <Route
+                        path="retenues"
+                        element={
+                            <Suspense fallback={<PageLoader />}>
+                                <RetenueCategorieList />
+                            </Suspense>
+                        }
+                    />
                 </Route>
             </Routes>
         </BrowserRouter>

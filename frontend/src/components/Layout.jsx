@@ -49,6 +49,11 @@ const NAV_SECTIONS = [
                 label: "Paie à la tâche",
                 Icon: CurrencyIcon,
             },
+            {
+                to: "/retenues",
+                label: "Retenues",
+                Icon: DocumentIcon,
+            },
         ],
     },
     {
