@@ -50,6 +50,20 @@ export default function TaskPayroll() {
                 Paie à la tâche
             </h2>
 
+            {data && (
+                <div className="flex gap-6 mb-4 text-sm">
+                    <span className="text-sand-600">
+                        {data.lignes.length} travailleurs
+                    </span>
+                    <span className="text-forest-700 font-bold">
+                        Total: {data.total.toLocaleString()} FCFA
+                    </span>
+                    <span className="text-sand-500">
+                        {data.site_nom || "Tous les sites"}
+                    </span>
+                </div>
+            )}
+
             <div className="bg-white rounded-xl shadow-card border border-sand-100 p-4 mb-6">
                 <div className="flex items-center gap-4 flex-wrap justify-between">
                     <div className="flex items-center gap-4 flex-wrap">
