@@ -48,25 +48,31 @@ class ResultatPaie:
 
 
 def get_bareme_cn_default():
-    """Barème CN progressif par défaut (réforme ITS 2024)."""
+    """Barème CN progressif par défaut (réforme ITS 2024).
+
+    Le dernier seuil est None = pas de limite supérieure.
+    """
     return [
         {"seuil": 300_000, "taux": 0.015, "fixe": 0},
         {"seuil": 600_000, "taux": 0.03, "fixe": 4_500},
-        {"seuil": float("inf"), "taux": 0.05, "fixe": 13_500},
+        {"seuil": None, "taux": 0.05, "fixe": 13_500},
     ]
 
 
 def calculer_cn(rni: float, bareme: Optional[list] = None) -> float:
-    """Calcule la Contribution Nationale selon le barème progressif."""
+    """Calcule la Contribution Nationale selon le barème progressif.
+
+    Chaque tranche a : seuil (None = pas de limite), taux, fixe.
+    """
     if bareme is None:
         bareme = get_bareme_cn_default()
 
+    seuil_prec = 0.0
     for tranche in bareme:
-        if rni <= tranche["seuil"]:
-            return _r(
-                tranche["fixe"]
-                + (rni - (tranche.get("seuil_prec", 0))) * tranche["taux"]
-            )
+        seuil = tranche["seuil"]
+        if seuil is None or rni <= seuil:
+            return _r(tranche["fixe"] + (rni - seuil_prec) * tranche["taux"])
+        seuil_prec = seuil
     return 0.0
 
 
@@ -170,16 +176,16 @@ def calculer_bulletin(
     cn = 0.0
     seuil_prec = 0.0
     for tranche in bareme_cn:
-        if rni <= tranche["seuil"]:
+        seuil = tranche["seuil"]
+        if seuil is None or rni <= seuil:
             cn = _r(tranche["fixe"] + (rni - seuil_prec) * tranche["taux"])
             break
-        seuil_prec = tranche["seuil"]
+        seuil_prec = seuil
     if cn == 0.0 and bareme_cn:
-        # Au-dessus du dernier seuil
+        # Au-dessus du dernier seuil (ne devrait pas arriver avec None)
         last = bareme_cn[-1]
-        cn = _r(
-            last["fixe"] + (rni - last.get("seuil_prec", seuil_prec)) * last["taux"]
-        )
+        cn = _r(last["fixe"] + (rni - seuil_prec) * last["taux"])
+
     igr = calculer_igr(rni, employe.parts_fiscales(), taux_igr, abatt_igr)
 
     total_its = _r(is_impot + cn + igr)

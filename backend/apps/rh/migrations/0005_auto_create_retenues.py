@@ -8,7 +8,7 @@ def create_default_retenues(apps, schema_editor):
     bareme_cn = [
         {"seuil": 300_000, "taux": 0.015, "fixe": 0},
         {"seuil": 600_000, "taux": 0.03, "fixe": 4_500},
-        {"seuil": float("inf"), "taux": 0.05, "fixe": 13_500},
+        {"seuil": None, "taux": 0.05, "fixe": 13_500},
     ]
 
     defaults = {
