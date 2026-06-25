@@ -6,21 +6,7 @@ from openpyxl.styles import Alignment, Border, Font, PatternFill, Side
 VERT_EKO = "1F8F53"
 VERT_CLAIR = "E8F5EE"
 
-MOIS_FR = [
-    "",
-    "Janvier",
-    "Février",
-    "Mars",
-    "Avril",
-    "Mai",
-    "Juin",
-    "Juillet",
-    "Août",
-    "Septembre",
-    "Octobre",
-    "Novembre",
-    "Décembre",
-]
+from apps.core.constants import MOIS_FR
 
 
 def _border(style="thin"):
@@ -47,14 +33,21 @@ def paie_excel(employes, presences_par_employe, mois, annee):
     ws.row_dimensions[1].height = 28
 
     headers = [
-        "Code", "Nom & Prénom", "Type", "Taux/Salaire (F)",
-        "Jours présents", "Total à payer (F)", "Poste",
+        "Code",
+        "Nom & Prénom",
+        "Type",
+        "Taux/Salaire (F)",
+        "Jours présents",
+        "Total à payer (F)",
+        "Poste",
     ]
     for col, h in enumerate(headers, start=1):
         cell = ws.cell(row=2, column=col, value=h)
         cell.font = white_bold
         cell.fill = PatternFill("solid", fgColor="2D7A50")
-        cell.alignment = Alignment(horizontal="center", vertical="center", wrap_text=True)
+        cell.alignment = Alignment(
+            horizontal="center", vertical="center", wrap_text=True
+        )
         cell.border = _border()
     ws.row_dimensions[2].height = 30
 
@@ -77,11 +70,17 @@ def paie_excel(employes, presences_par_employe, mois, annee):
 
         ws.cell(row=row, column=1, value=emp.code).border = _border()
         ws.cell(row=row, column=2, value=f"{emp.nom} {emp.prenom}").border = _border()
-        ws.cell(row=row, column=3, value=TYPE_LABEL.get(emp.type_contrat, emp.type_contrat)).border = _border()
+        ws.cell(
+            row=row, column=3, value=TYPE_LABEL.get(emp.type_contrat, emp.type_contrat)
+        ).border = _border()
         cell = ws.cell(row=row, column=4, value=taux)
         cell.number_format = "#,##0"
         cell.border = _border()
-        ws.cell(row=row, column=5, value=jours_presents if emp.type_contrat not in ("cdi", "cdd") else "—").border = _border()
+        ws.cell(
+            row=row,
+            column=5,
+            value=jours_presents if emp.type_contrat not in ("cdi", "cdd") else "—",
+        ).border = _border()
         cell = ws.cell(row=row, column=6, value=total)
         cell.font = bold
         cell.number_format = "#,##0"
@@ -134,14 +133,24 @@ def presences_excel(presences, mois, annee):
     ws.row_dimensions[1].height = 28
 
     headers = [
-        "Date", "Code", "Employé", "Type", "Présent",
-        "Heures", "Montant (F)", "Projet", "Site", "Notes",
+        "Date",
+        "Code",
+        "Employé",
+        "Type",
+        "Présent",
+        "Heures",
+        "Montant (F)",
+        "Projet",
+        "Site",
+        "Notes",
     ]
     for col, h in enumerate(headers, start=1):
         cell = ws.cell(row=2, column=col, value=h)
         cell.font = white_bold
         cell.fill = PatternFill("solid", fgColor="2D7A50")
-        cell.alignment = Alignment(horizontal="center", vertical="center", wrap_text=True)
+        cell.alignment = Alignment(
+            horizontal="center", vertical="center", wrap_text=True
+        )
         cell.border = _border()
     ws.row_dimensions[2].height = 30
 
@@ -153,13 +162,25 @@ def presences_excel(presences, mois, annee):
     for p in presences:
         ws.cell(row=row, column=1, value=str(p.date)).border = _border()
         ws.cell(row=row, column=2, value=p.employe.code).border = _border()
-        ws.cell(row=row, column=3, value=f"{p.employe.nom} {p.employe.prenom}").border = _border()
-        ws.cell(row=row, column=4, value=TYPE_LABEL.get(p.employe.type_contrat, p.employe.type_contrat)).border = _border()
-        cell_present = ws.cell(row=row, column=5, value="✓ Présent" if p.present else "✗ Absent")
+        ws.cell(
+            row=row, column=3, value=f"{p.employe.nom} {p.employe.prenom}"
+        ).border = _border()
+        ws.cell(
+            row=row,
+            column=4,
+            value=TYPE_LABEL.get(p.employe.type_contrat, p.employe.type_contrat),
+        ).border = _border()
+        cell_present = ws.cell(
+            row=row, column=5, value="✓ Présent" if p.present else "✗ Absent"
+        )
         cell_present.font = green_font if p.present else red_font
         cell_present.border = _border()
-        ws.cell(row=row, column=6, value=float(p.heures_travaillees) if p.present else 0).border = _border()
-        cell_montant = ws.cell(row=row, column=7, value=float(p.montant_du) if p.present else 0)
+        ws.cell(
+            row=row, column=6, value=float(p.heures_travaillees) if p.present else 0
+        ).border = _border()
+        cell_montant = ws.cell(
+            row=row, column=7, value=float(p.montant_du) if p.present else 0
+        )
         cell_montant.number_format = "#,##0"
         cell_montant.border = _border()
         ws.cell(row=row, column=8, value=p.projet_ref or "—").border = _border()
@@ -171,7 +192,9 @@ def presences_excel(presences, mois, annee):
         row += 1
 
     ws.merge_cells(f"A{row}:F{row}")
-    ws[f"A{row}"] = f"TOTAL — {total_presents} jour{['s', ''][total_presents == 1]} de présence"
+    ws[f"A{row}"] = (
+        f"TOTAL — {total_presents} jour{['s', ''][total_presents == 1]} de présence"
+    )
     ws[f"A{row}"].font = bold
     ws[f"A{row}"].fill = PatternFill("solid", fgColor=VERT_CLAIR)
     ws[f"A{row}"].alignment = Alignment(horizontal="right")
@@ -215,19 +238,38 @@ def cnps_excel(bulletins, mois, annee):
     ws.row_dimensions[1].height = 28
 
     headers = [
-        "Code", "Nom & Prénom", "Poste", "Brut (F)",
-        "Part salariale 6,3%", "Part patronale", "Total cotisation", "Net",
+        "Code",
+        "Nom & Prénom",
+        "Poste",
+        "Brut (F)",
+        "Part salariale 6,3%",
+        "Part patronale",
+        "Total cotisation",
+        "Net",
     ]
     for col, h in enumerate(headers, start=1):
         cell = ws.cell(row=2, column=col, value=h)
         cell.font = white_bold
         cell.fill = PatternFill("solid", fgColor="2D7A50")
-        cell.alignment = Alignment(horizontal="center", vertical="center", wrap_text=True)
+        cell.alignment = Alignment(
+            horizontal="center", vertical="center", wrap_text=True
+        )
         cell.border = _border()
     ws.row_dimensions[2].height = 30
 
     TAUX_SALARIAL = 0.063
     TAUX_PATRONAL = 0.16
+
+    # Charger les configurations de retenues par catégorie
+    from .models import RetenueCategorie
+
+    taux_par_categorie = {
+        rc.type_contrat: {
+            "salarial": float(rc.taux_cnps_salarial),
+            "patronal": float(rc.taux_cnps_patronal_retraite),
+        }
+        for rc in RetenueCategorie.objects.filter(actif=True)
+    }
 
     total_brut = 0.0
     total_salarial = 0.0
@@ -235,26 +277,36 @@ def cnps_excel(bulletins, mois, annee):
     row = 3
     for b in bulletins:
         brut = float(b.brut)
-        part_salarial = round(brut * TAUX_SALARIAL, 0)
-        part_patronal = round(brut * TAUX_PATRONAL, 0)
+        cfg = taux_par_categorie.get(
+            b.employe.type_contrat, {"salarial": 0.063, "patronal": 0.16}
+        )
+        part_salarial = round(brut * cfg["salarial"], 0)
+        part_patronal = round(brut * cfg["patronal"], 0)
         total_cotisation = part_salarial + part_patronal
         total_brut += brut
         total_salarial += part_salarial
         total_patronal += part_patronal
 
         ws.cell(row=row, column=1, value=b.employe.code).border = _border()
-        ws.cell(row=row, column=2, value=f"{b.employe.nom} {b.employe.prenom}").border = _border()
+        ws.cell(
+            row=row, column=2, value=f"{b.employe.nom} {b.employe.prenom}"
+        ).border = _border()
         ws.cell(row=row, column=3, value=b.employe.poste or "—").border = _border()
         c = ws.cell(row=row, column=4, value=brut)
-        c.number_format = "#,##0"; c.border = _border()
+        c.number_format = "#,##0"
+        c.border = _border()
         c = ws.cell(row=row, column=5, value=part_salarial)
-        c.number_format = "#,##0"; c.border = _border()
+        c.number_format = "#,##0"
+        c.border = _border()
         c = ws.cell(row=row, column=6, value=part_patronal)
-        c.number_format = "#,##0"; c.border = _border()
+        c.number_format = "#,##0"
+        c.border = _border()
         c = ws.cell(row=row, column=7, value=total_cotisation)
-        c.number_format = "#,##0"; c.border = _border()
+        c.number_format = "#,##0"
+        c.border = _border()
         c = ws.cell(row=row, column=8, value=float(b.net))
-        c.number_format = "#,##0"; c.border = _border()
+        c.number_format = "#,##0"
+        c.border = _border()
         row += 1
 
     ws.merge_cells(f"A{row}:C{row}")
@@ -262,7 +314,12 @@ def cnps_excel(bulletins, mois, annee):
     ws[f"A{row}"].font = bold
     ws[f"A{row}"].fill = PatternFill("solid", fgColor=VERT_CLAIR)
     ws[f"A{row}"].alignment = Alignment(horizontal="right")
-    for col, val in [(4, total_brut), (5, total_salarial), (6, total_patronal), (7, total_salarial + total_patronal)]:
+    for col, val in [
+        (4, total_brut),
+        (5, total_salarial),
+        (6, total_patronal),
+        (7, total_salarial + total_patronal),
+    ]:
         c = ws.cell(row=row, column=col, value=round(val, 0))
         c.font = Font(bold=True, size=11)
         c.number_format = "#,##0"

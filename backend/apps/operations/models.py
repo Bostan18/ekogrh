@@ -62,6 +62,12 @@ class TacheCatalogue(TimeStampedModel):
     tarif_reference = models.DecimalField(
         max_digits=10, decimal_places=2, null=True, blank=True
     )
+    seuil = models.DecimalField(
+        max_digits=10,
+        decimal_places=2,
+        default=0,
+        help_text="Quantité minimale non payée (ex: 15 lignes offertes)",
+    )
     actif = models.BooleanField(default=True)
 
     class Meta:

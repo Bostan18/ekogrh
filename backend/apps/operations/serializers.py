@@ -44,6 +44,7 @@ class TacheCatalogueSerializer(serializers.ModelSerializer):
             "type_objectif_display",
             "unite_label",
             "tarif_reference",
+            "seuil",
             "actif",
             "created_at",
             "updated_at",

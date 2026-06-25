@@ -11,6 +11,7 @@ from .views import (
     MissionMooViewSet,
     PaiementViewSet,
     PresenceJournaliereViewSet,
+    RetenueCategorieViewSet,
 )
 
 router = DefaultRouter()
@@ -24,5 +25,6 @@ router.register("competences", CompetenceViewSet)
 router.register("competences-employes", CompetenceEmployeViewSet)
 router.register("certifications", CertificationViewSet)
 router.register("historique-contrats", HistoriqueContratViewSet)
+router.register("retenues-categories", RetenueCategorieViewSet)
 
 urlpatterns = router.urls

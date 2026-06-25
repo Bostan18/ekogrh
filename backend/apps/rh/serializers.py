@@ -12,11 +12,15 @@ from .models import (
     MissionMoo,
     Paiement,
     PresenceJournaliere,
+    RetenueCategorie,
 )
 
 
 class EmployeSerializer(serializers.ModelSerializer):
     nom_complet = serializers.ReadOnlyField()
+    categorie_display = serializers.CharField(
+        source="get_categorie_display", read_only=True, default=""
+    )
     jours_non_payes = serializers.IntegerField(read_only=True, default=0)
     restant = serializers.DecimalField(
         read_only=True, max_digits=12, decimal_places=2, default=0
@@ -31,6 +35,8 @@ class EmployeSerializer(serializers.ModelSerializer):
             "prenom",
             "nom_complet",
             "type_contrat",
+            "categorie",
+            "categorie_display",
             "poste",
             "telephone",
             "email",
@@ -42,6 +48,8 @@ class EmployeSerializer(serializers.ModelSerializer):
             "salaire_mensuel",
             "taux_journalier",
             "numero_cnps",
+            "nb_enfants",
+            "statut_marital",
             "jours_non_payes",
             "restant",
             "user",
@@ -317,6 +325,35 @@ class PaiementSerializer(serializers.ModelSerializer):
             "bulletin",
             "bulletin_ref",
             "notes",
+            "created_at",
+            "updated_at",
+        ]
+        read_only_fields = ["id", "created_at", "updated_at"]
+
+
+class RetenueCategorieSerializer(serializers.ModelSerializer):
+    type_contrat_display = serializers.CharField(
+        source="get_type_contrat_display", read_only=True
+    )
+
+    class Meta:
+        model = RetenueCategorie
+        fields = [
+            "id",
+            "type_contrat",
+            "type_contrat_display",
+            "taux_cnps_salarial",
+            "plafond_cnps",
+            "taux_cnps_patronal_retraite",
+            "taux_cnps_patronal_pf",
+            "taux_cnps_patronal_at",
+            "plafond_pf_at",
+            "taux_is",
+            "taux_frais_pro",
+            "bareme_cn",
+            "taux_igr",
+            "abattement_igr",
+            "actif",
             "created_at",
             "updated_at",
         ]

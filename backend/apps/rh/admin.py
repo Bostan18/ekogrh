@@ -1,15 +1,33 @@
 from django.contrib import admin
+
 from .models import (
-    Employe, PresenceJournaliere, BulletinPaie, LigneBulletin,
-    Conge, MissionMoo, Paiement, Competence, CompetenceEmploye,
-    Certification, HistoriqueContrat,
+    BulletinPaie,
+    Certification,
+    Competence,
+    CompetenceEmploye,
+    Conge,
+    Employe,
+    HistoriqueContrat,
+    LigneBulletin,
+    MissionMoo,
+    Paiement,
+    PresenceJournaliere,
+    RetenueCategorie,
 )
 
 
 @admin.register(Employe)
 class EmployeAdmin(admin.ModelAdmin):
-    list_display = ["code", "nom", "prenom", "type_contrat", "poste", "statut"]
-    list_filter = ["type_contrat", "statut"]
+    list_display = [
+        "code",
+        "nom",
+        "prenom",
+        "type_contrat",
+        "categorie",
+        "poste",
+        "statut",
+    ]
+    list_filter = ["type_contrat", "statut", "categorie"]
     search_fields = ["nom", "prenom", "code"]
 
 
@@ -39,3 +57,21 @@ admin.site.register(Competence)
 admin.site.register(CompetenceEmploye)
 admin.site.register(Certification)
 admin.site.register(HistoriqueContrat)
+
+
+@admin.register(RetenueCategorie)
+class RetenueCategorieAdmin(admin.ModelAdmin):
+    list_display = [
+        "type_contrat",
+        "taux_cnps_salarial",
+        "taux_is",
+        "taux_cnps_patronal_retraite",
+        "actif",
+    ]
+    list_filter = ["actif"]
+    list_editable = [
+        "taux_cnps_salarial",
+        "taux_is",
+        "taux_cnps_patronal_retraite",
+        "actif",
+    ]
