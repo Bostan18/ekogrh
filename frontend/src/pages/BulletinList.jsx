@@ -125,7 +125,7 @@ export default function BulletinList() {
                 </h2>
                 <button
                     onClick={() => setShowSelect(!showSelect)}
-                    className="px-4 py-2 bg-forest-500 hover:bg-forest-600 text-white text-sm font-medium rounded-lg transition-colors"
+                    className="btn-primary"
                 >
                     {showSelect ? "Annuler" : "Générer des bulletins"}
                 </button>
@@ -185,13 +185,13 @@ export default function BulletinList() {
                         ))}
                     </div>
                     <div className="flex items-center justify-between">
-                        <span className="text-xs text-sand-500">
+                        <span className="text-caption text-sand-500">
                             {selectedIds.length} employé(s) sélectionné(s)
                         </span>
                         <button
                             onClick={generer}
                             disabled={generating || selectedIds.length === 0}
-                            className="px-4 py-2 bg-forest-500 hover:bg-forest-600 text-white text-sm font-medium rounded-lg transition-colors disabled:opacity-50"
+                            className="btn-primary"
                         >
                             {generating
                                 ? "Génération..."
@@ -204,28 +204,18 @@ export default function BulletinList() {
             {loading ? (
                 <TableSkeleton rows={4} cols={6} />
             ) : (
-                <div className="bg-white rounded-xl shadow-card border border-sand-100 overflow-hidden">
+                <div className="card overflow-hidden">
                     <table className="w-full">
                         <thead>
-                            <tr className="border-b border-sand-100 bg-sand-50">
-                                <th className="text-left px-4 py-3 text-xs font-semibold text-sand-500 uppercase">
-                                    Employé
-                                </th>
-                                <th className="text-left px-4 py-3 text-xs font-semibold text-sand-500 uppercase">
-                                    Poste
-                                </th>
-                                <th className="text-left px-4 py-3 text-xs font-semibold text-sand-500 uppercase">
-                                    Mois
-                                </th>
-                                <th className="text-right px-4 py-3 text-xs font-semibold text-sand-500 uppercase">
+                            <tr className="border-b border-border-light bg-sand-50">
+                                <th className="table-header">Employé</th>
+                                <th className="table-header">Poste</th>
+                                <th className="table-header">Mois</th>
+                                <th className="table-header text-right">
                                     Brut
                                 </th>
-                                <th className="text-right px-4 py-3 text-xs font-semibold text-sand-500 uppercase">
-                                    Net
-                                </th>
-                                <th className="text-left px-4 py-3 text-xs font-semibold text-sand-500 uppercase">
-                                    Statut
-                                </th>
+                                <th className="table-header text-right">Net</th>
+                                <th className="table-header">Statut</th>
                             </tr>
                         </thead>
                         <tbody className="divide-y divide-sand-50">

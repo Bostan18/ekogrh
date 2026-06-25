@@ -49,10 +49,7 @@ export default function EmployeList() {
                 <h2 className="text-2xl font-display font-bold text-ink">
                     Employés
                 </h2>
-                <Link
-                    to="/employes/nouveau"
-                    className="px-4 py-2 bg-forest-500 hover:bg-forest-600 text-white text-sm font-medium rounded-lg transition-colors"
-                >
+                <Link to="/employes/nouveau" className="btn-primary">
                     + Nouvel employé
                 </Link>
             </div>
@@ -64,12 +61,12 @@ export default function EmployeList() {
                     placeholder="Rechercher..."
                     value={search}
                     onChange={(e) => setSearch(e.target.value)}
-                    className="px-3 py-2 border border-sand-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-forest-500 w-64"
+                    className="input-field w-64"
                 />
                 <select
                     value={typeFilter}
                     onChange={(e) => setTypeFilter(e.target.value)}
-                    className="px-3 py-2 border border-sand-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-forest-500"
+                    className="select-field w-44"
                 >
                     <option value="">Tous les types</option>
                     <option value="cdi">CDI</option>
@@ -83,28 +80,16 @@ export default function EmployeList() {
             {loading ? (
                 <TableSkeleton rows={5} cols={6} />
             ) : (
-                <div className="bg-white rounded-xl shadow-card border border-sand-100 overflow-hidden">
+                <div className="card overflow-hidden">
                     <table className="w-full">
                         <thead>
-                            <tr className="border-b border-sand-100 bg-sand-50">
-                                <th className="text-left px-4 py-3 text-xs font-semibold text-sand-500 uppercase">
-                                    Code
-                                </th>
-                                <th className="text-left px-4 py-3 text-xs font-semibold text-sand-500 uppercase">
-                                    Nom
-                                </th>
-                                <th className="text-left px-4 py-3 text-xs font-semibold text-sand-500 uppercase">
-                                    Poste
-                                </th>
-                                <th className="text-left px-4 py-3 text-xs font-semibold text-sand-500 uppercase">
-                                    Type
-                                </th>
-                                <th className="text-left px-4 py-3 text-xs font-semibold text-sand-500 uppercase">
-                                    Statut
-                                </th>
-                                <th className="text-left px-4 py-3 text-xs font-semibold text-sand-500 uppercase">
-                                    Taux
-                                </th>
+                            <tr className="border-b border-border-light bg-sand-50">
+                                <th className="table-header">Code</th>
+                                <th className="table-header">Nom</th>
+                                <th className="table-header">Poste</th>
+                                <th className="table-header">Type</th>
+                                <th className="table-header">Statut</th>
+                                <th className="table-header">Taux</th>
                             </tr>
                         </thead>
                         <tbody className="divide-y divide-sand-50">

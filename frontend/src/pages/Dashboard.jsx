@@ -42,10 +42,9 @@ export default function Dashboard() {
                     masseSalariale: masse,
                 });
 
-                const recentList = (
-                    recentPres.data.results || recentPres.data
-                ).slice(0, 5);
-                setRecentPresences(recentList);
+                setRecentPresences(
+                    (recentPres.data.results || recentPres.data).slice(0, 5),
+                );
 
                 const today = new Date();
                 setPaieResume({
@@ -67,14 +66,14 @@ export default function Dashboard() {
             label: "Employés actifs",
             value: stats?.nbEmployes ?? "—",
             Icon: UsersIcon,
-            color: "bg-forest-50 text-forest-700",
+            color: "bg-forest-500/10 text-forest-500",
             to: "/employes",
         },
         {
             label: "Pointages du jour",
             value: stats?.nbPresences ?? "—",
             Icon: ClipboardIcon,
-            color: "bg-gold-50 text-gold-700",
+            color: "bg-gold-500/10 text-gold-600",
             to: "/pointage",
         },
         {
@@ -83,42 +82,20 @@ export default function Dashboard() {
             Icon: ExclamationIcon,
             color:
                 stats?.nbAnomalies > 0
-                    ? "bg-red-50 text-red-700"
-                    : "bg-green-50 text-green-700",
+                    ? "bg-red-500/10 text-danger"
+                    : "bg-green-500/10 text-success",
             to: stats?.nbAnomalies > 0 ? "/pointage" : null,
         },
         {
             label: "Masse salariale",
             value: stats?.masseSalariale
                 ? `${stats.masseSalariale.toLocaleString()} FCFA`
-                : "— FCFA",
+                : "—",
             Icon: CurrencyIcon,
-            color: "bg-blue-50 text-blue-700",
+            color: "bg-blue-500/10 text-info",
             to: "/bulletins",
         },
     ];
-
-    if (loading) {
-        return (
-            <div>
-                <h2 className="text-2xl font-display font-bold text-ink mb-6">
-                    Tableau de bord
-                </h2>
-                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
-                    {[1, 2, 3, 4].map((i) => (
-                        <div
-                            key={i}
-                            className="bg-white rounded-xl shadow-card p-5 border border-sand-100 animate-pulse"
-                        >
-                            <div className="w-10 h-10 rounded-lg bg-sand-100 mb-3" />
-                            <div className="h-7 bg-sand-100 rounded w-20 mb-1" />
-                            <div className="h-4 bg-sand-50 rounded w-28" />
-                        </div>
-                    ))}
-                </div>
-            </div>
-        );
-    }
 
     const moisNoms = [
         "",
@@ -136,95 +113,102 @@ export default function Dashboard() {
         "Décembre",
     ];
 
+    if (loading) {
+        return (
+            <div>
+                <h2 className="text-page-title text-ink mb-6">
+                    Tableau de bord
+                </h2>
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5 mb-8">
+                    {[1, 2, 3, 4].map((i) => (
+                        <div key={i} className="card p-5 animate-shimmer">
+                            <div className="w-10 h-10 rounded-lg bg-sand-100 mb-3" />
+                            <div className="h-7 bg-sand-100 rounded w-20 mb-1" />
+                            <div className="h-4 bg-sand-50 rounded w-28" />
+                        </div>
+                    ))}
+                </div>
+            </div>
+        );
+    }
+
     return (
         <div>
-            <h2 className="text-2xl font-display font-bold text-ink mb-6">
-                Tableau de bord
-            </h2>
+            <h2 className="text-page-title text-ink mb-6">Tableau de bord</h2>
 
             <OnboardingChecklist />
 
             {/* Bandeau d'alerte */}
             {stats?.nbAnomalies > 0 && (
-                <div className="flex items-center justify-between bg-gold-50 border border-gold-200 rounded-xl p-4 mb-6">
+                <div className="flex items-center justify-between bg-gold-50 border border-gold-200 rounded-card p-4 mb-6">
                     <div className="flex items-center gap-3">
-                        <span className="inline-flex items-center justify-center w-8 h-8 rounded-lg bg-gold-100 text-gold-700">
+                        <span className="inline-flex items-center justify-center w-9 h-9 rounded-lg bg-gold-100 text-gold-600">
                             <ExclamationIcon className="w-4 h-4" />
                         </span>
                         <div>
-                            <p className="text-sm font-medium text-gold-800">
+                            <p className="text-body-sm font-semibold text-gold-700">
                                 {stats.nbAnomalies} anomalie
                                 {stats.nbAnomalies > 1 ? "s" : ""} détectée
                                 {stats.nbAnomalies > 1 ? "s" : ""}
                             </p>
-                            <p className="text-xs text-gold-600">
+                            <p className="text-caption text-gold-600">
                                 Vérifiez les pointages pour les résoudre
                             </p>
                         </div>
                     </div>
-                    <Link
-                        to="/pointage"
-                        className="px-4 py-2 bg-gold-500 hover:bg-gold-600 text-white text-sm font-medium rounded-lg transition-colors"
-                    >
+                    <Link to="/pointage" className="btn-primary text-sm">
                         Voir les anomalies
                     </Link>
                 </div>
             )}
 
             {/* KPI Cards */}
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5 mb-8">
                 {kpis.map((kpi) => {
                     const content = (
-                        <div className="flex items-center justify-between mb-3">
-                            <span
-                                className={`inline-flex items-center justify-center w-10 h-10 rounded-lg ${kpi.color || ""}`}
-                            >
-                                <kpi.Icon className="w-5 h-5" />
-                            </span>
-                            {kpi.to && (
-                                <svg
-                                    className="w-4 h-4 text-sand-300 group-hover:text-forest-500 transition-colors"
-                                    fill="none"
-                                    viewBox="0 0 24 24"
-                                    stroke="currentColor"
-                                    strokeWidth={2}
+                        <>
+                            <div className="flex items-center justify-between mb-4">
+                                <span
+                                    className={`inline-flex items-center justify-center w-11 h-11 rounded-xl ${kpi.color}`}
                                 >
-                                    <path
-                                        strokeLinecap="round"
-                                        strokeLinejoin="round"
-                                        d="M8.25 4.5l7.5 7.5-7.5 7.5"
-                                    />
-                                </svg>
-                            )}
-                        </div>
+                                    <kpi.Icon className="w-5 h-5" />
+                                </span>
+                                {kpi.to && (
+                                    <svg
+                                        className="w-4 h-4 text-sand-300 group-hover:text-forest-500 transition-colors"
+                                        fill="none"
+                                        viewBox="0 0 24 24"
+                                        stroke="currentColor"
+                                        strokeWidth={2}
+                                    >
+                                        <path
+                                            strokeLinecap="round"
+                                            strokeLinejoin="round"
+                                            d="M8.25 4.5l7.5 7.5-7.5 7.5"
+                                        />
+                                    </svg>
+                                )}
+                            </div>
+                            <p className="text-display-2 text-ink leading-none mb-1">
+                                {kpi.value}
+                            </p>
+                            <p className="text-body-sm text-ink-secondary">
+                                {kpi.label}
+                            </p>
+                        </>
                     );
 
                     return kpi.to ? (
                         <Link
                             key={kpi.label}
                             to={kpi.to}
-                            className="group bg-white rounded-xl shadow-card p-5 border border-sand-100 hover:shadow-md hover:border-forest-200 transition-all"
+                            className="group card p-5 hover:shadow-elevation-2 transition-shadow duration-fast"
                         >
                             {content}
-                            <p className="text-2xl font-display font-bold text-ink">
-                                {kpi.value}
-                            </p>
-                            <p className="text-sm text-sand-500 mt-1">
-                                {kpi.label}
-                            </p>
                         </Link>
                     ) : (
-                        <div
-                            key={kpi.label}
-                            className="bg-white rounded-xl shadow-card p-5 border border-sand-100"
-                        >
+                        <div key={kpi.label} className="card p-5">
                             {content}
-                            <p className="text-2xl font-display font-bold text-ink">
-                                {kpi.value}
-                            </p>
-                            <p className="text-sm text-sand-500 mt-1">
-                                {kpi.label}
-                            </p>
                         </div>
                     );
                 })}
@@ -232,8 +216,8 @@ export default function Dashboard() {
 
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
                 {/* Accès rapides */}
-                <div className="bg-white rounded-xl shadow-card p-6 border border-sand-100">
-                    <h3 className="text-lg font-display font-semibold text-ink mb-4">
+                <div className="card-padded">
+                    <h3 className="text-section-title text-ink mb-4">
                         Accès rapides
                     </h3>
                     <div className="grid grid-cols-2 gap-3">
@@ -262,7 +246,7 @@ export default function Dashboard() {
                             <Link
                                 key={item.to}
                                 to={item.to}
-                                className="flex items-center gap-2 p-3 rounded-lg bg-sand-50 hover:bg-forest-50 text-sm font-medium text-sand-700 hover:text-forest-700 transition-colors"
+                                className="flex items-center gap-2.5 p-3 rounded-btn bg-sand-50 hover:bg-forest-50 text-body-sm font-semibold text-ink-secondary hover:text-forest-600 transition-colors duration-fast"
                             >
                                 <item.Icon className="w-4 h-4" />
                                 {item.label}
@@ -272,31 +256,31 @@ export default function Dashboard() {
                 </div>
 
                 {/* Derniers pointages */}
-                <div className="bg-white rounded-xl shadow-card p-6 border border-sand-100">
+                <div className="card-padded">
                     <div className="flex items-center justify-between mb-4">
-                        <h3 className="text-lg font-display font-semibold text-ink">
+                        <h3 className="text-section-title text-ink">
                             Derniers pointages
                         </h3>
                         <Link
                             to="/pointage"
-                            className="text-xs text-forest-600 hover:text-forest-700 font-medium"
+                            className="text-body-sm font-semibold text-forest-500 hover:text-forest-600"
                         >
                             Voir tout →
                         </Link>
                     </div>
                     {recentPresences.length > 0 ? (
-                        <div className="space-y-2">
+                        <div className="space-y-1">
                             {recentPresences.map((p) => (
                                 <div
                                     key={p.id}
-                                    className="flex items-center justify-between py-2 border-b border-sand-50 last:border-0"
+                                    className="flex items-center justify-between py-2.5 border-b border-border-light last:border-0"
                                 >
                                     <div className="min-w-0">
-                                        <p className="text-sm font-medium text-ink truncate">
+                                        <p className="text-body-sm font-semibold text-ink truncate">
                                             {p.employe_nom ||
                                                 `Employé #${p.employe}`}
                                         </p>
-                                        <p className="text-xs text-sand-500">
+                                        <p className="text-caption text-sand-500">
                                             {p.date}
                                             {p.heures_travaillees
                                                 ? ` · ${p.heures_travaillees}h`
@@ -304,11 +288,7 @@ export default function Dashboard() {
                                         </p>
                                     </div>
                                     <span
-                                        className={`flex-shrink-0 inline-block px-2 py-0.5 text-xs font-medium rounded-full ${
-                                            p.present
-                                                ? "bg-green-100 text-green-700"
-                                                : "bg-red-100 text-red-700"
-                                        }`}
+                                        className={`badge flex-shrink-0 ${p.present ? "bg-success/10 text-success" : "bg-danger/10 text-danger"}`}
                                     >
                                         {p.present ? "Présent" : "Absent"}
                                     </span>
@@ -316,13 +296,13 @@ export default function Dashboard() {
                             ))}
                         </div>
                     ) : (
-                        <div className="text-center py-6">
-                            <p className="text-sm text-sand-500 mb-3">
+                        <div className="text-center py-8">
+                            <p className="text-body-sm text-sand-500 mb-4">
                                 Aucun pointage enregistré.
                             </p>
                             <Link
                                 to="/pointage"
-                                className="inline-flex px-4 py-2 bg-forest-500 hover:bg-forest-600 text-white text-sm font-medium rounded-lg transition-colors"
+                                className="btn-primary text-sm"
                             >
                                 Effectuer un pointage
                             </Link>
@@ -330,48 +310,46 @@ export default function Dashboard() {
                     )}
                 </div>
 
-                {/* Résumé paie du mois */}
-                <div className="bg-white rounded-xl shadow-card p-6 border border-sand-100">
+                {/* Résumé paie */}
+                <div className="card-padded">
                     <div className="flex items-center justify-between mb-4">
-                        <h3 className="text-lg font-display font-semibold text-ink">
+                        <h3 className="text-section-title text-ink">
                             Paie — {moisNoms[paieResume?.mois]}{" "}
                             {paieResume?.annee}
                         </h3>
                         <Link
                             to="/bulletins"
-                            className="text-xs text-forest-600 hover:text-forest-700 font-medium"
+                            className="text-body-sm font-semibold text-forest-500 hover:text-forest-600"
                         >
                             Voir tout →
                         </Link>
                     </div>
-                    <div className="space-y-4">
-                        <div className="flex items-center justify-between py-3 border-b border-sand-50">
-                            <span className="text-sm text-sand-600">
+                    <div className="space-y-1">
+                        <div className="flex items-center justify-between py-3 border-b border-border-light">
+                            <span className="text-body-sm text-ink-secondary">
                                 Bulletins générés
                             </span>
-                            <span className="text-lg font-bold text-ink">
+                            <span className="text-display-2 text-ink">
                                 {paieResume?.nbBulletins ?? "—"}
                             </span>
                         </div>
-                        <div className="flex items-center justify-between py-3 border-b border-sand-50">
-                            <span className="text-sm text-sand-600">
+                        <div className="flex items-center justify-between py-3 border-b border-border-light">
+                            <span className="text-body-sm text-ink-secondary">
                                 Masse salariale
                             </span>
-                            <span className="text-lg font-bold text-forest-700">
+                            <span className="text-display-2 text-forest-600">
                                 {stats?.masseSalariale
                                     ? `${stats.masseSalariale.toLocaleString()} FCFA`
-                                    : "— FCFA"}
+                                    : "—"}
                             </span>
                         </div>
                     </div>
-                    <div className="mt-4">
-                        <Link
-                            to="/bulletins"
-                            className="block w-full py-2.5 bg-forest-500 hover:bg-forest-600 text-white text-sm font-medium rounded-lg transition-colors text-center"
-                        >
-                            Générer la paie de {moisNoms[paieResume?.mois]}
-                        </Link>
-                    </div>
+                    <Link
+                        to="/bulletins"
+                        className="btn-primary w-full mt-5 text-sm justify-center"
+                    >
+                        Générer la paie de {moisNoms[paieResume?.mois]}
+                    </Link>
                 </div>
             </div>
         </div>
