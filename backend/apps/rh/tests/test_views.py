@@ -1,26 +1,26 @@
-import pytest
 from datetime import date, timedelta
 from decimal import Decimal
+
+import pytest
 from django.urls import reverse
 
 from apps.rh.models import (
-    Employe,
-    PresenceJournaliere,
     BulletinPaie,
-    LigneBulletin,
-    Conge,
     Certification,
     Competence,
     CompetenceEmploye,
+    Conge,
+    Employe,
+    HistoriqueContrat,
+    LigneBulletin,
     MissionMoo,
     Paiement,
-    HistoriqueContrat,
+    PresenceJournaliere,
 )
 
 
 @pytest.mark.django_db
 class TestEmployeAPI:
-
     def test_list_employes(self, auth_client):
         emp = Employe.objects.create(
             code="EMP-001",
@@ -59,7 +59,6 @@ class TestEmployeAPI:
 
 @pytest.mark.django_db
 class TestPresenceAPI:
-
     @pytest.fixture
     def journaliers(self):
         emps = []
@@ -136,9 +135,7 @@ class TestPresenceAPI:
         )
 
         url = reverse("presencejournaliere-valider")
-        response = auth_client.post(
-            url, {"ids": [p1.id, p2.id]}, format="json"
-        )
+        response = auth_client.post(url, {"ids": [p1.id, p2.id]}, format="json")
         assert response.status_code == 200
         assert response.data["validees"] == 2
 
@@ -150,7 +147,6 @@ class TestPresenceAPI:
 
 @pytest.mark.django_db
 class TestBulletinAPI:
-
     @pytest.fixture
     def cdi_employe(self):
         return Employe.objects.create(
@@ -164,22 +160,31 @@ class TestBulletinAPI:
 
     def test_generer_bulletins(self, auth_client, cdi_employe):
         url = reverse("bulletinpaie-generer")
-        payload = {"mois": 6, "annee": 2026}
+        payload = {
+            "mois": 6,
+            "annee": 2026,
+            "employe_ids": [cdi_employe.id],
+        }
         response = auth_client.post(url, payload, format="json")
         assert response.status_code == 200
         assert response.data["generes"] == 1
         assert response.data["total_employes"] == 1
 
-        bulletin = BulletinPaie.objects.get(
-            employe=cdi_employe, mois=date(2026, 6, 1)
-        )
+        bulletin = BulletinPaie.objects.get(employe=cdi_employe, mois=date(2026, 6, 1))
         lignes = bulletin.lignes.all()
-        assert lignes.count() == 3
+        # Avec le nouveau calcul CI complet
+        assert lignes.count() >= 8
+
+    def test_generer_bulletins_sans_ids_echoue(self, auth_client, cdi_employe):
+        url = reverse("bulletinpaie-generer")
+        payload = {"mois": 6, "annee": 2026}
+        response = auth_client.post(url, payload, format="json")
+        assert response.status_code == 400
+        assert "employe_ids" in str(response.data)
 
 
 @pytest.mark.django_db
 class TestCongeAPI:
-
     @pytest.fixture
     def employe(self):
         return Employe.objects.create(

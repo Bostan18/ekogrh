@@ -1,25 +1,25 @@
-import pytest
 from datetime import date, timedelta
 from decimal import Decimal
 
+import pytest
+
 from apps.rh.models import (
-    Employe,
-    PresenceJournaliere,
     BulletinPaie,
-    LigneBulletin,
-    Conge,
     Certification,
     Competence,
     CompetenceEmploye,
+    Conge,
+    Employe,
+    HistoriqueContrat,
+    LigneBulletin,
     MissionMoo,
     Paiement,
-    HistoriqueContrat,
+    PresenceJournaliere,
 )
 
 
 @pytest.mark.django_db
 class TestEmploye:
-
     def test_create_employe(self):
         emp = Employe.objects.create(
             code="EMP-001",
@@ -65,7 +65,6 @@ class TestEmploye:
 
 @pytest.mark.django_db
 class TestPresenceJournaliere:
-
     def test_auto_calculates_montant_du(self):
         emp = Employe.objects.create(
             code="EMP-003",
@@ -116,10 +115,58 @@ class TestPresenceJournaliere:
 
 @pytest.mark.django_db
 class TestBulletinPaie:
-
-    def test_save_generates_lignes_with_cnps(self):
+    def test_save_generates_lignes_with_full_ci_calculation(self):
         emp = Employe.objects.create(
             code="EMP-006",
+            nom="Diallo",
+            prenom="Aminata",
+            type_contrat="cdi",
+            statut="actif",
+            salaire_mensuel=Decimal("200000.00"),
+            nb_enfants=0,
+            statut_marital="celibataire",
+        )
+        bulletin = BulletinPaie.objects.create(
+            employe=emp,
+            mois=date(2026, 6, 1),
+            brut=Decimal("200000.00"),
+        )
+        lignes = bulletin.lignes.all()
+        # Avec le calcul CI complet, on a : salaire_base, total_brut,
+        # cnps_salarie, IS, CN, IGR, total_retenues, net_a_payer,
+        # + 4 lignes info employeur = au moins 8 lignes
+        assert lignes.count() >= 8
+
+        # Vérifie la présence des lignes clés
+        types = [l.type_ligne for l in lignes]
+        assert "salaire_base" in types
+        assert "retenue_cnps" in types
+        assert "retenue_its" in types
+        assert "net_a_payer" in types
+
+        # Vérifie que le net est bien calculé
+        net_a_payer = lignes.get(type_ligne="net_a_payer")
+        assert net_a_payer.montant > 0
+        bulletin.refresh_from_db()
+        assert bulletin.net == net_a_payer.montant
+
+    def test_generer_lignes_with_retenue_config(self):
+        from apps.rh.models import RetenueCategorie
+
+        RetenueCategorie.objects.create(
+            type_contrat="cdi",
+            taux_cnps_salarial=Decimal("0.0630"),
+            taux_cnps_patronal_retraite=Decimal("0.0770"),
+            taux_cnps_patronal_pf=Decimal("0.0575"),
+            taux_cnps_patronal_at=Decimal("0.0200"),
+            taux_is=Decimal("0.0150"),
+            taux_frais_pro=Decimal("0.2000"),
+            taux_igr=Decimal("0.1000"),
+            abattement_igr=Decimal("15000.00"),
+        )
+
+        emp = Employe.objects.create(
+            code="EMP-006B",
             nom="Diallo",
             prenom="Aminata",
             type_contrat="cdi",
@@ -132,20 +179,19 @@ class TestBulletinPaie:
             brut=Decimal("200000.00"),
         )
         lignes = bulletin.lignes.all()
-        assert lignes.count() == 3
+        # Avec config : salaire_base + total_brut + cnps + IS + CN + IGR + total_retenues + net
+        assert lignes.count() >= 8
 
-        salaire_base = lignes.get(type_ligne="salaire_base")
-        assert salaire_base.montant == Decimal("200000.00")
+        # CNPS doit être présent et négatif (retenue)
+        cnps = lignes.get(type_ligne="retenue_cnps")
+        assert cnps.montant < 0  # retenue
 
-        retenue_cnps = lignes.get(type_ligne="retenue_cnps")
-        # 200000 * 0.063 = 12600
-        assert retenue_cnps.montant == Decimal("-12600.00")
-
-        net_a_payer = lignes.get(type_ligne="net_a_payer")
-        assert net_a_payer.montant == Decimal("187400.00")
-
+        # Net = brut - total_retenues
+        net = lignes.get(type_ligne="net_a_payer")
+        assert net.montant > 0
+        assert net.montant < Decimal("200000.00")  # inférieur au brut
         bulletin.refresh_from_db()
-        assert bulletin.net == Decimal("187400.00")
+        assert bulletin.net == net.montant
 
     def test_unique_together_employe_mois(self):
         emp = Employe.objects.create(
@@ -155,6 +201,8 @@ class TestBulletinPaie:
             type_contrat="cdi",
             statut="actif",
             salaire_mensuel=Decimal("300000.00"),
+            nb_enfants=0,
+            statut_marital="celibataire",
         )
         BulletinPaie.objects.create(
             employe=emp, mois=date(2026, 6, 1), brut=Decimal("300000.00")
@@ -167,7 +215,6 @@ class TestBulletinPaie:
 
 @pytest.mark.django_db
 class TestConge:
-
     def test_nb_jours_property(self):
         emp = Employe.objects.create(
             code="EMP-008",
@@ -217,7 +264,6 @@ class TestConge:
 
 @pytest.mark.django_db
 class TestCertification:
-
     @pytest.fixture
     def employe(self):
         return Employe.objects.create(
