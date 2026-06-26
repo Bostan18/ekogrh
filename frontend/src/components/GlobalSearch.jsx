@@ -139,12 +139,14 @@ export default function GlobalSearch() {
         return (
             <button
                 onClick={() => setOpen(true)}
-                className="hidden md:flex items-center gap-2 px-3 py-1.5 text-body-sm text-sand-500 bg-sand-50 hover:bg-white border border-border-light rounded-btn transition-colors duration-fast w-56"
+                className="hidden md:flex items-center gap-2.5 h-9 px-4 rounded-full bg-[#eef0fa] hover:bg-[#e4e8f3] border-0 transition-colors duration-fast w-[305px]"
                 title="Recherche rapide (Ctrl+K)"
             >
-                <SearchIcon className="w-3.5 h-3.5" />
-                <span className="flex-1 text-left">Rechercher...</span>
-                <kbd className="text-[10px] font-mono text-sand-400 bg-white border border-sand-200 rounded px-1 py-0.5">
+                <SearchIcon className="w-[14px] h-[14px] text-[#8e94a9] flex-shrink-0" />
+                <span className="flex-1 text-left text-body-sm text-[#111111] font-normal">
+                    Search products
+                </span>
+                <kbd className="hidden sm:inline text-[10px] font-mono text-sand-400 bg-white/70 border border-sand-200 rounded px-1.5 py-0.5">
                     Ctrl+K
                 </kbd>
             </button>
