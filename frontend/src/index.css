@@ -39,20 +39,22 @@
 @layer components {
     /* ▸ Bouton primaire */
     .btn-primary {
-        @apply inline-flex items-center justify-center px-5 h-11
-           bg-forest-500 hover:bg-forest-600 active:bg-forest-700
-           text-white font-semibold text-body
-           rounded-btn shadow-elevation-1
+        @apply inline-flex items-center justify-center
+           px-3 py-[0.775rem]
+           bg-forest-500 hover:bg-forest-600 active:bg-forest-600
+           text-white font-bold text-xs leading-none
+           rounded-btn border border-forest-500
            transition-all duration-fast
            disabled:opacity-50 disabled:cursor-not-allowed;
     }
 
     /* ▸ Bouton secondaire (outline) */
     .btn-outline {
-        @apply inline-flex items-center justify-center px-5 h-11
+        @apply inline-flex items-center justify-center
+           px-3 py-[0.775rem]
            border border-border-color
            bg-white hover:bg-sand-50
-           text-ink-secondary font-semibold text-body
+           text-ink-secondary font-bold text-xs leading-none
            rounded-btn
            transition-all duration-fast
            disabled:opacity-50 disabled:cursor-not-allowed;
@@ -60,20 +62,79 @@
 
     /* ▸ Bouton danger */
     .btn-danger {
-        @apply inline-flex items-center justify-center px-5 h-11
-           bg-danger hover:bg-red-600
-           text-white font-semibold text-body
-           rounded-btn shadow-elevation-1
+        @apply inline-flex items-center justify-center
+           px-3 py-[0.775rem]
+           bg-danger hover:bg-red-600 active:bg-red-600
+           text-white font-bold text-xs leading-none
+           rounded-btn border border-danger
            transition-all duration-fast
            disabled:opacity-50 disabled:cursor-not-allowed;
     }
 
-    /* ▸ Input standard */
+    /* ▸ Bouton warning */
+    .btn-warning {
+        @apply inline-flex items-center justify-center
+           px-3 py-[0.775rem]
+           bg-gold-500 hover:bg-gold-600 active:bg-gold-600
+           text-white font-bold text-xs leading-none
+           rounded-btn border border-gold-500
+           transition-all duration-fast
+           disabled:opacity-50 disabled:cursor-not-allowed;
+    }
+
+    /* ▸ Bouton success */
+    .btn-success {
+        @apply inline-flex items-center justify-center
+           px-3 py-[0.775rem]
+           bg-success hover:bg-green-600 active:bg-green-600
+           text-white font-bold text-xs leading-none
+           rounded-btn border border-success
+           transition-all duration-fast
+           disabled:opacity-50 disabled:cursor-not-allowed;
+    }
+
+    /* ▸ Bouton fixed width */
+    .btn-fw {
+        min-width: 150px;
+    }
+
+    /* ▸ Bouton tailles */
+    .btn-xs {
+        @apply text-[10px] py-[0.5rem] px-2;
+    }
+    .btn-sm {
+        @apply text-sm py-[0.625rem] px-3;
+    }
+    .btn-lg {
+        @apply text-sm py-[0.875rem] px-4;
+    }
+
+    /* ▸ Bouton pilule */
+    .btn-rounded {
+        border-radius: 50px !important;
+    }
+
+    /* ▸ Bouton icône carré */
+    .btn-icon {
+        @apply w-[42px] h-[42px] p-0 inline-flex items-center justify-center text-xs;
+    }
+
+    /* ▸ Form group — espacement vertical */
+    .form-group {
+        @apply mb-6; /* 24px — Connect Plus */
+    }
+
+    /* ▸ Form label */
+    .form-label {
+        @apply block text-body font-semibold text-ink-secondary mb-2; /* 14px, 8px margin */
+    }
+
+    /* ▸ Input standard — Connect Plus spec */
     .input-field {
-        @apply w-full h-11 px-4
+        @apply w-full h-[46px] px-[22px]
            border border-border-color
            bg-white
-           text-body text-ink placeholder:text-sand-400
+           text-[13px] leading-none text-ink placeholder:text-ink/40 font-normal
            rounded-input
            transition-all duration-fast
            focus:outline-none focus:ring-2 focus:ring-forest-500/40 focus:border-forest-500;
@@ -81,16 +142,26 @@
 
     /* ▸ Select standard */
     .select-field {
-        @apply w-full h-11 px-4 pr-10
+        @apply w-full h-[46px] px-[22px] pr-10
            border border-border-color
            bg-white
-           text-body text-ink
+           text-[13px] leading-none text-ink
            rounded-input
            transition-all duration-fast appearance-none
            focus:outline-none focus:ring-2 focus:ring-forest-500/40 focus:border-forest-500;
         background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%237e7a6e' stroke-width='2'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E");
         background-repeat: no-repeat;
-        background-position: right 12px center;
+        background-position: right 14px center;
+    }
+
+    /* ▸ Input danger state */
+    .input-danger {
+        @apply border-danger focus:ring-danger/40 focus:border-danger;
+    }
+
+    /* ▸ Textarea */
+    .textarea-field {
+        @apply input-field h-auto py-[15px] resize-y;
     }
 
     /* ▸ Card standard */
@@ -110,7 +181,49 @@
 
     /* ▸ Table header */
     .table-header {
-        @apply text-left px-4 py-3 text-caption font-semibold text-sand-500 uppercase tracking-wider;
+        @apply text-left px-[15px] py-3 text-body-sm font-semibold text-sand-500 uppercase tracking-wider;
+    }
+
+    /* ▸ Table — base */
+    .table-ekogrh {
+        @apply w-full text-body;
+    }
+    .table-ekogrh thead th {
+        font-family: "Nunito", sans-serif;
+        font-weight: 600;
+        border-bottom: 1px solid rgba(151, 151, 151, 0.3);
+    }
+    .table-ekogrh tbody td {
+        @apply px-[15px] py-[15px] align-middle;
+    }
+
+    /* ▸ Table striped */
+    .table-striped tbody tr:nth-of-type(odd) {
+        background-color: #f0f1f6;
+    }
+    .table-striped tbody tr:nth-of-type(even) {
+        background-color: #ffffff;
+    }
+
+    /* ▸ Table hover */
+    .table-hover tbody tr:hover {
+        background-color: #e8ebf0 !important;
+    }
+
+    /* ▸ Table dark */
+    .table-dark {
+        background-color: #2a2b32;
+        color: #ffffff;
+    }
+    .table-dark thead th {
+        color: #ffffff;
+        border-bottom-color: rgba(255, 255, 255, 0.15);
+    }
+    .table-dark.table-striped tbody tr:nth-of-type(odd) {
+        background-color: rgba(255, 255, 255, 0.05);
+    }
+    .table-dark.table-striped tbody tr:nth-of-type(even) {
+        background-color: transparent;
     }
 }
 

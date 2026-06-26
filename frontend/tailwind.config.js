@@ -68,7 +68,7 @@ export default {
                 "card-bg": "#ffffff",
 
                 // ▸ Bordures
-                "border-color": "rgba(151,151,151, 0.25)",
+                "border-color": "rgba(151,151,151, 0.3)",
                 "border-light": "#e8e5df",
             },
 
@@ -145,8 +145,8 @@ export default {
             // 🔘 Border Radius
             // ──────────────────────────────────────────────
             borderRadius: {
-                btn: "0.375rem", // 6px — boutons
-                input: "0.375rem", // 6px — champs
+                btn: "0.1875rem", // 3px — boutons (Connect Plus)
+                input: "2px", // 2px — champs (Connect Plus)
                 card: "0.75rem", // 12px — cartes
                 modal: "0.875rem", // 14px — modales
                 full: "9999px",

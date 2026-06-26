@@ -95,6 +95,8 @@ export default function Layout() {
     };
     const closeSidebar = () => setSidebarOpen(false);
 
+    const [profileOpen, setProfileOpen] = useState(false);
+
     const linkClass = ({ isActive }) =>
         isActive
             ? "flex items-center gap-3 px-3 py-2 rounded-btn text-submenu font-semibold bg-forest-500/15 text-forest-400"
@@ -202,21 +204,78 @@ export default function Layout() {
 
             {/* Main content */}
             <main className="flex-1 overflow-y-auto flex flex-col">
-                {/* Top bar */}
-                <header className="flex items-center gap-4 h-[navbar-h] shrink-0 px-5 bg-card-bg border-b border-border-light shadow-elevation-1 z-10">
+                {/* Top bar — Connect Plus */}
+                <header className="flex items-center gap-3 h-[navbar-h] shrink-0 px-6 bg-card-bg border-b border-border-light z-10">
+                    {/* Mobile hamburger */}
                     <button
                         onClick={() => setSidebarOpen(true)}
-                        className="lg:hidden text-ink-secondary hover:text-ink transition-colors duration-fast"
+                        className="lg:hidden text-sand-500 hover:text-ink transition-colors duration-fast"
                         aria-label="Menu"
                     >
                         <MenuIcon className="w-5 h-5" />
                     </button>
 
+                    {/* Mobile brand */}
+                    <span className="lg:hidden font-bold text-ink text-lg">
+                        EKO<span className="text-forest-500">GRH</span>
+                    </span>
+
+                    {/* Breadcrumb (desktop) */}
                     <div className="hidden lg:block flex-1">
                         {!isRoot && <Breadcrumb />}
                     </div>
 
+                    {/* Spacer */}
+                    <div className="flex-1 lg:hidden" />
+
+                    {/* Search pill */}
                     <GlobalSearch />
+
+                    {/* Profile dropdown */}
+                    <div className="relative">
+                        <button
+                            onClick={() => setProfileOpen(!profileOpen)}
+                            className="flex items-center gap-2 hover:opacity-80 transition-opacity duration-fast"
+                        >
+                            <div className="w-8 h-8 rounded-full bg-forest-500 flex items-center justify-center">
+                                <span className="text-xs font-bold text-white">
+                                    {(user?.username || "U")[0].toUpperCase()}
+                                </span>
+                            </div>
+                            <span className="hidden md:block text-body-sm font-semibold text-ink">
+                                {user?.username || "Utilisateur"}
+                            </span>
+                        </button>
+
+                        {profileOpen && (
+                            <>
+                                <div
+                                    className="fixed inset-0 z-40"
+                                    onClick={() => setProfileOpen(false)}
+                                />
+                                <div className="absolute right-0 top-full mt-2 w-56 bg-card-bg rounded-card shadow-modal border border-border-light z-50 py-1">
+                                    <div className="px-4 py-3 border-b border-border-light">
+                                        <p className="text-body-sm font-semibold text-ink">
+                                            {user?.username || "Utilisateur"}
+                                        </p>
+                                        <p className="text-caption text-sand-500">
+                                            {ROLE_LABELS[role] || "Utilisateur"}
+                                        </p>
+                                    </div>
+                                    <button
+                                        onClick={() => {
+                                            handleLogout();
+                                            setProfileOpen(false);
+                                        }}
+                                        className="w-full text-left px-4 py-2.5 text-body-sm text-ink-secondary hover:bg-sand-50 transition-colors duration-fast flex items-center gap-2"
+                                    >
+                                        <LogoutIcon className="w-4 h-4" />
+                                        Déconnexion
+                                    </button>
+                                </div>
+                            </>
+                        )}
+                    </div>
                 </header>
 
                 {/* Page content */}
