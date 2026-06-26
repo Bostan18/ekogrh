@@ -142,9 +142,9 @@ export default function Login() {
                             </div>
                         )}
 
-                        <form onSubmit={handleSubmit} className="space-y-4">
-                            <div>
-                                <label className="block text-body-sm font-semibold text-ink-secondary mb-1.5">
+                        <form onSubmit={handleSubmit} className="space-y-5">
+                            <div className="form-group">
+                                <label className="form-label">
                                     Nom d'utilisateur
                                 </label>
                                 <input
@@ -159,9 +159,8 @@ export default function Login() {
                                     autoFocus
                                 />
                             </div>
-
-                            <div>
-                                <label className="block text-body-sm font-semibold text-ink-secondary mb-1.5">
+                            <div className="form-group">
+                                <label className="form-label">
                                     Mot de passe
                                 </label>
                                 <input
