@@ -77,12 +77,9 @@ export default function Paiements() {
                                 <th className="table-header">Notes</th>
                             </tr>
                         </thead>
-                        <tbody className="divide-y divide-sand-50">
+                        <tbody>
                             {paiements.map((p) => (
-                                <tr
-                                    key={p.id}
-                                    className="hover:bg-sand-50 transition-colors"
-                                >
+                                <tr key={p.id}>
                                     <td className="px-4 py-3 text-sm text-sand-600">
                                         {p.date}
                                     </td>

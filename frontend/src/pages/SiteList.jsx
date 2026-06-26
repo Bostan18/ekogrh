@@ -196,9 +196,9 @@ export default function SiteList() {
                             <th className="table-header">Localisation</th>
                         </tr>
                     </thead>
-                    <tbody className="divide-y divide-sand-50">
+                    <tbody>
                         {sites.map((s) => (
-                            <tr key={s.id} className="hover:bg-sand-50">
+                            <tr key={s.id}>
                                 <td className="px-4 py-3 font-mono text-sm text-forest-600">
                                     {s.code}
                                 </td>

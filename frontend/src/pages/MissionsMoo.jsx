@@ -261,12 +261,9 @@ export default function MissionsMoo() {
                                 </th>
                             </tr>
                         </thead>
-                        <tbody className="divide-y divide-sand-50">
+                        <tbody>
                             {missions.map((m) => (
-                                <tr
-                                    key={m.id}
-                                    className="hover:bg-sand-50 transition-colors"
-                                >
+                                <tr key={m.id}>
                                     <td className="px-4 py-3">
                                         <div className="text-sm font-medium text-ink">
                                             {m.employe_nom}

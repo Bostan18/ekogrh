@@ -316,9 +316,9 @@ export default function LogTravailList() {
                             <th className="table-header text-center">Statut</th>
                         </tr>
                     </thead>
-                    <tbody className="divide-y divide-sand-50">
+                    <tbody>
                         {logs.map((l) => (
-                            <tr key={l.id} className="hover:bg-sand-50">
+                            <tr key={l.id}>
                                 <td className="px-4 py-3">
                                     <div className="text-sm font-medium text-ink">
                                         {l.employe_nom}

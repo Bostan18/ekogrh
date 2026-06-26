@@ -68,9 +68,9 @@ export default function TacheCatalogueList() {
                             <th className="table-header text-center">Action</th>
                         </tr>
                     </thead>
-                    <tbody className="divide-y divide-sand-50">
+                    <tbody>
                         {taches.map((t) => (
-                            <tr key={t.id} className="hover:bg-sand-50">
+                            <tr key={t.id}>
                                 <td className="px-4 py-3 font-mono text-sm text-forest-600">
                                     {t.code}
                                 </td>

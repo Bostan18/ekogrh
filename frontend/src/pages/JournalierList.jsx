@@ -190,12 +190,9 @@ export default function JournalierList() {
                                         </th>
                                     </tr>
                                 </thead>
-                                <tbody className="divide-y divide-sand-50">
+                                <tbody>
                                     {restants.map((r) => (
-                                        <tr
-                                            key={r.employe_id}
-                                            className="hover:bg-sand-50 transition-colors"
-                                        >
+                                        <tr key={r.employe_id}>
                                             <td className="px-4 py-3 text-sm font-medium text-ink">
                                                 <Link
                                                     to={`/employes/${r.employe_id}`}

@@ -28,10 +28,8 @@ function InputField({
     disabled,
 }) {
     return (
-        <div>
-            <label className="block text-xs font-semibold text-sand-500 uppercase mb-1">
-                {label}
-            </label>
+        <div className="form-group">
+            <label className="form-label">{label}</label>
             <input
                 type={type}
                 name={name}
@@ -39,7 +37,7 @@ function InputField({
                 onChange={onChange}
                 required={required}
                 disabled={disabled}
-                className="w-full px-3 py-2 border border-sand-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-forest-500 disabled:bg-sand-50 disabled:text-sand-500"
+                className="input-field disabled:bg-sand-50 disabled:text-sand-500"
             />
         </div>
     );
@@ -151,14 +149,11 @@ export default function EmployeForm() {
             >
                 ← Retour
             </button>
-            <h2 className="text-2xl font-display font-bold text-ink mb-6">
+            <h2 className="text-page-title text-ink mb-6">
                 {isEdit ? "Modifier employé" : "Nouvel employé"}
             </h2>
 
-            <form
-                onSubmit={handleSubmit}
-                className="bg-white rounded-xl shadow-card border border-sand-100 p-6"
-            >
+            <form onSubmit={handleSubmit} className="card p-6">
                 {error && (
                     <div className="mb-4 p-3 bg-red-50 border border-red-200 rounded-lg text-red-700 text-sm whitespace-pre-line">
                         {error}
@@ -187,15 +182,13 @@ export default function EmployeForm() {
                         onChange={handleChange}
                         required
                     />
-                    <div>
-                        <label className="block text-xs font-semibold text-sand-500 uppercase mb-1">
-                            Type de contrat
-                        </label>
+                    <div className="form-group">
+                        <label className="form-label">Type de contrat</label>
                         <select
                             name="type_contrat"
                             value={form.type_contrat}
                             onChange={handleChange}
-                            className="w-full px-3 py-2 border border-sand-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-forest-500"
+                            className="select-field"
                         >
                             <option value="cdi">CDI</option>
                             <option value="cdd">CDD</option>
@@ -204,15 +197,13 @@ export default function EmployeForm() {
                             <option value="stagiaire">Stagiaire</option>
                         </select>
                     </div>
-                    <div>
-                        <label className="block text-xs font-semibold text-sand-500 uppercase mb-1">
-                            Statut
-                        </label>
+                    <div className="form-group">
+                        <label className="form-label">Statut</label>
                         <select
                             name="statut"
                             value={form.statut}
                             onChange={handleChange}
-                            className="w-full px-3 py-2 border border-sand-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-forest-500"
+                            className="select-field"
                         >
                             <option value="actif">Actif</option>
                             <option value="inactif">Inactif</option>
@@ -279,7 +270,7 @@ export default function EmployeForm() {
                     <button
                         type="submit"
                         disabled={saving}
-                        className="px-6 py-2 bg-forest-500 hover:bg-forest-600 text-white text-sm font-medium rounded-lg transition-colors disabled:opacity-50"
+                        className="btn-primary"
                     >
                         {saving
                             ? "Enregistrement..."
@@ -290,7 +281,7 @@ export default function EmployeForm() {
                     <button
                         type="button"
                         onClick={() => navigate(-1)}
-                        className="px-6 py-2 border border-sand-200 hover:bg-sand-50 text-sand-700 text-sm font-medium rounded-lg transition-colors"
+                        className="btn-outline"
                     >
                         Annuler
                     </button>

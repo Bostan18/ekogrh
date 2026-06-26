@@ -130,9 +130,9 @@ export default function TaskPayroll() {
                                 <th className="table-header">Contact</th>
                             </tr>
                         </thead>
-                        <tbody className="divide-y divide-sand-50">
+                        <tbody>
                             {data.lignes.map((l, i) => (
-                                <tr key={i} className="hover:bg-sand-50">
+                                <tr key={i}>
                                     <td className="px-4 py-3">
                                         <div className="text-sm font-medium text-ink">
                                             {l.employe_nom}

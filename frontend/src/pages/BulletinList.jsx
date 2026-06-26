@@ -216,12 +216,9 @@ export default function BulletinList() {
                                 <th className="table-header">Statut</th>
                             </tr>
                         </thead>
-                        <tbody className="divide-y divide-sand-50">
+                        <tbody>
                             {bulletins.map((b) => (
-                                <tr
-                                    key={b.id}
-                                    className="hover:bg-sand-50 transition-colors"
-                                >
+                                <tr key={b.id}>
                                     <td className="px-4 py-3">
                                         <Link
                                             to={"/bulletins/" + b.id}

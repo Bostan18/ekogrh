@@ -80,12 +80,9 @@ export default function CongesList() {
                                 <th className="table-header">Actions</th>
                             </tr>
                         </thead>
-                        <tbody className="divide-y divide-sand-50">
+                        <tbody>
                             {conges.map((c) => (
-                                <tr
-                                    key={c.id}
-                                    className="hover:bg-sand-50 transition-colors"
-                                >
+                                <tr key={c.id}>
                                     <td className="px-4 py-3 text-sm font-medium text-ink">
                                         {c.employe_nom}
                                     </td>

@@ -92,12 +92,9 @@ export default function EmployeList() {
                                 <th className="table-header">Taux</th>
                             </tr>
                         </thead>
-                        <tbody className="divide-y divide-sand-50">
+                        <tbody>
                             {employes.map((emp) => (
-                                <tr
-                                    key={emp.id}
-                                    className="hover:bg-sand-50 transition-colors"
-                                >
+                                <tr key={emp.id}>
                                     <td className="px-4 py-3">
                                         <Link
                                             to={`/employes/${emp.id}`}
