@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import api from "../api/client";
+import { today } from "../utils/constants";
 
 const INITIAL = {
     code: "",
@@ -9,7 +10,7 @@ const INITIAL = {
     type_contrat: "cdi",
     poste: "",
     statut: "actif",
-    date_entree: new Date().toISOString().slice(0, 10),
+    date_entree: today(),
     salaire_mensuel: "",
     taux_journalier: "",
     telephone: "",

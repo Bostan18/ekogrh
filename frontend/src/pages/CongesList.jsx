@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import api from "../api/client";
 import EmptyState from "../components/EmptyState";
 import { TableSkeleton } from "../components/Skeleton";
+import { toast } from "../store/toastStore";
 
 export default function CongesList() {
     const [conges, setConges] = useState([]);
@@ -33,12 +34,22 @@ export default function CongesList() {
     }
 
     async function approuver(id) {
-        await api.post("/rh/conges/" + id + "/approuver/");
-        loadConges();
+        try {
+            await api.post("/rh/conges/" + id + "/approuver/");
+            toast().success("Congé approuvé.");
+            loadConges();
+        } catch {
+            toast().error("Erreur lors de l'approbation.");
+        }
     }
     async function refuser(id) {
-        await api.post("/rh/conges/" + id + "/refuser/");
-        loadConges();
+        try {
+            await api.post("/rh/conges/" + id + "/refuser/");
+            toast().success("Congé refusé.");
+            loadConges();
+        } catch {
+            toast().error("Erreur lors du refus.");
+        }
     }
 
     return (

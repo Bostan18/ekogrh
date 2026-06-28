@@ -3,12 +3,15 @@ import api from "../api/client";
 import SearchableSelect from "../components/SearchableSelect";
 import MonthYearPicker from "../components/MonthYearPicker";
 import EmptyState from "../components/EmptyState";
+import { toast } from "../store/toastStore";
+import Spinner from "../components/Spinner";
+import { currentMonth, currentYear } from "../utils/constants";
 
 export default function TaskPayroll() {
     const [sites, setSites] = useState([]);
     const [siteId, setSiteId] = useState("");
-    const [mois, setMois] = useState(new Date().getMonth() + 1);
-    const [annee, setAnnee] = useState(new Date().getFullYear());
+    const [mois, setMois] = useState(currentMonth());
+    const [annee, setAnnee] = useState(currentYear());
     const [data, setData] = useState(null);
     const [loading, setLoading] = useState(false);
 
@@ -20,8 +23,8 @@ export default function TaskPayroll() {
         try {
             const { data } = await api.get("/operations/sites/");
             setSites(data.results || data);
-        } catch (err) {
-            console.error(err);
+        } catch {
+            toast().error("Erreur lors du chargement des sites.");
         }
     }
 
@@ -35,8 +38,8 @@ export default function TaskPayroll() {
                 { params },
             );
             setData(data);
-        } catch (err) {
-            console.error(err);
+        } catch {
+            toast().error("Erreur lors du chargement de la paie.");
         } finally {
             setLoading(false);
         }
@@ -107,9 +110,7 @@ export default function TaskPayroll() {
             </div>
 
             {loading ? (
-                <div className="flex items-center justify-center h-48">
-                    <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-forest-500"></div>
-                </div>
+                <Spinner className="h-48" />
             ) : data && data.lignes.length > 0 ? (
                 <div className="card overflow-hidden">
                     <table className="w-full">

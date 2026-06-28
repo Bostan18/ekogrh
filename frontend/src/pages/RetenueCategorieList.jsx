@@ -1,13 +1,8 @@
 import { useState, useEffect } from "react";
 import api from "../api/client";
-
-const TYPE_LABELS = {
-    cdi: "CDI Permanent",
-    cdd: "CDD",
-    journalier: "Journalier",
-    moo: "MOO",
-    stagiaire: "Stagiaire",
-};
+import { toast } from "../store/toastStore";
+import Spinner from "../components/Spinner";
+import { TYPE_LABELS } from "../utils/constants";
 
 export default function RetenueCategorieList() {
     const [retenues, setRetenues] = useState([]);
@@ -41,7 +36,7 @@ export default function RetenueCategorieList() {
                 prev.map((r) => (r.id === id ? { ...r, [field]: value } : r)),
             );
         } catch (err) {
-            alert("Erreur lors de la sauvegarde");
+            toast().error("Erreur lors de la sauvegarde");
         } finally {
             setSaving(null);
         }
@@ -52,11 +47,7 @@ export default function RetenueCategorieList() {
     }
 
     if (loading)
-        return (
-            <div className="flex items-center justify-center h-48">
-                <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-forest-500"></div>
-            </div>
-        );
+        return <Spinner className="h-48" />;
 
     return (
         <div>

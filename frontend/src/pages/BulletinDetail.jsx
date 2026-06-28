@@ -1,6 +1,8 @@
 import { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import api from "../api/client";
+import { toast } from "../store/toastStore";
+import Spinner from "../components/Spinner";
 
 export default function BulletinDetail() {
     const { id } = useParams();
@@ -32,18 +34,14 @@ export default function BulletinDetail() {
             const { data } = await api.get("/rh/bulletins/" + id + "/");
             setBulletin(data);
         } catch (err) {
-            alert("Erreur lors du marquage comme payé");
+            toast().error("Erreur lors du marquage comme payé");
         } finally {
             setPaying(false);
         }
     }
 
     if (loading)
-        return (
-            <div className="flex items-center justify-center h-64">
-                <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-forest-500"></div>
-            </div>
-        );
+        return <Spinner className="h-64" />;
     if (!bulletin) return null;
 
     return (

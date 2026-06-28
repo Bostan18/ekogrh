@@ -3,6 +3,7 @@ import api from "../api/client";
 import EmptyState from "../components/EmptyState";
 import { TableSkeleton } from "../components/Skeleton";
 import { toast } from "../store/toastStore";
+import { today } from "../utils/constants";
 
 export default function MissionsMoo() {
     const [missions, setMissions] = useState([]);
@@ -28,7 +29,7 @@ export default function MissionsMoo() {
     const [form, setForm] = useState({
         employe: "",
         description: "",
-        date_debut: new Date().toISOString().slice(0, 10),
+                date_debut: today(),
         date_fin: "",
         montant_forfaitaire: "",
         projet_ref: "",
@@ -78,7 +79,7 @@ export default function MissionsMoo() {
             setForm({
                 employe: "",
                 description: "",
-                date_debut: new Date().toISOString().slice(0, 10),
+        date_debut: today(),
                 date_fin: "",
                 montant_forfaitaire: "",
                 projet_ref: "",
@@ -97,9 +98,10 @@ export default function MissionsMoo() {
     const handleMarquerPayee = async (id) => {
         try {
             await api.post(`/rh/missions-moo/${id}/marquer_payee/`);
+            toast().success("Mission marquée comme payée.");
             loadAll();
-        } catch (err) {
-            console.error(err);
+        } catch {
+            toast().error("Erreur lors du marquage.");
         }
     };
 

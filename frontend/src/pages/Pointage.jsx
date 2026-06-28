@@ -35,7 +35,7 @@ export default function Pointage() {
     useEffect(() => {
         api.get("/operations/sites/")
             .then(({ data }) => setSites(data.results || data))
-            .catch(() => {});
+            .catch(() => toast().error("Erreur lors du chargement des sites."));
     }, []);
 
     const togglePresence = (idx) => {

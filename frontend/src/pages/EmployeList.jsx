@@ -3,6 +3,8 @@ import { Link } from "react-router-dom";
 import api from "../api/client";
 import EmptyState from "../components/EmptyState";
 import { TableSkeleton } from "../components/Skeleton";
+import { toast } from "../store/toastStore";
+import { typeColors, statutColors } from "../utils/constants";
 
 export default function EmployeList() {
     const [employes, setEmployes] = useState([]);
@@ -22,26 +24,12 @@ export default function EmployeList() {
             if (search) params.search = search;
             const { data } = await api.get("/rh/employes/", { params });
             setEmployes(data.results || data);
-        } catch (err) {
-            console.error(err);
+        } catch {
+            toast().error("Erreur lors du chargement des employés.");
         } finally {
             setLoading(false);
         }
     }
-
-    const typeColors = {
-        cdi: "bg-blue-100 text-blue-700",
-        cdd: "bg-purple-100 text-purple-700",
-        journalier: "bg-gold-100 text-gold-700",
-        moo: "bg-orange-100 text-orange-700",
-        stagiaire: "bg-teal-100 text-teal-700",
-    };
-
-    const statutColors = {
-        actif: "bg-green-100 text-green-700",
-        inactif: "bg-red-100 text-red-700",
-        conge: "bg-gold-100 text-gold-700",
-    };
 
     return (
         <div>
