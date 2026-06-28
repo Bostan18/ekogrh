@@ -1,3 +1,4 @@
+import { jwtDecode } from "jwt-decode";
 import { create } from "zustand";
 import api from "../api/client";
 
@@ -14,7 +15,7 @@ const useAuthStore = create((set, get) => ({
         // Decode JWT payload for role
         let role = "admin";
         try {
-            const payload = JSON.parse(atob(data.access.split(".")[1]));
+            const payload = jwtDecode(data.access);
             role = payload.role || "admin";
         } catch {}
 
@@ -49,7 +50,7 @@ const useAuthStore = create((set, get) => ({
             let role = "admin";
             let username = "admin";
             try {
-                const payload = JSON.parse(atob(token.split(".")[1]));
+                const payload = jwtDecode(token);
                 role = payload.role || "admin";
                 username = payload.username || "admin";
             } catch {}

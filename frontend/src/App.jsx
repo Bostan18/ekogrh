@@ -1,8 +1,10 @@
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import { useEffect, lazy, Suspense } from "react";
 import useAuthStore from "./store/authStore";
+import ErrorBoundary from "./components/ErrorBoundary";
 import Layout from "./components/Layout";
 import Login from "./pages/Login";
+import Spinner from "./components/Spinner";
 
 const Dashboard = lazy(() => import("./pages/Dashboard"));
 const EmployeList = lazy(() => import("./pages/EmployeList"));
@@ -24,21 +26,12 @@ const TaskPayroll = lazy(() => import("./pages/TaskPayroll"));
 const RetenueCategorieList = lazy(() => import("./pages/RetenueCategorieList"));
 
 function PageLoader() {
-    return (
-        <div className="flex h-64 items-center justify-center">
-            <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-forest-500"></div>
-        </div>
-    );
+    return <Spinner className="h-64" />;
 }
 
 function ProtectedRoute({ children }) {
     const { isAuthenticated, loading } = useAuthStore();
-    if (loading)
-        return (
-            <div className="flex h-screen items-center justify-center">
-                <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-forest-500"></div>
-            </div>
-        );
+    if (loading) return <Spinner className="h-screen" size="lg" />;
     if (!isAuthenticated) return <Navigate to="/login" replace />;
     return children;
 }
@@ -53,12 +46,21 @@ export default function App() {
     return (
         <BrowserRouter>
             <Routes>
-                <Route path="/login" element={<Login />} />
+                <Route
+                    path="/login"
+                    element={
+                        <ErrorBoundary fallbackMessage="Erreur sur la page de connexion.">
+                            <Login />
+                        </ErrorBoundary>
+                    }
+                />
                 <Route
                     path="/"
                     element={
                         <ProtectedRoute>
-                            <Layout />
+                            <ErrorBoundary>
+                                <Layout />
+                            </ErrorBoundary>
                         </ProtectedRoute>
                     }
                 >
