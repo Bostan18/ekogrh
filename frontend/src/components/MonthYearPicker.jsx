@@ -1,17 +1,4 @@
-const MOIS_NOMS = [
-    "Janvier",
-    "Février",
-    "Mars",
-    "Avril",
-    "Mai",
-    "Juin",
-    "Juillet",
-    "Août",
-    "Septembre",
-    "Octobre",
-    "Novembre",
-    "Décembre",
-];
+import { MOIS_NOMS_0, currentMonth as curMonth, currentYear as curYear } from "../utils/constants";
 
 export default function MonthYearPicker({
     month,
@@ -22,22 +9,22 @@ export default function MonthYearPicker({
     showYear = true,
     className = "",
 }) {
-    const currentMonth = month || new Date().getMonth() + 1;
-    const currentYear = year || new Date().getFullYear();
+    const effectiveMonth = month || curMonth();
+    const effectiveYear = year || curYear();
 
     const handlePrevMonth = () => {
-        if (currentMonth === 1) {
-            onChange({ month: 12, year: currentYear - 1 });
+        if (effectiveMonth === 1) {
+            onChange({ month: 12, year: effectiveYear - 1 });
         } else {
-            onChange({ month: currentMonth - 1, year: currentYear });
+            onChange({ month: effectiveMonth - 1, year: effectiveYear });
         }
     };
 
     const handleNextMonth = () => {
-        if (currentMonth === 12) {
-            onChange({ month: 1, year: currentYear + 1 });
+        if (effectiveMonth === 12) {
+            onChange({ month: 1, year: effectiveYear + 1 });
         } else {
-            onChange({ month: currentMonth + 1, year: currentYear });
+            onChange({ month: effectiveMonth + 1, year: effectiveYear });
         }
     };
 
@@ -58,16 +45,16 @@ export default function MonthYearPicker({
             </button>
             {showMonth && (
                 <select
-                    value={currentMonth}
+                    value={effectiveMonth}
                     onChange={(e) =>
                         onChange({
                             month: parseInt(e.target.value),
-                            year: currentYear,
+                            year: effectiveYear,
                         })
                     }
                     className="select-field w-auto"
                 >
-                    {MOIS_NOMS.map((nom, i) => (
+                    {MOIS_NOMS_0.map((nom, i) => (
                         <option key={i + 1} value={i + 1}>
                             {nom}
                         </option>
@@ -77,11 +64,11 @@ export default function MonthYearPicker({
             {showYear && (
                 <input
                     type="number"
-                    value={currentYear}
+                    value={effectiveYear}
                     onChange={(e) =>
                         onChange({
-                            month: currentMonth,
-                            year: parseInt(e.target.value) || currentYear,
+                            month: effectiveMonth,
+                            year: parseInt(e.target.value) || effectiveYear,
                         })
                     }
                     className="input-field w-24"

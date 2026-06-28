@@ -5,31 +5,17 @@ import EmptyState from "../components/EmptyState";
 import MonthYearPicker from "../components/MonthYearPicker";
 import { TableSkeleton } from "../components/Skeleton";
 import { toast } from "../store/toastStore";
+import { MOIS_NOMS_1, currentMonth, currentYear } from "../utils/constants";
 
 export default function BulletinList() {
     const [bulletins, setBulletins] = useState([]);
     const [employes, setEmployes] = useState([]);
     const [loading, setLoading] = useState(true);
     const [generating, setGenerating] = useState(false);
-    const [mois, setMois] = useState(new Date().getMonth() + 1);
-    const [annee, setAnnee] = useState(new Date().getFullYear());
+    const [mois, setMois] = useState(currentMonth());
+    const [annee, setAnnee] = useState(currentYear());
     const [selectedIds, setSelectedIds] = useState([]);
     const [showSelect, setShowSelect] = useState(false);
-    const moisLabels = [
-        "",
-        "Janvier",
-        "Février",
-        "Mars",
-        "Avril",
-        "Mai",
-        "Juin",
-        "Juillet",
-        "Août",
-        "Septembre",
-        "Octobre",
-        "Novembre",
-        "Décembre",
-    ];
 
     useEffect(() => {
         loadBulletins();
@@ -145,7 +131,7 @@ export default function BulletinList() {
                 <div className="bg-white rounded-xl shadow-card border border-forest-200 p-4 mb-4">
                     <p className="text-sm font-medium text-ink mb-3">
                         Sélectionnez les employés pour lesquels générer le
-                        bulletin de {moisLabels[mois]} {annee} :
+                        bulletin de {MOIS_NOMS_1[mois]} {annee} :
                     </p>
                     <div className="max-h-48 overflow-y-auto border border-sand-100 rounded-lg mb-3">
                         <label className="flex items-center gap-2 px-3 py-2 border-b border-sand-50 bg-sand-50 cursor-pointer hover:bg-sand-100">

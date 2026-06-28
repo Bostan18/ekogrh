@@ -2,20 +2,13 @@ import { useState, useEffect } from "react";
 import api from "../api/client";
 import EmptyState from "../components/EmptyState";
 import { TableSkeleton } from "../components/Skeleton";
+import { modeColors } from "../utils/constants";
 
 export default function Paiements() {
     const [paiements, setPaiements] = useState([]);
     const [restants, setRestants] = useState([]);
     const [loading, setLoading] = useState(true);
     const [tab, setTab] = useState("paiements");
-    const modeColors = {
-        especes: "bg-green-100 text-green-700",
-        orange: "bg-orange-100 text-orange-700",
-        mtn: "bg-yellow-100 text-yellow-700",
-        moov: "bg-blue-100 text-blue-700",
-        virement: "bg-purple-100 text-purple-700",
-        cheque: "bg-slate-100 text-slate-700",
-    };
 
     useEffect(() => {
         loadData();

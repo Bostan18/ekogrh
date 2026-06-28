@@ -5,6 +5,7 @@ import EmptyState from "../components/EmptyState";
 import { CardSkeleton, TableSkeleton } from "../components/Skeleton";
 import { toast } from "../store/toastStore";
 import PaymentModal from "../components/PaymentModal";
+import { today } from "../utils/constants";
 
 export default function JournalierList() {
     const [journaliers, setJournaliers] = useState([]);
@@ -51,7 +52,7 @@ export default function JournalierList() {
             const ids = restantsNonPayes.map((r) => r.employe_id);
             await api.post("/rh/presences/marquer_payees/", {
                 ids,
-                paye_le: new Date().toISOString().slice(0, 10),
+                paye_le: today(),
             });
             toast().success(
                 `${restantsNonPayes.length} journalier(s) marqué(s) payé(s).`,
@@ -61,15 +62,6 @@ export default function JournalierList() {
             toast().error("Erreur lors du règlement.");
         }
     }
-
-    const modeColors = {
-        especes: "bg-green-100 text-green-700",
-        orange: "bg-orange-100 text-orange-700",
-        mtn: "bg-yellow-100 text-yellow-700",
-        moov: "bg-blue-100 text-blue-700",
-        virement: "bg-purple-100 text-purple-700",
-        cheque: "bg-slate-100 text-slate-700",
-    };
 
     const tabBtn = (name) =>
         "px-4 py-2 rounded-lg text-sm font-medium transition-colors " +

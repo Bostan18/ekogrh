@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import api from '../api/client'
 import { toast } from '../store/toastStore'
+import { today } from '../utils/constants'
 
 const MODES = [
   { value: 'especes', label: 'Espèces' },
@@ -15,7 +16,7 @@ export default function PaymentModal({ items, onClose, onPaid }) {
   const [mode, setMode] = useState('especes')
   const [reference, setReference] = useState('')
   const [notes, setNotes] = useState('')
-  const [datePaiement, setDatePaiement] = useState(new Date().toISOString().slice(0, 10))
+  const [datePaiement, setDatePaiement] = useState(today())
   const [saving, setSaving] = useState(false)
 
   const total = items.reduce((sum, item) => sum + (item.restant || item.montant || 0), 0)

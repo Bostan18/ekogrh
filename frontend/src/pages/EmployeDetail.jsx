@@ -3,6 +3,7 @@ import { useParams, useNavigate, Link } from "react-router-dom";
 import api from "../api/client";
 import { UserCircleIcon } from "../components/Icon";
 import { toast } from "../store/toastStore";
+import Spinner from "../components/Spinner";
 
 export default function EmployeDetail() {
     const { id } = useParams();
@@ -38,11 +39,7 @@ export default function EmployeDetail() {
     }, [id]);
 
     if (loading) {
-        return (
-            <div className="flex items-center justify-center h-64">
-                <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-forest-500"></div>
-            </div>
-        );
+        return <Spinner className="h-64" />;
     }
 
     if (!employe) return null;

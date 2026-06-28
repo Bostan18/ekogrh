@@ -10,6 +10,7 @@ import {
     UmbrellaIcon,
 } from "../components/Icon";
 import OnboardingChecklist from "../components/OnboardingChecklist";
+import { MOIS_NOMS_1, currentMonth, currentYear } from "../utils/constants";
 
 export default function Dashboard() {
     const [stats, setStats] = useState(null);
@@ -46,10 +47,9 @@ export default function Dashboard() {
                     (recentPres.data.results || recentPres.data).slice(0, 5),
                 );
 
-                const today = new Date();
                 setPaieResume({
-                    mois: today.getMonth() + 1,
-                    annee: today.getFullYear(),
+                    mois: currentMonth(),
+                    annee: currentYear(),
                     nbBulletins: paie.data.count || 0,
                 });
             } catch (err) {
@@ -95,22 +95,6 @@ export default function Dashboard() {
             color: "bg-blue-500/10 text-info",
             to: "/bulletins",
         },
-    ];
-
-    const moisNoms = [
-        "",
-        "Janvier",
-        "Février",
-        "Mars",
-        "Avril",
-        "Mai",
-        "Juin",
-        "Juillet",
-        "Août",
-        "Septembre",
-        "Octobre",
-        "Novembre",
-        "Décembre",
     ];
 
     if (loading) {
@@ -314,7 +298,7 @@ export default function Dashboard() {
                 <div className="card-padded">
                     <div className="flex items-center justify-between mb-4">
                         <h3 className="text-section-title text-ink">
-                            Paie — {moisNoms[paieResume?.mois]}{" "}
+                            Paie — {MOIS_NOMS_1[paieResume?.mois]}{" "}
                             {paieResume?.annee}
                         </h3>
                         <Link
@@ -348,7 +332,7 @@ export default function Dashboard() {
                         to="/bulletins"
                         className="btn-primary w-full mt-5 text-sm justify-center"
                     >
-                        Générer la paie de {moisNoms[paieResume?.mois]}
+                        Générer la paie de {MOIS_NOMS_1[paieResume?.mois]}
                     </Link>
                 </div>
             </div>
