@@ -93,7 +93,7 @@ def global_search(request):
     sites = (
         Site.objects.filter(
             Q(nom__icontains=q) | Q(code__icontains=q),
-            is_deleted=False,
+            actif=True,
         )
         .only("id", "code", "nom", "type_site")
         .order_by("nom")[:5]
