@@ -1,4 +1,4 @@
-from apps.core.models import TimeStampedModel
+from apps.core.models import CodeCounter, TimeStampedModel
 from django.db import models
 
 
@@ -36,9 +36,7 @@ class Site(TimeStampedModel):
 
     @classmethod
     def generate_code(cls):
-        last = cls.objects.order_by("-id").first()
-        num = (last.id + 1) if last else 1
-        return f"SIT-{num:03d}"
+        return CodeCounter.next_code("SIT", "{prefix}-{num:03d}")
 
     def save(self, *args, **kwargs):
         if not self.code:
@@ -78,9 +76,7 @@ class TacheCatalogue(TimeStampedModel):
 
     @classmethod
     def generate_code(cls):
-        last = cls.objects.order_by("-id").first()
-        num = (last.id + 1) if last else 1
-        return f"TAC-{num:03d}"
+        return CodeCounter.next_code("TAC", "{prefix}-{num:03d}")
 
     def save(self, *args, **kwargs):
         if not self.code:

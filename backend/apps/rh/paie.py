@@ -14,14 +14,8 @@ from apps.core.constants import ALLOC_ENFANT, HEURES_MOIS, SMIG
 def _r(val, decimals=0):
     """Arrondi bancaire (ROUND_HALF_UP)."""
     if isinstance(val, Decimal):
-        return val.quantize(
-            Decimal("1") if decimals == 0 else Decimal(f"0.{'0' * (decimals - 1)}1"),
-            rounding=ROUND_HALF_UP,
-        )
-        return val.quantize(
-            Decimal("1") if decimals == 0 else Decimal(f"0.{'0' * (decimals - 1)}1"),
-            rounding=ROUND_HALF_UP,
-        )
+        precision = Decimal("1") if decimals == 0 else Decimal(f"0.{'0' * decimals}")
+        return val.quantize(precision, rounding=ROUND_HALF_UP)
     return round(val, decimals)
 
 

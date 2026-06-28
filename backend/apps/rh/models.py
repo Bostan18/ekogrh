@@ -1,7 +1,7 @@
 from django.conf import settings
 from django.db import models
 
-from apps.core.models import SoftDeleteModel, TimeStampedModel
+from apps.core.models import CodeCounter, SoftDeleteModel, TimeStampedModel
 
 
 class Employe(SoftDeleteModel):
@@ -67,6 +67,11 @@ class Employe(SoftDeleteModel):
     class Meta:
         verbose_name = "Employé"
         ordering = ["nom", "prenom"]
+        indexes = [
+            models.Index(fields=["type_contrat"]),
+            models.Index(fields=["statut"]),
+            models.Index(fields=["is_deleted"]),
+        ]
 
     def __str__(self):
         return f"{self.code} — {self.nom} {self.prenom}"
@@ -77,9 +82,7 @@ class Employe(SoftDeleteModel):
 
     @classmethod
     def generate_code(cls):
-        last = cls.objects.order_by("-id").first()
-        num = (last.id + 1) if last else 1
-        return f"EMP-{num:03d}"
+        return CodeCounter.next_code("EMP", "{prefix}-{num:03d}")
 
     def save(self, *args, **kwargs):
         if not self.code:
@@ -126,6 +129,12 @@ class PresenceJournaliere(TimeStampedModel):
         verbose_name = "Présence journalière"
         unique_together = ["employe", "date"]
         ordering = ["-date"]
+        indexes = [
+            models.Index(fields=["date"]),
+            models.Index(fields=["statut"]),
+            models.Index(fields=["paye_le"]),
+            models.Index(fields=["employe", "date", "present"]),
+        ]
 
     def save(self, *args, **kwargs):
         if self.employe.taux_journalier and self.present:
@@ -152,6 +161,10 @@ class BulletinPaie(TimeStampedModel):
         verbose_name = "Bulletin de paie"
         unique_together = ["employe", "mois"]
         ordering = ["-mois", "employe__nom"]
+        indexes = [
+            models.Index(fields=["mois"]),
+            models.Index(fields=["statut"]),
+        ]
 
     def __str__(self):
         return f"{self.employe.code} — {self.mois.strftime('%Y-%m')}"
@@ -463,6 +476,10 @@ class Paiement(TimeStampedModel):
     class Meta:
         verbose_name = "Paiement"
         ordering = ["-date"]
+        indexes = [
+            models.Index(fields=["date"]),
+            models.Index(fields=["employe"]),
+        ]
 
     def __str__(self):
         return f"{self.employe.code} — {self.montant} F ({self.date})"

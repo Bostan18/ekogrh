@@ -2,7 +2,9 @@
 
 from datetime import timedelta
 
-from django.db.models import Count
+from django.db import models
+from django.db.models import Count, F, Q, Sum
+from django.db.models.functions import Concat
 from django.http import HttpResponse
 from django.utils import timezone
 from rest_framework import status, viewsets
@@ -303,33 +305,26 @@ class PresenceJournaliereViewSet(viewsets.ModelViewSet):
     @action(detail=False, methods=["get"])
     def restant_a_payer(self, request):
         """Récap par employé journalier : total dû, total payé, restant."""
-        presences = PresenceJournaliere.objects.filter(
-            employe__type_contrat="journalier",
-            present=True,
-        ).select_related("employe")
 
-        recap = {}
-        for p in presences:
-            key = p.employe_id
-            if key not in recap:
-                recap[key] = {
-                    "employe_id": p.employe_id,
-                    "employe_code": p.employe.code,
-                    "employe_nom": p.employe.nom_complet,
-                    "total_du": 0.0,
-                    "total_paye": 0.0,
-                    "restant": 0.0,
-                    "jours_non_payes": 0,
-                }
-            montant = float(p.montant_du)
-            recap[key]["total_du"] += montant
-            if p.paye_le:
-                recap[key]["total_paye"] += montant
-            else:
-                recap[key]["restant"] += montant
-                recap[key]["jours_non_payes"] += 1
+        recap = list(
+            PresenceJournaliere.objects.filter(
+                employe__type_contrat="journalier",
+                present=True,
+            )
+            .values("employe_id", "employe__code", "employe__nom", "employe__prenom")
+            .annotate(
+                employe_nom=Concat(
+                    F("employe__nom"), models.Value(" "), F("employe__prenom")
+                ),
+                total_du=Sum("montant_du"),
+                total_paye=Sum("montant_du", filter=Q(paye_le__isnull=False)),
+                restant=Sum("montant_du", filter=Q(paye_le__isnull=True)),
+                jours_non_payes=Count("id", filter=Q(paye_le__isnull=True)),
+            )
+            .order_by("employe__nom")
+        )
 
-        return Response(list(recap.values()))
+        return Response(recap)
 
     @action(detail=False, methods=["get"])
     def export_paie(self, request):
