@@ -122,7 +122,7 @@ export default function Layout() {
             </div>
 
             {/* Nav */}
-            <nav className="flex-1 px-3 py-4 space-y-5">
+            <nav className="flex-1 px-3 py-4 space-y-5 overflow-y-auto">
                 {NAV_SECTIONS.filter((s) => s.roles.includes(role)).map(
                     (section) => (
                         <div key={section.label}>
