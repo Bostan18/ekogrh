@@ -2,6 +2,7 @@
 
 from openpyxl import Workbook
 from openpyxl.styles import Alignment, Border, Font, PatternFill, Side
+from apps.core.constants import MOIS_FR
 
 
 def _get_payroll_data(logs_queryset):
@@ -35,9 +36,6 @@ def _get_payroll_data(logs_queryset):
     results = sorted(grouped.values(), key=lambda x: x["employe_nom"])
     total = sum(r["montant"] for r in results)
     return results, total
-
-
-from apps.core.constants import MOIS_FR
 
 
 def build_payroll_excel(results, total, site_nom, mois, annee):
