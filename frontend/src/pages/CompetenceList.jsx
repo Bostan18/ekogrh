@@ -58,19 +58,36 @@ export default function CompetenceList() {
             setEditId(null);
             toast().success("Compétence mise à jour.");
             load();
-        } catch { toast().error("Erreur de mise à jour."); }
+        } catch (err) {
+            const msg = err.response?.data;
+            if (typeof msg === "object") {
+                const detail = Object.entries(msg).map(([k, v]) => `${k}: ${Array.isArray(v) ? v.join(", ") : v}`).join("\n");
+                toast().error(detail);
+            } else {
+                toast().error("Erreur de mise à jour.");
+            }
+        }
     }
 
     async function handleCreate(e) {
         e.preventDefault();
         setSaving(true);
         try {
-            await api.post("/rh/competences/", createForm);
+            const { code, ...payload } = createForm;
+            await api.post("/rh/competences/", payload);
             setShowCreate(false);
             setCreateForm(INITIAL_FORM);
             toast().success("Compétence créée.");
             load();
-        } catch { toast().error("Erreur de création."); }
+        } catch (err) {
+            const msg = err.response?.data;
+            if (typeof msg === "object") {
+                const detail = Object.entries(msg).map(([k, v]) => `${k}: ${Array.isArray(v) ? v.join(", ") : v}`).join("\n");
+                toast().error(detail);
+            } else {
+                toast().error("Erreur de création.");
+            }
+        }
         finally { setSaving(false); }
     }
 
