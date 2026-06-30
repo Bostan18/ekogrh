@@ -128,6 +128,7 @@ export default function TaskPayroll() {
                                 <th className="table-header text-right">
                                     Montant
                                 </th>
+                                <th className="table-header">Mode</th>
                                 <th className="table-header">Contact</th>
                             </tr>
                         </thead>
@@ -162,6 +163,9 @@ export default function TaskPayroll() {
                                         {l.montant.toLocaleString()} F
                                     </td>
                                     <td className="px-4 py-3 text-sm text-sand-600">
+                                        {l.mode_paiement_display || "Espèces"}
+                                    </td>
+                                    <td className="px-4 py-3 text-sm text-sand-600">
                                         {l.employe_telephone || "—"}
                                     </td>
                                 </tr>
@@ -170,7 +174,7 @@ export default function TaskPayroll() {
                         <tfoot>
                             <tr className="border-t-2 border-sand-200 bg-sand-50">
                                 <td
-                                    colSpan={4}
+                                    colSpan={5}
                                     className="px-4 py-3 text-sm font-semibold text-ink text-right"
                                 >
                                     Total {data.site_nom || "tous sites"}
@@ -178,7 +182,7 @@ export default function TaskPayroll() {
                                 <td className="px-4 py-3 text-sm font-bold text-forest-700 text-right">
                                     {data.total.toLocaleString()} F
                                 </td>
-                                <td></td>
+                                <td colSpan={2}></td>
                             </tr>
                         </tfoot>
                     </table>

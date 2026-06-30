@@ -85,6 +85,15 @@ class TacheCatalogue(TimeStampedModel):
 
 
 class LogTravail(TimeStampedModel):
+    MODE_PAIEMENT_CHOICES = [
+        ("especes", "Espèces"),
+        ("orange", "Orange Money"),
+        ("mtn", "MTN Mobile Money"),
+        ("moov", "Moov Money"),
+        ("virement", "Virement bancaire"),
+        ("cheque", "Chèque"),
+    ]
+
     employe = models.ForeignKey(
         "rh.Employe",
         on_delete=models.CASCADE,
@@ -101,6 +110,9 @@ class LogTravail(TimeStampedModel):
     duree_heures = models.DecimalField(max_digits=4, decimal_places=1, default=8.0)
     rendement = models.DecimalField(max_digits=10, decimal_places=2, editable=False)
     prime = models.DecimalField(max_digits=10, decimal_places=2, default=0)
+    mode_paiement = models.CharField(
+        max_length=20, choices=MODE_PAIEMENT_CHOICES, default="especes"
+    )
     paye_le = models.DateField(null=True, blank=True)
     notes = models.TextField(blank=True)
 

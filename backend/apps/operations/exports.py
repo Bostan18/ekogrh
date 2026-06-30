@@ -3,13 +3,17 @@
 from openpyxl import Workbook
 from openpyxl.styles import Alignment, Border, Font, PatternFill, Side
 from apps.core.constants import MOIS_FR
+from .models import LogTravail
+
+
+MODE_LABELS = dict(LogTravail.MODE_PAIEMENT_CHOICES)
 
 
 def _get_payroll_data(logs_queryset):
     """Helper : retourne les données groupées de paie à la tâche."""
     grouped = {}
-    for log in logs_queryset:
-        key = (log.employe_id, log.tache_id)
+    for log in logs_queryset.select_related("employe", "tache", "site"):
+        key = (log.employe_id, log.tache_id, log.mode_paiement)
         if key not in grouped:
             grouped[key] = {
                 "employe_id": log.employe_id,
@@ -23,6 +27,8 @@ def _get_payroll_data(logs_queryset):
                 "seuil": float(log.tache.seuil or 0),
                 "site_id": log.site_id,
                 "site_nom": log.site.nom,
+                "mode_paiement": log.mode_paiement,
+                "mode_paiement_display": MODE_LABELS.get(log.mode_paiement, log.mode_paiement),
                 "quantite_totale": 0,
                 "prime": 0,
                 "montant": 0,
@@ -33,7 +39,7 @@ def _get_payroll_data(logs_queryset):
         qte_payable = max(0, g["quantite_totale"] - g["seuil"])
         g["montant"] = qte_payable * g["tarif"] + g["prime"]
 
-    results = sorted(grouped.values(), key=lambda x: x["employe_nom"])
+    results = sorted(grouped.values(), key=lambda x: (x["employe_nom"], x["mode_paiement"]))
     total = sum(r["montant"] for r in results)
     return results, total
 
@@ -58,7 +64,7 @@ def build_payroll_excel(results, total, site_nom, mois, annee):
     )
     money_fmt = "#,##0"
 
-    ws.merge_cells("A1:H1")
+    ws.merge_cells("A1:I1")
     ws["A1"] = (
         f"ETAT DE PAIE À LA TÂCHE — {site_nom or 'Tous'} — {MOIS_FR[mois]} {annee}"
     )
@@ -73,6 +79,7 @@ def build_payroll_excel(results, total, site_nom, mois, annee):
         "PU (FCFA)",
         "PRIME",
         "MONTANT (FCFA)",
+        "MODE DE PAIEMENT",
         "CONTACT",
     ]
     for col, h in enumerate(headers, 1):
@@ -98,21 +105,24 @@ def build_payroll_excel(results, total, site_nom, mois, annee):
         c.number_format = money_fmt
         c.border = thin_border
         ws.cell(
-            row=row, column=8, value=r.get("employe_telephone", "")
+            row=row, column=8, value=r.get("mode_paiement_display", "Espèces")
+        ).border = thin_border
+        ws.cell(
+            row=row, column=9, value=r.get("employe_telephone", "")
         ).border = thin_border
 
     total_row = len(results) + 4
-    ws.merge_cells(f"A{total_row}:F{total_row}")
+    ws.merge_cells(f"A{total_row}:G{total_row}")
     ws.cell(row=total_row, column=1, value="TOTAL").font = total_font
     ws.cell(row=total_row, column=1).alignment = Alignment(horizontal="right")
-    for c in range(1, 8):
+    for c in range(1, 9):
         ws.cell(row=total_row, column=c).border = thin_border
     c = ws.cell(row=total_row, column=7, value=total)
     c.font = total_font
     c.number_format = money_fmt
     c.border = thin_border
 
-    for col, w in zip("ABCDEFGH", [6, 30, 22, 12, 14, 12, 18, 18]):
+    for col, w in zip("ABCDEFGHI", [6, 30, 22, 12, 14, 12, 18, 18, 18]):
         ws.column_dimensions[col].width = w
 
     return wb

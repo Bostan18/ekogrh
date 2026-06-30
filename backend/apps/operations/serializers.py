@@ -58,6 +58,9 @@ class LogTravailSerializer(serializers.ModelSerializer):
     site_nom = serializers.CharField(source="site.nom", read_only=True)
     tache_libelle = serializers.CharField(source="tache.libelle", read_only=True)
     tache_unite = serializers.CharField(source="tache.unite_label", read_only=True)
+    mode_paiement_display = serializers.CharField(
+        source="get_mode_paiement_display", read_only=True
+    )
 
     class Meta:
         model = LogTravail
@@ -76,6 +79,8 @@ class LogTravailSerializer(serializers.ModelSerializer):
             "duree_heures",
             "rendement",
             "prime",
+            "mode_paiement",
+            "mode_paiement_display",
             "paye_le",
             "notes",
             "created_at",

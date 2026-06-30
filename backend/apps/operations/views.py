@@ -103,7 +103,7 @@ class LogTravailViewSet(viewsets.ModelViewSet):
             employe=log.employe,
             date=log.paye_le,
             montant=montant,
-            mode=request.data.get("mode", "especes"),
+            mode=log.mode_paiement,
             notes=f"Log #{log.id} — {log.tache.libelle}",
         )
 
