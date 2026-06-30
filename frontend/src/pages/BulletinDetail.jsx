@@ -17,13 +17,14 @@ export default function BulletinDetail() {
                 const { data } = await api.get("/rh/bulletins/" + id + "/");
                 setBulletin(data);
             } catch {
+                toast().error("Bulletin introuvable.");
                 navigate("/bulletins");
             } finally {
                 setLoading(false);
             }
         }
         load();
-    }, [id]);
+    }, [id, navigate]);
 
     async function marquerPaye() {
         setPaying(true);

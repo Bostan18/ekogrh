@@ -30,13 +30,14 @@ export default function EmployeDetail() {
                 const { data } = await api.get(`/rh/employes/${id}/`);
                 setEmploye(data);
             } catch {
+                toast().error("Employé introuvable.");
                 navigate("/employes");
             } finally {
                 setLoading(false);
             }
         }
         load();
-    }, [id]);
+    }, [id, navigate]);
 
     if (loading) {
         return <Spinner className="h-64" />;

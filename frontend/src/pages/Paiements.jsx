@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import api from "../api/client";
 import EmptyState from "../components/EmptyState";
 import { TableSkeleton } from "../components/Skeleton";
+import { toast } from "../store/toastStore";
 import { modeColors } from "../utils/constants";
 
 export default function Paiements() {
@@ -24,7 +25,7 @@ export default function Paiements() {
             setPaiements(pRes.data.results || pRes.data);
             setRestants(rRes.data);
         } catch (err) {
-            console.error(err);
+            toast().error("Erreur lors du chargement des paiements.");
         } finally {
             setLoading(false);
         }
@@ -122,7 +123,7 @@ export default function Paiements() {
                             <tr className="border-b border-border-light bg-sand-50">
                                 <th className="table-header">Employe</th>
                                 <th className="table-header text-right">
-                                    Total du
+                                    Total dû
                                 </th>
                                 <th className="table-header text-right">
                                     Total paye
@@ -148,16 +149,16 @@ export default function Paiements() {
                                         {r.employe_nom}
                                     </td>
                                     <td className="px-4 py-3 text-sm text-right">
-                                        {r.total_du.toLocaleString()} F
+                                        {(r.total_du ?? 0).toLocaleString()} F
                                     </td>
                                     <td className="px-4 py-3 text-sm text-right text-green-700">
-                                        {r.total_paye.toLocaleString()} F
+                                        {(r.total_paye ?? 0).toLocaleString()} F
                                     </td>
                                     <td className="px-4 py-3 text-sm text-right font-bold text-red-600">
-                                        {r.restant.toLocaleString()} F
+                                        {(r.restant ?? 0).toLocaleString()} F
                                     </td>
                                     <td className="px-4 py-3 text-sm text-center">
-                                        {r.jours_non_payes}
+                                        {r.jours_non_payes ?? 0}
                                     </td>
                                     <td className="px-4 py-3 text-center">
                                         <a

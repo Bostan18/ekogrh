@@ -1,6 +1,8 @@
 import { useState, useEffect, useCallback } from "react";
 import api from "../api/client";
+import EmptyState from "../components/EmptyState";
 import { TableSkeleton } from "../components/Skeleton";
+import { toast } from "../store/toastStore";
 
 function getLundi(date) {
     const d = new Date(date);
@@ -40,7 +42,7 @@ export default function PointageSemaine() {
             setData(data);
             setModified(new Set());
         } catch (err) {
-            console.error(err);
+            toast().error("Erreur lors du chargement de la semaine.");
         } finally {
             setLoading(false);
         }
@@ -126,7 +128,7 @@ export default function PointageSemaine() {
             setModified(new Set());
             load(semaine);
         } catch (err) {
-            console.error("Erreur sauvegarde:", err);
+            toast().error("Erreur lors de la sauvegarde.");
         } finally {
             setSaving(false);
         }
@@ -153,6 +155,21 @@ export default function PointageSemaine() {
                     <div className="h-9 bg-sand-100 rounded w-56 animate-shimmer" />
                 </div>
                 <TableSkeleton rows={6} cols={8} />
+            </div>
+        );
+    }
+
+    if (data && data.lignes.length === 0) {
+        return (
+            <div>
+                <div className="flex items-center justify-between mb-6">
+                    <h2 className="text-page-title text-ink">Pointage — Semaine</h2>
+                </div>
+                <EmptyState
+                    icon="logs"
+                    title="Aucun pointage cette semaine"
+                    description="Revenez sur la page de pointage journalier pour effectuer les saisies."
+                />
             </div>
         );
     }

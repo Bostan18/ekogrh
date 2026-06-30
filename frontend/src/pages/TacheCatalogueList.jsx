@@ -20,7 +20,7 @@ export default function TacheCatalogueList() {
             const { data } = await api.get("/operations/taches-catalogue/");
             setTaches(data.results || data);
         } catch (err) {
-            console.error(err);
+            toast().error("Erreur lors du chargement des tâches.");
         } finally {
             setLoading(false);
         }
@@ -69,7 +69,18 @@ export default function TacheCatalogueList() {
                         </tr>
                     </thead>
                     <tbody>
-                        {taches.map((t) => (
+                        {taches.length === 0 ? (
+                            <tr>
+                                <td colSpan={7}>
+                                    <EmptyState
+                                        icon="default"
+                                        title="Aucune tâche catalogue"
+                                        description="Créez des tâches depuis le module Opérations."
+                                        className="border-0 shadow-none"
+                                    />
+                                </td>
+                            </tr>
+                        ) : taches.map((t) => (
                             <tr key={t.id}>
                                 <td className="px-4 py-3 font-mono text-sm text-forest-600">
                                     {t.code}

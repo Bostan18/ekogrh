@@ -6,6 +6,7 @@ import {
     ExclamationIcon,
     CurrencyIcon,
 } from "../components/Icon";
+import { toast } from "../store/toastStore";
 import OnboardingChecklist from "../components/OnboardingChecklist";
 import { currentMonth, currentYear } from "../utils/constants";
 import DashboardSkeleton from "../components/dashboard/DashboardSkeleton";
@@ -56,7 +57,7 @@ export default function Dashboard() {
                     nbBulletins: paie.data.count || 0,
                 });
             } catch (err) {
-                console.error("Erreur chargement dashboard", err);
+                toast().error("Erreur lors du chargement du tableau de bord.");
             } finally {
                 setLoading(false);
             }
