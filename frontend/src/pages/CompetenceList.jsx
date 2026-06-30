@@ -32,6 +32,15 @@ export default function CompetenceList() {
 
     useEffect(() => { load(); }, []);
 
+    useEffect(() => {
+        if (!showCreate) return;
+        const max = items.reduce((m, i) => {
+            const n = parseInt((i.code || "").replace(/\D/g, ""), 10);
+            return n > m ? n : m;
+        }, 0);
+        setCreateForm((f) => ({ ...f, code: `COMP-${String(max + 1).padStart(3, "0")}` }));
+    }, [showCreate, items]);
+
     async function load() {
         setLoading(true);
         try {
@@ -73,8 +82,7 @@ export default function CompetenceList() {
         e.preventDefault();
         setSaving(true);
         try {
-            const { code, ...payload } = createForm;
-            await api.post("/rh/competences/", payload);
+            await api.post("/rh/competences/", createForm);
             setShowCreate(false);
             setCreateForm(INITIAL_FORM);
             toast().success("Compétence créée.");
