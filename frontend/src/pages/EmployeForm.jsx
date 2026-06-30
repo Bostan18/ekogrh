@@ -8,11 +8,16 @@ const INITIAL = {
     nom: "",
     prenom: "",
     type_contrat: "cdi",
+    categorie: "",
     poste: "",
     statut: "actif",
+    statut_marital: "celibataire",
+    date_naissance: "",
     date_entree: today(),
+    date_sortie: "",
     salaire_mensuel: "",
     taux_journalier: "",
+    nb_enfants: 0,
     telephone: "",
     email: "",
     adresse: "",
@@ -81,11 +86,16 @@ export default function EmployeForm() {
                     nom: data.nom || "",
                     prenom: data.prenom || "",
                     type_contrat: data.type_contrat || "cdi",
+                    categorie: data.categorie || "",
                     poste: data.poste || "",
                     statut: data.statut || "actif",
+                    statut_marital: data.statut_marital || "celibataire",
+                    date_naissance: data.date_naissance || "",
                     date_entree: data.date_entree || "",
+                    date_sortie: data.date_sortie || "",
                     salaire_mensuel: data.salaire_mensuel || "",
                     taux_journalier: data.taux_journalier || "",
+                    nb_enfants: data.nb_enfants ?? 0,
                     telephone: data.telephone || "",
                     email: data.email || "",
                     adresse: data.adresse || "",
@@ -211,6 +221,39 @@ export default function EmployeForm() {
                             <option value="conge">Congé</option>
                         </select>
                     </div>
+                    <div className="form-group">
+                        <label className="form-label">Catégorie</label>
+                        <select
+                            name="categorie"
+                            value={form.categorie}
+                            onChange={handleChange}
+                            className="select-field"
+                        >
+                            <option value="">— Sélectionner —</option>
+                            <option value="cadre_iv">Cadre IV</option>
+                            <option value="cadre_iii">Cadre III</option>
+                            <option value="cadre_ii">Cadre II</option>
+                            <option value="cadre_i">Cadre I</option>
+                            <option value="technicien_ii">Technicien II</option>
+                            <option value="technicien_i">Technicien I</option>
+                            <option value="support_ii">Support II</option>
+                            <option value="support_i">Support I</option>
+                            <option value="ouvrier">Ouvrier</option>
+                        </select>
+                    </div>
+                    <div className="form-group">
+                        <label className="form-label">Statut marital</label>
+                        <select
+                            name="statut_marital"
+                            value={form.statut_marital}
+                            onChange={handleChange}
+                            className="select-field"
+                        >
+                            <option value="celibataire">Célibataire</option>
+                            <option value="marie">Marié(e)</option>
+                            <option value="divorce">Divorcé(e)</option>
+                        </select>
+                    </div>
                     <InputField
                         label="Poste"
                         name="poste"
@@ -219,12 +262,26 @@ export default function EmployeForm() {
                         required
                     />
                     <InputField
+                        label="Date de naissance"
+                        name="date_naissance"
+                        type="date"
+                        value={form.date_naissance}
+                        onChange={handleChange}
+                    />
+                    <InputField
                         label="Date d'entrée"
                         name="date_entree"
                         type="date"
                         value={form.date_entree}
                         onChange={handleChange}
                         required
+                    />
+                    <InputField
+                        label="Date de sortie"
+                        name="date_sortie"
+                        type="date"
+                        value={form.date_sortie}
+                        onChange={handleChange}
                     />
                     <InputField
                         label="Salaire mensuel (FCFA)"
@@ -238,6 +295,14 @@ export default function EmployeForm() {
                         name="taux_journalier"
                         type="number"
                         value={form.taux_journalier}
+                        onChange={handleChange}
+                    />
+                    <InputField
+                        label="Nombre d'enfants"
+                        name="nb_enfants"
+                        type="number"
+                        min={0}
+                        value={form.nb_enfants}
                         onChange={handleChange}
                     />
                     <InputField
