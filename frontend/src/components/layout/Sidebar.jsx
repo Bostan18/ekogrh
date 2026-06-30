@@ -77,7 +77,7 @@ export default function Sidebar({ role, username, onLogout, onNavClick }) {
                 </div>
             </div>
 
-            <nav className="flex-1 px-3 py-4 space-y-5 overflow-hidden">
+            <nav className="flex-1 px-3 py-4 space-y-5 overflow-y-auto sidebar-scroll">
                 {NAV_SECTIONS.filter((s) => s.roles.includes(role)).map((section) => (
                     <div key={section.label}>
                         <p className="px-3 mb-1.5 text-[0.6875rem] font-bold text-sand-500 uppercase tracking-[0.1em]">

@@ -2,6 +2,17 @@
 @tailwind components;
 @tailwind utilities;
 
+/* ── Utilities ───────────────────────────────────── */
+@layer utilities {
+    .sidebar-scroll {
+        scrollbar-width: none;
+        -ms-overflow-style: none;
+    }
+    .sidebar-scroll::-webkit-scrollbar {
+        display: none;
+    }
+}
+
 /* ── Base layer defaults ─────────────────────────── */
 @layer base {
     body {
