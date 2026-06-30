@@ -11,7 +11,7 @@ export default function PointageToolbar({
     onCloturer,
 }) {
     return (
-        <div className="bg-white rounded-xl shadow-card border border-sand-100 p-4 mb-4">
+        <div className="bg-white rounded-card shadow-card border border-sand-100 p-4 mb-4">
             <div className="flex items-center gap-4 flex-wrap">
                 <div className="flex items-center gap-2">
                     <label className="text-sm font-medium text-sand-700">

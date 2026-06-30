@@ -161,7 +161,7 @@ export default function GlobalSearch() {
             <div className="fixed inset-0 bg-black/30" />
             <div
                 ref={containerRef}
-                className="relative w-full max-w-lg bg-white rounded-xl shadow-2xl border border-sand-200 overflow-hidden z-10"
+                className="relative w-full max-w-lg bg-white rounded-card shadow-2xl border border-sand-200 overflow-hidden z-10"
                 onClick={(e) => e.stopPropagation()}
             >
                 <div className="flex items-center gap-3 px-4 py-3 border-b border-sand-100">

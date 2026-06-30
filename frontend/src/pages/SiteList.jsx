@@ -109,7 +109,7 @@ export default function SiteList() {
             {showForm && (
                 <form
                     onSubmit={handleSubmit}
-                    className="bg-white rounded-xl shadow-card border border-sand-100 p-6 mb-6"
+                    className="bg-white rounded-card shadow-card border border-sand-100 p-6 mb-6"
                 >
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
                         <div>

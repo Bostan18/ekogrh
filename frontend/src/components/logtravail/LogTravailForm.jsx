@@ -4,7 +4,7 @@ export default function LogTravailForm({ form, onChange, employes, sites, taches
     const set = (field) => (e) => onChange({ ...form, [field]: e.target.value });
 
     return (
-        <form onSubmit={onSubmit} className="bg-white rounded-xl shadow-card border border-sand-100 p-6 mb-6">
+        <form onSubmit={onSubmit} className="bg-white rounded-card shadow-card border border-sand-100 p-6 mb-6">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
                 <div>
                     <label className="block text-xs font-semibold text-sand-500 uppercase mb-1">Employé</label>

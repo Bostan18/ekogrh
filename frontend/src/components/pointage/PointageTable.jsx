@@ -2,7 +2,7 @@ import PointageRow from "./PointageRow";
 
 export default function PointageTable({ journaliers, sites, onToggle, onFieldChange }) {
     return (
-        <div className="bg-white rounded-xl shadow-card border border-sand-100 overflow-hidden">
+        <div className="bg-white rounded-card shadow-card border border-sand-100 overflow-hidden">
             <table className="w-full table-ekogrh">
                 <thead>
                     <tr className="border-b border-sand-100 bg-sand-50">

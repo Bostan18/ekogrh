@@ -51,7 +51,7 @@ export default function PaymentModal({ items, onClose, onPaid }) {
     <div className="fixed inset-0 z-[80] flex items-center justify-center p-4" onClick={onClose}>
       <div className="fixed inset-0 bg-black/40" />
       <div
-        className="relative bg-white rounded-xl shadow-2xl border border-sand-200 w-full max-w-md max-h-[90vh] overflow-y-auto z-10"
+        className="relative bg-white rounded-modal shadow-2xl border border-sand-200 w-full max-w-md max-h-[90vh] overflow-y-auto z-10"
         onClick={(e) => e.stopPropagation()}
       >
         <div className="flex items-center justify-between p-5 border-b border-sand-100">

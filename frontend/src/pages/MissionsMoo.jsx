@@ -151,7 +151,7 @@ export default function MissionsMoo() {
 
             {/* Create form */}
             {showForm && (
-                <div className="bg-white rounded-xl shadow-card border border-sand-100 p-6 mb-6">
+                <div className="bg-white rounded-card shadow-card border border-sand-100 p-6 mb-6">
                     <h3 className="text-lg font-display font-semibold text-ink mb-4">
                         Nouvelle mission
                     </h3>

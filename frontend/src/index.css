@@ -415,6 +415,10 @@
     /* ▸ Table — base ekogrh */
     .table-ekogrh {
         @apply w-full text-body;
+        border-collapse: separate;
+        border-spacing: 0;
+        border-radius: 0.75rem;
+        overflow: hidden;
     }
     .table-ekogrh thead th {
         font-family: "Nunito", sans-serif;

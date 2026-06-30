@@ -4,7 +4,7 @@ function KpiCard({ label, value, Icon, color, to }) {
     const content = (
         <>
             <div className="flex items-center justify-between mb-4">
-                <span className={`inline-flex items-center justify-center w-11 h-11 rounded-xl ${color}`}>
+                <span className={`inline-flex items-center justify-center w-11 h-11 rounded-card ${color}`}>
                     <Icon className="w-5 h-5" />
                 </span>
                 {to && (

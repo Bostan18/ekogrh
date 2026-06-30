@@ -53,7 +53,7 @@ export default function BulletinDetail() {
             >
                 Retour aux bulletins
             </button>
-            <div className="bg-white rounded-xl shadow-card border border-sand-100 p-6 max-w-2xl">
+            <div className="bg-white rounded-card shadow-card border border-sand-100 p-6 max-w-2xl">
                 <div className="text-center mb-8 pb-6 border-b border-sand-100">
                     <h2 className="text-xl font-display font-bold text-forest-700">
                         EKOGRH

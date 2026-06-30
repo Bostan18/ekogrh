@@ -158,7 +158,7 @@ export default function JournalierList() {
                             )}
                         </div>
 
-                        <div className="bg-white rounded-xl shadow-card border border-sand-100 overflow-hidden">
+                        <div className="bg-white rounded-card shadow-card border border-sand-100 overflow-hidden">
                             <table className="w-full table-ekogrh table-striped">
                                 <thead>
                                     <tr className="border-b border-sand-100 bg-sand-50">
@@ -257,7 +257,7 @@ export default function JournalierList() {
                                 <Link
                                     key={emp.id}
                                     to={`/employes/${emp.id}`}
-                                    className="bg-white rounded-xl shadow-card border border-sand-100 p-5 hover:shadow-md transition-shadow"
+                                    className="bg-white rounded-card shadow-card border border-sand-100 p-5 hover:shadow-md transition-shadow"
                                 >
                                     <div className="flex items-start justify-between mb-3">
                                         <div>

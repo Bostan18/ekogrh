@@ -67,7 +67,7 @@ export default function TaskPayroll() {
                 </div>
             )}
 
-            <div className="bg-white rounded-xl shadow-card border border-sand-100 p-4 mb-6">
+            <div className="bg-white rounded-card shadow-card border border-sand-100 p-4 mb-6">
                 <div className="flex items-center gap-4 flex-wrap justify-between">
                     <div className="flex items-center gap-4 flex-wrap">
                         <div className="w-64">

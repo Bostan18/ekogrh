@@ -54,7 +54,7 @@ export default function EmployeDetail() {
                 ← Retour à la liste
             </button>
 
-            <div className="bg-white rounded-xl shadow-card border border-sand-100 p-6">
+            <div className="bg-white rounded-card shadow-card border border-sand-100 p-6">
                 <div className="flex items-start justify-between mb-6">
                     <div>
                         <div className="flex items-center gap-3">

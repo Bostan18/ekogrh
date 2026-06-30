@@ -63,7 +63,7 @@ export default function RetenueCategorieList() {
                 {retenues.map((r) => (
                     <div
                         key={r.id}
-                        className="bg-white rounded-xl shadow-card border border-sand-100 overflow-hidden"
+                        className="bg-white rounded-card shadow-card border border-sand-100 overflow-hidden"
                     >
                         {/* En-tête cliquable */}
                         <button

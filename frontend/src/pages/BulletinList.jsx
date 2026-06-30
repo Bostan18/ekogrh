@@ -128,7 +128,7 @@ export default function BulletinList() {
 
             {/* Panneau de sélection des employés */}
             {showSelect && (
-                <div className="bg-white rounded-xl shadow-card border border-forest-200 p-4 mb-4">
+                <div className="bg-white rounded-card shadow-card border border-forest-200 p-4 mb-4">
                     <p className="text-sm font-medium text-ink mb-3">
                         Sélectionnez les employés pour lesquels générer le
                         bulletin de {MOIS_NOMS_1[mois]} {annee} :
