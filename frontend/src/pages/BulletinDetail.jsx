@@ -119,6 +119,12 @@ export default function BulletinDetail() {
                         </tr>
                     </tfoot>
                 </table>
+                {bulletin.notes && (
+                    <div className="mb-4 p-3 bg-sand-50 rounded-lg text-sm text-sand-700">
+                        <span className="text-xs font-semibold text-sand-500 uppercase">Notes :</span>
+                        <p className="mt-1">{bulletin.notes}</p>
+                    </div>
+                )}
                 <div className="flex items-center justify-between pt-4 border-t border-sand-100">
                     <span
                         className={

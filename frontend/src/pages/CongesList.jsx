@@ -87,6 +87,9 @@ export default function CongesList() {
                                 <th className="table-header text-center">
                                     Jours
                                 </th>
+                                <th className="table-header">Motif</th>
+                                <th className="table-header">Approuvé par</th>
+                                <th className="table-header">Approuvé le</th>
                                 <th className="table-header">Statut</th>
                                 <th className="table-header">Actions</th>
                             </tr>
@@ -108,6 +111,15 @@ export default function CongesList() {
                                     </td>
                                     <td className="px-4 py-3 text-sm text-center">
                                         {c.nb_jours}
+                                    </td>
+                                    <td className="px-4 py-3 text-sm text-sand-600 max-w-[180px] truncate" title={c.motif}>
+                                        {c.motif || "—"}
+                                    </td>
+                                    <td className="px-4 py-3 text-sm text-sand-600">
+                                        {c.approuve_par || "—"}
+                                    </td>
+                                    <td className="px-4 py-3 text-sm text-sand-600">
+                                        {c.approuve_le || "—"}
                                     </td>
                                     <td className="px-4 py-3">
                                         <span
@@ -145,7 +157,7 @@ export default function CongesList() {
                             ))}
                             {conges.length === 0 && (
                                 <tr>
-                                    <td colSpan={7}>
+                                    <td colSpan={10}>
                                         <EmptyState
                                             icon="conges"
                                             title="Aucun congé trouvé"

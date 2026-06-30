@@ -6,6 +6,7 @@ import { toast } from "../store/toastStore";
 
 export default function SiteList() {
     const [sites, setSites] = useState([]);
+    const [employes, setEmployes] = useState([]);
     const [loading, setLoading] = useState(true);
     const [showForm, setShowForm] = useState(false);
     const [form, setForm] = useState({
@@ -13,6 +14,8 @@ export default function SiteList() {
         nom: "",
         type_site: "chantier",
         localisation: "",
+        responsable: "",
+        actif: true,
     });
     const [saving, setSaving] = useState(false);
     const [editingId, setEditingId] = useState(null);
@@ -31,6 +34,9 @@ export default function SiteList() {
 
     useEffect(() => {
         load();
+        api.get("/rh/employes/", { params: { statut: "actif" } })
+            .then(({ data }) => setEmployes(data.results || data))
+            .catch(() => {});
     }, []);
 
     async function load() {
@@ -63,6 +69,8 @@ export default function SiteList() {
                 nom: "",
                 type_site: "chantier",
                 localisation: "",
+                responsable: "",
+                actif: true,
             });
             load();
         } catch (err) {
@@ -78,6 +86,8 @@ export default function SiteList() {
             nom: site.nom,
             type_site: site.type_site,
             localisation: site.localisation || "",
+            responsable: site.responsable || "",
+            actif: site.actif,
         });
         setEditingId(site.id);
         setShowForm(true);
@@ -98,6 +108,8 @@ export default function SiteList() {
                             nom: "",
                             type_site: "chantier",
                             localisation: "",
+                            responsable: "",
+                            actif: true,
                         });
                     }}
                     className="px-4 py-2 bg-forest-500 hover:bg-forest-600 text-white text-sm font-medium rounded-lg transition-colors"
@@ -175,6 +187,48 @@ export default function SiteList() {
                                 className="w-full px-3 py-2 border border-sand-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-forest-500"
                             />
                         </div>
+                        <div>
+                            <label className="block text-xs font-semibold text-sand-500 uppercase mb-1">
+                                Responsable
+                            </label>
+                            <select
+                                value={form.responsable}
+                                onChange={(e) =>
+                                    setForm({
+                                        ...form,
+                                        responsable: e.target.value,
+                                    })
+                                }
+                                className="w-full px-3 py-2 border border-sand-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-forest-500"
+                            >
+                                <option value="">— Aucun —</option>
+                                {employes.map((e) => (
+                                    <option key={e.id} value={e.id}>
+                                        {e.nom_complet}
+                                    </option>
+                                ))}
+                            </select>
+                        </div>
+                        <div className="flex items-center gap-2 pt-6">
+                            <input
+                                type="checkbox"
+                                id="site-actif"
+                                checked={form.actif}
+                                onChange={(e) =>
+                                    setForm({
+                                        ...form,
+                                        actif: e.target.checked,
+                                    })
+                                }
+                                className="w-4 h-4 text-forest-500 border-sand-200 rounded focus:ring-forest-500"
+                            />
+                            <label
+                                htmlFor="site-actif"
+                                className="text-sm font-medium text-ink"
+                            >
+                                Site actif
+                            </label>
+                        </div>
                     </div>
                     <button
                         type="submit"
@@ -194,6 +248,8 @@ export default function SiteList() {
                             <th className="table-header">Nom</th>
                             <th className="table-header">Type</th>
                             <th className="table-header">Localisation</th>
+                            <th className="table-header">Responsable</th>
+                            <th className="table-header text-center">Actif</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -210,6 +266,16 @@ export default function SiteList() {
                                 </td>
                                 <td className="px-4 py-3 text-sm text-sand-600">
                                     {s.localisation || "—"}
+                                </td>
+                                <td className="px-4 py-3 text-sm text-sand-600">
+                                    {s.responsable_nom || "—"}
+                                </td>
+                                <td className="px-4 py-3 text-center">
+                                    {s.actif ? (
+                                        <span className="text-green-600 text-sm font-medium">✓</span>
+                                    ) : (
+                                        <span className="text-red-400 text-sm font-medium">✗</span>
+                                    )}
                                 </td>
                                 <td className="px-4 py-3">
                                     <button
@@ -229,7 +295,7 @@ export default function SiteList() {
                         ))}
                         {sites.length === 0 && (
                             <tr>
-                                <td colSpan={5}>
+                                <td colSpan={7}>
                                     <EmptyState
                                         icon="sites"
                                         title="Aucun site enregistré"

@@ -106,6 +106,38 @@ export default function EmployeDetail() {
                             label="N° CNPS"
                             value={employe.numero_cnps || "—"}
                         />
+                        <Info
+                            label="Catégorie"
+                            value={
+                                employe.categorie
+                                    ? employe.categorie
+                                          .replace("_", " ")
+                                          .toUpperCase()
+                                    : "—"
+                            }
+                        />
+                        <Info
+                            label="Date de naissance"
+                            value={employe.date_naissance || "—"}
+                        />
+                        <Info
+                            label="Statut marital"
+                            value={
+                                employe.statut_marital === "celibataire"
+                                    ? "Célibataire"
+                                    : employe.statut_marital === "marie"
+                                      ? "Marié(e)"
+                                      : employe.statut_marital === "divorce"
+                                        ? "Divorcé(e)"
+                                        : employe.statut_marital || "—"
+                            }
+                        />
+                        <Info
+                            label="Nombre d'enfants"
+                            value={
+                                employe.nb_enfants ?? "—"
+                            }
+                        />
                     </div>
                     <div className="space-y-4">
                         <h3 className="text-sm font-semibold text-sand-500 uppercase">
@@ -156,9 +188,18 @@ export default function EmployeDetail() {
                         >
                             Historique contrat
                         </Link>
-                        <button className="w-full px-4 py-2 border border-sand-200 hover:bg-sand-50 text-sand-700 text-sm font-medium rounded-lg transition-colors">
+                        <Link
+                            to={`/employes/${id}/certifications`}
+                            className="block w-full px-4 py-2 border border-sand-200 hover:bg-sand-50 text-sand-700 text-sm font-medium rounded-lg transition-colors text-center"
+                        >
                             Certifications
-                        </button>
+                        </Link>
+                        <Link
+                            to={`/employes/${id}/competences`}
+                            className="block w-full px-4 py-2 border border-sand-200 hover:bg-sand-50 text-sand-700 text-sm font-medium rounded-lg transition-colors text-center"
+                        >
+                            Compétences
+                        </Link>
                         <button
                             className="w-full px-4 py-2 border border-red-200 hover:bg-red-50 text-red-600 text-sm font-medium rounded-lg transition-colors"
                             onClick={handleDelete}

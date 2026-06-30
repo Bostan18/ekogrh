@@ -24,6 +24,9 @@ const LogTravailList = lazy(() => import("./pages/LogTravailList"));
 const HistoriqueContrats = lazy(() => import("./pages/HistoriqueContrats"));
 const TaskPayroll = lazy(() => import("./pages/TaskPayroll"));
 const RetenueCategorieList = lazy(() => import("./pages/RetenueCategorieList"));
+const CompetenceList = lazy(() => import("./pages/CompetenceList"));
+const CertificationList = lazy(() => import("./pages/CertificationList"));
+const CompetenceEmployeList = lazy(() => import("./pages/CompetenceEmployeList"));
 
 function PageLoader() {
     return <Spinner className="h-64" />;
@@ -213,6 +216,30 @@ export default function App() {
                         element={
                             <Suspense fallback={<PageLoader />}>
                                 <RetenueCategorieList />
+                            </Suspense>
+                        }
+                    />
+                    <Route
+                        path="competences"
+                        element={
+                            <Suspense fallback={<PageLoader />}>
+                                <CompetenceList />
+                            </Suspense>
+                        }
+                    />
+                    <Route
+                        path="employes/:id/certifications"
+                        element={
+                            <Suspense fallback={<PageLoader />}>
+                                <CertificationList />
+                            </Suspense>
+                        }
+                    />
+                    <Route
+                        path="employes/:id/competences"
+                        element={
+                            <Suspense fallback={<PageLoader />}>
+                                <CompetenceEmployeList />
                             </Suspense>
                         }
                     />

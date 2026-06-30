@@ -33,6 +33,7 @@ export default function TacheCatalogueList() {
             tarif_reference: t.tarif_reference || "",
             unite_label: t.unite_label,
             seuil: t.seuil || "",
+            actif: t.actif,
         });
     }
 
@@ -65,13 +66,14 @@ export default function TacheCatalogueList() {
                                 Tarif (FCFA)
                             </th>
                             <th className="table-header text-right">Seuil</th>
+                            <th className="table-header text-center">Actif</th>
                             <th className="table-header text-center">Action</th>
                         </tr>
                     </thead>
                     <tbody>
                         {taches.length === 0 ? (
                             <tr>
-                                <td colSpan={7}>
+                                <td colSpan={8}>
                                     <EmptyState
                                         icon="default"
                                         title="Aucune tâche catalogue"
@@ -144,6 +146,19 @@ export default function TacheCatalogueList() {
                                             />
                                         </td>
                                         <td className="px-4 py-3 text-center">
+                                            <input
+                                                type="checkbox"
+                                                checked={editForm.actif}
+                                                onChange={(e) =>
+                                                    setEditForm({
+                                                        ...editForm,
+                                                        actif: e.target.checked,
+                                                    })
+                                                }
+                                                className="w-4 h-4 text-forest-500 border-sand-200 rounded focus:ring-forest-500"
+                                            />
+                                        </td>
+                                        <td className="px-4 py-3 text-center">
                                             <button
                                                 onClick={saveEdit}
                                                 className="px-2 py-1 text-xs font-medium rounded bg-forest-500 text-white hover:bg-forest-600 mr-1"
@@ -182,6 +197,13 @@ export default function TacheCatalogueList() {
                                                       t.seuil,
                                                   ).toLocaleString()
                                                 : 0}
+                                        </td>
+                                        <td className="px-4 py-3 text-center">
+                                            {t.actif ? (
+                                                <span className="text-green-600 text-sm font-medium">✓</span>
+                                            ) : (
+                                                <span className="text-red-400 text-sm font-medium">✗</span>
+                                            )}
                                         </td>
                                         <td className="px-4 py-3 text-center">
                                             <button
