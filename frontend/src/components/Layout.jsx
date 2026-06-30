@@ -4,7 +4,7 @@ import useAuthStore from "../store/authStore";
 import useNotificationStore from "../store/notificationStore";
 import { MenuIcon, BellIcon, EmailIcon } from "./Icon";
 import Sidebar from "./layout/Sidebar";
-import ProfileDropdown from "./layout/ProfileDropdown";
+
 import NotificationDropdown from "./layout/NotificationDropdown";
 import MessageDropdown from "./layout/MessageDropdown";
 import Breadcrumb from "./Breadcrumb";
@@ -18,7 +18,7 @@ export default function Layout() {
     const navigate = useNavigate();
     const location = useLocation();
     const [sidebarOpen, setSidebarOpen] = useState(false);
-    const [profileOpen, setProfileOpen] = useState(false);
+
     const [notifOpen, setNotifOpen] = useState(false);
     const [messageOpen, setMessageOpen] = useState(false);
 
@@ -87,24 +87,6 @@ export default function Layout() {
                             </button>
                             {messageOpen && <MessageDropdown onClose={() => setMessageOpen(false)} />}
                         </div>
-                    </div>
-
-                    <div className="relative">
-                        <button onClick={() => setProfileOpen(!profileOpen)} className="flex items-center gap-2 hover:opacity-80 transition-opacity duration-fast">
-                            <div className="w-8 h-8 rounded-full bg-forest-500 flex items-center justify-center">
-                                <span className="text-xs font-bold text-white">{(user?.username || "U")[0].toUpperCase()}</span>
-                            </div>
-                            <span className="hidden md:block text-body-sm font-semibold text-ink">{user?.username || "Utilisateur"}</span>
-                        </button>
-
-                        {profileOpen && (
-                            <ProfileDropdown
-                                username={user?.username}
-                                role={role}
-                                onLogout={handleLogout}
-                                onClose={() => setProfileOpen(false)}
-                            />
-                        )}
                     </div>
                 </header>
 
