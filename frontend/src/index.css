@@ -419,17 +419,32 @@
     .table-ekogrh thead th {
         font-family: "Nunito", sans-serif;
         font-weight: 600;
+        border-top: 0;
         border-bottom: 1px solid rgba(151, 151, 151, 0.3);
+        font-size: .875rem;
+        line-height: 1;
+        white-space: nowrap;
     }
     .table-ekogrh tbody td {
         @apply px-[15px] py-[15px] align-middle;
+        font-size: .875rem;
+        line-height: 1;
+        white-space: nowrap;
+    }
+    .table-ekogrh td img {
+        width: 36px;
+        height: 36px;
+        border-radius: 100%;
+    }
+    .table-ekogrh td .badge {
+        margin-bottom: 0;
     }
 
     /* ▸ Table striped */
     .table-striped tbody tr:nth-of-type(odd) {
         background-color: #f0f1f6;
     }
-    .table-striped.table-ekogrh tbody tr:nth-of-type(even) {
+    .table-striped tbody tr:nth-of-type(even) {
         background-color: #ffffff;
     }
 

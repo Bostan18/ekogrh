@@ -54,7 +54,7 @@ export default function TacheCatalogueList() {
             <h2 className="text-page-title text-ink mb-6">Tâches catalogue</h2>
 
             <div className="card overflow-hidden">
-                <table className="w-full">
+                <table className="w-full table-ekogrh table-striped">
                     <thead>
                         <tr className="border-b border-border-light bg-sand-50">
                             <th className="table-header">Code</th>

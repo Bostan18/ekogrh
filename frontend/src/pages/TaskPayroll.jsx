@@ -113,7 +113,7 @@ export default function TaskPayroll() {
                 <Spinner className="h-48" />
             ) : data && data.lignes.length > 0 ? (
                 <div className="card overflow-hidden">
-                    <table className="w-full">
+                    <table className="w-full table-ekogrh table-striped">
                         <thead>
                             <tr className="border-b border-border-light bg-sand-50">
                                 <th className="table-header">Employé</th>

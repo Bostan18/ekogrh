@@ -159,7 +159,7 @@ export default function JournalierList() {
                         </div>
 
                         <div className="bg-white rounded-xl shadow-card border border-sand-100 overflow-hidden">
-                            <table className="w-full">
+                            <table className="w-full table-ekogrh table-striped">
                                 <thead>
                                     <tr className="border-b border-sand-100 bg-sand-50">
                                         <th className="text-left px-4 py-3 text-xs font-semibold text-sand-500 uppercase">

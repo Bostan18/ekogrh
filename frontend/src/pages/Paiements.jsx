@@ -58,7 +58,7 @@ export default function Paiements() {
                 <TableSkeleton rows={4} cols={6} />
             ) : tab === "paiements" ? (
                 <div className="card overflow-hidden">
-                    <table className="w-full">
+                    <table className="w-full table-ekogrh table-striped">
                         <thead>
                             <tr className="border-b border-border-light bg-sand-50">
                                 <th className="table-header">Date</th>
@@ -118,7 +118,7 @@ export default function Paiements() {
                 </div>
             ) : (
                 <div className="card overflow-hidden">
-                    <table className="w-full">
+                    <table className="w-full table-ekogrh">
                         <thead>
                             <tr className="border-b border-border-light bg-sand-50">
                                 <th className="table-header">Employe</th>

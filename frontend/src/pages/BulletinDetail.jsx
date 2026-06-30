@@ -79,7 +79,7 @@ export default function BulletinDetail() {
                         </p>
                     </div>
                 </div>
-                <table className="w-full mb-6">
+                <table className="w-full table-ekogrh mb-6">
                     <thead>
                         <tr className="border-b border-sand-100">
                             <th className="text-left py-2 text-xs font-semibold text-sand-500 uppercase">

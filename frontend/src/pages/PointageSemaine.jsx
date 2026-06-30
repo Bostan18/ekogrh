@@ -227,7 +227,7 @@ export default function PointageSemaine() {
             {/* Grid */}
             {data && (
                 <div className="card overflow-x-auto">
-                    <table className="w-full min-w-[700px]">
+                    <table className="w-full min-w-[700px] table-ekogrh">
                         <thead>
                             <tr className="border-b border-border-light bg-sand-50">
                                 <th className="table-header sticky left-0 bg-sand-50 z-10">
