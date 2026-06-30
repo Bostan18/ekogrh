@@ -76,6 +76,10 @@ export default {
                 // ▸ Bordures
                 "border-color": "rgba(151,151,151, 0.3)",
                 "border-light": "#e8e5df",
+
+                // ▸ Tableaux
+                "table-accent": "#f0f1f6",
+                "table-dark-bg": "#2a2b32",
             },
 
             // ──────────────────────────────────────────────

@@ -376,12 +376,43 @@
         @apply inline-flex items-center px-2.5 py-0.5 rounded-full text-caption font-semibold;
     }
 
+    /* ▸ Table — Bootstrap base */
+    .table {
+        margin-bottom: 0;
+    }
+    .table thead th {
+        border-top: 0;
+        border-bottom-width: 1px;
+        @apply font-semibold;
+    }
+    .table th,
+    .table td {
+        vertical-align: middle;
+        font-size: .875rem;
+        line-height: 1;
+        white-space: nowrap;
+    }
+    .table td img {
+        width: 36px;
+        height: 36px;
+        border-radius: 100%;
+    }
+    .table td .badge {
+        margin-bottom: 0;
+    }
+    .table.table-borderless,
+    .table.table-borderless tr,
+    .table.table-borderless td,
+    .table.table-borderless th {
+        border: none;
+    }
+
     /* ▸ Table header */
     .table-header {
         @apply text-left px-[15px] py-3 text-body-sm font-semibold text-sand-500 uppercase tracking-wider;
     }
 
-    /* ▸ Table — base */
+    /* ▸ Table — base ekogrh */
     .table-ekogrh {
         @apply w-full text-body;
     }
@@ -398,7 +429,7 @@
     .table-striped tbody tr:nth-of-type(odd) {
         background-color: #f0f1f6;
     }
-    .table-striped tbody tr:nth-of-type(even) {
+    .table-striped.table-ekogrh tbody tr:nth-of-type(even) {
         background-color: #ffffff;
     }
 
@@ -418,9 +449,6 @@
     }
     .table-dark.table-striped tbody tr:nth-of-type(odd) {
         background-color: rgba(255, 255, 255, 0.05);
-    }
-    .table-dark.table-striped tbody tr:nth-of-type(even) {
-        background-color: transparent;
     }
 }
 
