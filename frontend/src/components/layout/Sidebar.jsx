@@ -65,7 +65,7 @@ const linkClass = ({ isActive }) =>
 export default function Sidebar({ role, username, onLogout, onNavClick }) {
     return (
         <aside className="flex flex-col h-full bg-sidebar-dark text-white">
-            <div className="flex items-center gap-3 px-5 h-[navbar-h] shrink-0 border-b border-white/5">
+            <div className="flex items-center gap-3 px-5 h-navbar-h shrink-0 border-b border-white/5">
                 <div className="w-9 h-9 rounded-lg bg-forest-500 flex items-center justify-center flex-shrink-0">
                     <span className="text-white font-bold text-base">E</span>
                 </div>

@@ -139,11 +139,11 @@ export default function GlobalSearch() {
         return (
             <button
                 onClick={() => setOpen(true)}
-                className="hidden md:flex items-center gap-2.5 h-9 px-4 rounded-full bg-[#eef0fa] hover:bg-[#e4e8f3] border-0 transition-colors duration-fast w-[305px]"
+                className="hidden md:flex items-center gap-2.5 h-9 px-4 rounded-full bg-content-bg hover:bg-sand-100 border-0 transition-colors duration-fast w-[305px]"
                 title="Recherche rapide (Ctrl+K)"
             >
-                <SearchIcon className="w-[14px] h-[14px] text-[#8e94a9] flex-shrink-0" />
-                <span className="flex-1 text-left text-body-sm text-[#111111] font-normal">
+                <SearchIcon className="w-[14px] h-[14px] text-btn-secondary flex-shrink-0" />
+                <span className="flex-1 text-left text-body-sm text-ink font-normal">
                     Recherche rapide...
                 </span>
                 <kbd className="hidden sm:inline text-[10px] font-mono text-sand-400 bg-white/70 border border-sand-200 rounded px-1.5 py-0.5">
@@ -183,7 +183,7 @@ export default function GlobalSearch() {
                 <div className="max-h-80 overflow-y-auto">
                     {loading && (
                         <div className="flex items-center justify-center py-8">
-                            <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-forest-500"></div>
+                            <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-btn-primary"></div>
                         </div>
                     )}
 
@@ -211,7 +211,7 @@ export default function GlobalSearch() {
                                                 }
                                                 className={`w-full text-left px-4 py-2.5 flex items-center gap-3 text-sm transition-colors ${
                                                     idx === selectedIndex
-                                                        ? "bg-forest-50 text-forest-700"
+                                                        ? "bg-btn-primary/10 text-btn-primary"
                                                         : "hover:bg-sand-50 text-ink"
                                                 }`}
                                             >

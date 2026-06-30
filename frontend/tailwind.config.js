@@ -53,6 +53,12 @@ export default {
                 ink: "#1a1814",
                 "ink-secondary": "#5c5950",
 
+                // ▸ Statuts sémantiques (présence, notifications, indicateurs)
+                success: "#44ce42",
+                danger: "#fc5a5a",
+                warning: "#ffc542",
+                info: "#a461d8",
+
                 // ▸ Sidebar dark
                 "sidebar-dark": "#181824",
                 "sidebar-light": "#ffffff",
@@ -147,6 +153,7 @@ export default {
                     "0 10px 15px rgba(0,0,0,0.05), 0 4px 6px rgba(0,0,0,0.05)",
                 "elevation-4":
                     "0 20px 25px rgba(0,0,0,0.06), 0 10px 10px rgba(0,0,0,0.04)",
+                card: "0 1px 3px rgba(0,0,0,0.04), 0 1px 2px rgba(0,0,0,0.06)",
                 drawer: "-8px 0 40px rgba(0,0,0,0.12)",
                 modal: "0 25px 50px rgba(0,0,0,0.15)",
             },

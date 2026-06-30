@@ -50,7 +50,7 @@ export default function Layout() {
             </div>
 
             <main className="flex-1 overflow-y-auto flex flex-col">
-                <header className="flex items-center gap-3 h-[navbar-h] shrink-0 px-6 bg-card-bg border-b border-border-light z-10">
+                <header className="flex items-center gap-3 h-navbar-h shrink-0 px-6 bg-card-bg border-b border-border-light z-10">
                     <button onClick={() => setSidebarOpen(true)} className="lg:hidden text-sand-500 hover:text-ink transition-colors duration-fast" aria-label="Menu">
                         <MenuIcon className="w-5 h-5" />
                     </button>
