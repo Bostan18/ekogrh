@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { useParams, useNavigate } from "react-router-dom";
+import { useParams, useNavigate, Link } from "react-router-dom";
 import api from "../api/client";
 import { toast } from "../store/toastStore";
 import Spinner from "../components/Spinner";
@@ -69,17 +69,27 @@ export default function CompetenceEmployeList() {
 
             <div className="flex items-center justify-between mb-6">
                 <h2 className="text-page-title text-ink">Compétences — {employe.nom_complet}</h2>
-                <button onClick={() => setShowForm(!showForm)} disabled={available.length === 0} className="px-4 py-2 bg-forest-500 hover:bg-forest-600 disabled:bg-sand-300 text-white text-sm font-medium rounded-lg transition-colors">
+                <button onClick={() => setShowForm(!showForm)} className="px-4 py-2 bg-forest-500 hover:bg-forest-600 text-white text-sm font-medium rounded-lg transition-colors">
                     {showForm ? "Annuler" : "+ Ajouter"}
                 </button>
             </div>
 
             {showForm && (
                 <form onSubmit={handleSubmit} className="card p-6 mb-6">
+                    {available.length === 0 && competences.length > 0 && (
+                        <div className="mb-4 p-3 bg-gold-50 border border-gold-200 rounded-lg text-sm text-gold-700">
+                            Toutes les compétences du catalogue sont déjà attribuées à cet employé.
+                        </div>
+                    )}
+                    {competences.length === 0 && (
+                        <div className="mb-4 p-3 bg-gold-50 border border-gold-200 rounded-lg text-sm text-gold-700">
+                            Aucune compétence dans le catalogue. <Link to="/competences" className="underline font-semibold">Créez-en une</Link>.
+                        </div>
+                    )}
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
                         <div>
                             <label className="form-label">Compétence *</label>
-                            <select required value={form.competence} onChange={e => setForm({ ...form, competence: e.target.value })} className="select-field">
+                            <select required value={form.competence} onChange={e => setForm({ ...form, competence: e.target.value })} className="select-field" disabled={available.length === 0}>
                                 <option value="">— Sélectionner —</option>
                                 {available.map(c => <option key={c.id} value={c.id}>{c.code} — {c.libelle}</option>)}
                             </select>
@@ -97,7 +107,7 @@ export default function CompetenceEmployeList() {
                             <input value={form.notes} onChange={e => setForm({ ...form, notes: e.target.value })} className="input-field" />
                         </div>
                     </div>
-                    <button type="submit" disabled={saving} className="btn-primary">{saving ? "Enregistrement..." : "Ajouter"}</button>
+                    <button type="submit" disabled={saving || available.length === 0} className="btn-primary">{saving ? "Enregistrement..." : "Ajouter"}</button>
                 </form>
             )}
 
