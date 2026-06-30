@@ -1,19 +1,30 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Outlet, useNavigate, useLocation } from "react-router-dom";
 import useAuthStore from "../store/authStore";
-import { MenuIcon } from "./Icon";
+import useNotificationStore from "../store/notificationStore";
+import { MenuIcon, BellIcon, EmailIcon } from "./Icon";
 import Sidebar from "./layout/Sidebar";
 import ProfileDropdown from "./layout/ProfileDropdown";
+import NotificationDropdown from "./layout/NotificationDropdown";
+import MessageDropdown from "./layout/MessageDropdown";
 import Breadcrumb from "./Breadcrumb";
 import GlobalSearch from "./GlobalSearch";
 import ToastContainer from "./Toast";
 
 export default function Layout() {
     const { logout, user } = useAuthStore();
+    const { fetchAll, unreadNotifCount, unreadMsgCount } =
+        useNotificationStore();
     const navigate = useNavigate();
     const location = useLocation();
     const [sidebarOpen, setSidebarOpen] = useState(false);
     const [profileOpen, setProfileOpen] = useState(false);
+    const [notifOpen, setNotifOpen] = useState(false);
+    const [messageOpen, setMessageOpen] = useState(false);
+
+    useEffect(() => {
+        fetchAll();
+    }, [fetchAll]);
     const role = user?.role || "admin";
 
     const handleLogout = () => { logout(); navigate("/login"); };
@@ -55,6 +66,28 @@ export default function Layout() {
                     <div className="flex-1 lg:hidden" />
 
                     <GlobalSearch />
+
+                    <div className="flex items-center gap-1">
+                        <div className="relative">
+                            <button onClick={() => { setNotifOpen(!notifOpen); setMessageOpen(false); }} className="relative p-2 text-sand-500 hover:text-ink transition-colors duration-fast" aria-label="Notifications">
+                                <BellIcon className="w-5 h-5" />
+                                {unreadNotifCount > 0 && (
+                                    <span className="absolute top-1.5 right-1 w-2.5 h-2.5 bg-danger rounded-full border-2 border-card-bg animate-pulse-notif" />
+                                )}
+                            </button>
+                            {notifOpen && <NotificationDropdown onClose={() => setNotifOpen(false)} />}
+                        </div>
+
+                        <div className="relative">
+                            <button onClick={() => { setMessageOpen(!messageOpen); setNotifOpen(false); }} className="relative p-2 text-sand-500 hover:text-ink transition-colors duration-fast" aria-label="Messages">
+                                <EmailIcon className="w-5 h-5" />
+                                {unreadMsgCount > 0 && (
+                                    <span className="absolute top-1.5 right-1 w-2.5 h-2.5 bg-success rounded-full border-2 border-card-bg animate-pulse-notif" />
+                                )}
+                            </button>
+                            {messageOpen && <MessageDropdown onClose={() => setMessageOpen(false)} />}
+                        </div>
+                    </div>
 
                     <div className="relative">
                         <button onClick={() => setProfileOpen(!profileOpen)} className="flex items-center gap-2 hover:opacity-80 transition-opacity duration-fast">

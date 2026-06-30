@@ -1,7 +1,12 @@
 from django.db.models import Q
 from django.http import JsonResponse
-from rest_framework.decorators import api_view, permission_classes
+from rest_framework import status, viewsets
+from rest_framework.decorators import action, api_view, permission_classes
 from rest_framework.permissions import IsAuthenticated
+from rest_framework.response import Response
+
+from .models import Notification
+from .serializers import NotificationSerializer
 
 from apps.operations.models import Site
 from apps.rh.models import BulletinPaie, Employe, MissionMoo
@@ -143,3 +148,38 @@ def global_search(request):
         ]
 
     return JsonResponse({"results": results})
+
+
+class NotificationViewSet(viewsets.ReadOnlyModelViewSet):
+    serializer_class = NotificationSerializer
+    permission_classes = [IsAuthenticated]
+
+    def get_queryset(self):
+        return Notification.objects.filter(user=self.request.user)
+
+    @action(detail=True, methods=["post"])
+    def mark_read(self, request, pk=None):
+        notification = self.get_object()
+        notification.is_read = True
+        notification.save(update_fields=["is_read"])
+        return Response({"status": "ok"})
+
+    @action(detail=False, methods=["post"])
+    def mark_all_read(self, request):
+        self.get_queryset().filter(is_read=False).update(is_read=True)
+        return Response({"status": "ok"})
+
+    @action(detail=False, methods=["get"])
+    def unread_count(self, request):
+        total = self.get_queryset().filter(is_read=False).count()
+        notifications = self.get_queryset().filter(
+            is_read=False, type="notification"
+        ).count()
+        messages = self.get_queryset().filter(
+            is_read=False, type="message"
+        ).count()
+        return Response({
+            "total": total,
+            "notifications": notifications,
+            "messages": messages,
+        })

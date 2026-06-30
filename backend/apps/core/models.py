@@ -1,3 +1,4 @@
+from django.conf import settings
 from django.db import models, transaction
 
 
@@ -46,3 +47,39 @@ class CodeCounter(models.Model):
             counter.counter += 1
             counter.save(update_fields=["counter"])
             return fmt.format(prefix=prefix, num=counter.counter)
+
+
+class Notification(TimeStampedModel):
+    TYPE_CHOICES = [
+        ("notification", "Notification"),
+        ("message", "Message"),
+    ]
+
+    user = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.CASCADE,
+        related_name="notifications",
+        verbose_name="Utilisateur",
+    )
+    type = models.CharField(
+        max_length=20, choices=TYPE_CHOICES, default="notification"
+    )
+    title = models.CharField(max_length=255, verbose_name="Titre")
+    description = models.TextField(blank=True, verbose_name="Description")
+    icon = models.CharField(
+        max_length=50, blank=True, verbose_name="Icône",
+        help_text="Nom de l'icône (calendar, settings, account, etc.)",
+    )
+    link = models.CharField(
+        max_length=500, blank=True, verbose_name="Lien",
+        help_text="URL de redirection au clic",
+    )
+    is_read = models.BooleanField(default=False, verbose_name="Lu")
+
+    class Meta:
+        verbose_name = "Notification"
+        verbose_name_plural = "Notifications"
+        ordering = ["-created_at"]
+
+    def __str__(self):
+        return f"[{self.get_type_display()}] {self.title}"

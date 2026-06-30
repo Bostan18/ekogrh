@@ -63,6 +63,9 @@ export default {
                 "sidebar-dark": "#181824",
                 "sidebar-light": "#ffffff",
 
+                // ▸ Alias sémantiques
+                primary: "#181824",
+
                 // ▸ Backgrounds applicatifs
                 "content-bg": "#f0f2f5",
                 "card-bg": "#ffffff",
@@ -163,6 +166,16 @@ export default {
             },
             transitionTimingFunction: {
                 DEFAULT: "cubic-bezier(0.4, 0, 0.2, 1)",
+            },
+
+            keyframes: {
+                "pulse-notif": {
+                    "0%, 100%": { opacity: "1" },
+                    "50%": { opacity: "0.3" },
+                },
+            },
+            animation: {
+                "pulse-notif": "pulse-notif 3s ease-out infinite",
             },
         },
     },

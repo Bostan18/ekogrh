@@ -144,7 +144,7 @@ export default function GlobalSearch() {
             >
                 <SearchIcon className="w-[14px] h-[14px] text-[#8e94a9] flex-shrink-0" />
                 <span className="flex-1 text-left text-body-sm text-[#111111] font-normal">
-                    Search products
+                    Recherche rapide...
                 </span>
                 <kbd className="hidden sm:inline text-[10px] font-mono text-sand-400 bg-white/70 border border-sand-200 rounded px-1.5 py-0.5">
                     Ctrl+K

@@ -28,6 +28,7 @@ urlpatterns = [
     path("admin/", admin.site.urls),
     path("api/token/", TokenObtainPairView.as_view(), name="token_obtain_pair"),
     path("api/token/refresh/", TokenRefreshView.as_view(), name="token_refresh"),
+    path("api/core/", include("apps.core.urls")),
     path("api/rh/", include("apps.rh.urls")),
     path("api/operations/", include("apps.operations.urls")),
     path("api/search/", global_search, name="global_search"),
