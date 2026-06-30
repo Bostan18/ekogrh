@@ -20,7 +20,7 @@ export default function RetenueCategorieList() {
             const { data } = await api.get("/rh/retenues-categories/");
             setRetenues(data.results || data);
         } catch (err) {
-            console.error(err);
+            toast().error("Erreur lors du chargement des retenues.");
         } finally {
             setLoading(false);
         }
@@ -303,6 +303,188 @@ export default function RetenueCategorieList() {
                                                 disabled={saving === r.id}
                                             />
                                         </label>
+                                    </div>
+                                </div>
+
+                                {/* CN progressif */}
+                                <div>
+                                    <p className="text-xs font-semibold text-sand-500 uppercase mb-2">
+                                        CN — Contribution Nationale (barème progressif)
+                                    </p>
+                                    <div className="space-y-2">
+                                        {r.bareme_cn?.length > 0
+                                            ? r.bareme_cn.map((tranche, i) => (
+                                                  <div
+                                                      key={i}
+                                                      className="flex items-center gap-2"
+                                                  >
+                                                      <span className="text-xs text-sand-400 w-12">
+                                                          Tranche {i + 1}
+                                                      </span>
+                                                      <label className="text-xs text-sand-500">
+                                                          Seuil (FCFA)
+                                                          <input
+                                                              type="number"
+                                                              step="1"
+                                                              min="0"
+                                                              value={
+                                                                  tranche.seuil ??
+                                                                  ""
+                                                              }
+                                                              onChange={(e) => {
+                                                                  const bareme =
+                                                                      [
+                                                                          ...r.bareme_cn,
+                                                                      ];
+                                                                  bareme[i] = {
+                                                                      ...bareme[
+                                                                          i
+                                                                      ],
+                                                                      seuil:
+                                                                          e.target
+                                                                              .value ===
+                                                                          ""
+                                                                              ? null
+                                                                              : Number(
+                                                                                    e.target
+                                                                                        .value,
+                                                                                ),
+                                                                  };
+                                                                  save(
+                                                                      r.id,
+                                                                      "bareme_cn",
+                                                                      bareme,
+                                                                  );
+                                                              }}
+                                                              className="w-28 mt-1 px-2 py-1.5 border border-sand-200 rounded text-sm"
+                                                              disabled={
+                                                                  saving === r.id
+                                                              }
+                                                          />
+                                                      </label>
+                                                      <label className="text-xs text-sand-500">
+                                                          Taux (%)
+                                                          <input
+                                                              type="number"
+                                                              step="0.1"
+                                                              min="0"
+                                                              max="100"
+                                                              value={
+                                                                  tranche.taux
+                                                                      ? Number(
+                                                                            tranche.taux,
+                                                                        ) *
+                                                                          100
+                                                                      : ""
+                                                              }
+                                                              onChange={(e) => {
+                                                                  const bareme =
+                                                                      [
+                                                                          ...r.bareme_cn,
+                                                                      ];
+                                                                  bareme[i] = {
+                                                                      ...bareme[
+                                                                          i
+                                                                      ],
+                                                                      taux:
+                                                                          Number(
+                                                                              e
+                                                                                  .target
+                                                                                  .value,
+                                                                          ) /
+                                                                          100,
+                                                                  };
+                                                                  save(
+                                                                      r.id,
+                                                                      "bareme_cn",
+                                                                      bareme,
+                                                                  );
+                                                              }}
+                                                              className="w-20 mt-1 px-2 py-1.5 border border-sand-200 rounded text-sm"
+                                                              disabled={
+                                                                  saving === r.id
+                                                              }
+                                                          />
+                                                      </label>
+                                                      <label className="text-xs text-sand-500">
+                                                          Fixe (FCFA)
+                                                          <input
+                                                              type="number"
+                                                              step="1"
+                                                              min="0"
+                                                              value={
+                                                                  tranche.fixe ??
+                                                                  ""
+                                                              }
+                                                              onChange={(e) => {
+                                                                  const bareme =
+                                                                      [
+                                                                          ...r.bareme_cn,
+                                                                      ];
+                                                                  bareme[i] = {
+                                                                      ...bareme[
+                                                                          i
+                                                                      ],
+                                                                      fixe:
+                                                                          Number(
+                                                                              e
+                                                                                  .target
+                                                                                  .value,
+                                                                          ),
+                                                                  };
+                                                                  save(
+                                                                      r.id,
+                                                                      "bareme_cn",
+                                                                      bareme,
+                                                                  );
+                                                              }}
+                                                              className="w-24 mt-1 px-2 py-1.5 border border-sand-200 rounded text-sm"
+                                                              disabled={
+                                                                  saving === r.id
+                                                              }
+                                                          />
+                                                      </label>
+                                                      <button
+                                                          onClick={() => {
+                                                              const bareme =
+                                                                  r.bareme_cn.filter(
+                                                                      (_, j) =>
+                                                                          j !==
+                                                                          i,
+                                                                  );
+                                                              save(
+                                                                  r.id,
+                                                                  "bareme_cn",
+                                                                  bareme,
+                                                              );
+                                                          }}
+                                                          className="p-1 text-red-400 hover:text-red-600 text-xs"
+                                                      >
+                                                          ✕
+                                                      </button>
+                                                  </div>
+                                              ))
+                                            : null}
+                                        <button
+                                            onClick={() => {
+                                                const bareme = [
+                                                    ...(r.bareme_cn || []),
+                                                    {
+                                                        seuil: null,
+                                                        taux: 0,
+                                                        fixe: 0,
+                                                    },
+                                                ];
+                                                save(
+                                                    r.id,
+                                                    "bareme_cn",
+                                                    bareme,
+                                                );
+                                            }}
+                                            className="text-xs text-forest-600 hover:text-forest-800 font-medium"
+                                        >
+                                            + Ajouter une tranche
+                                        </button>
                                     </div>
                                 </div>
 

@@ -659,6 +659,15 @@ class RetenueCategorie(TimeStampedModel):
         verbose_name_plural = "Retenues par catégorie"
         ordering = ["type_contrat"]
 
+    def save(self, *args, **kwargs):
+        if not self.bareme_cn:
+            self.bareme_cn = [
+                {"seuil": 300_000, "taux": 0.015, "fixe": 0},
+                {"seuil": 600_000, "taux": 0.03, "fixe": 4_500},
+                {"seuil": None, "taux": 0.05, "fixe": 13_500},
+            ]
+        super().save(*args, **kwargs)
+
     def __str__(self):
         return f"{self.get_type_contrat_display()} — CNPS {self.taux_cnps_salarial} | IS {self.taux_is}"
 

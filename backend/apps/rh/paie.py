@@ -166,19 +166,7 @@ def calculer_bulletin(
 
     is_impot = _r(rni * taux_is)
 
-    # CN progressif avec seuil précédent
-    cn = 0.0
-    seuil_prec = 0.0
-    for tranche in bareme_cn:
-        seuil = tranche["seuil"]
-        if seuil is None or rni <= seuil:
-            cn = _r(tranche["fixe"] + (rni - seuil_prec) * tranche["taux"])
-            break
-        seuil_prec = seuil
-    if cn == 0.0 and bareme_cn:
-        # Au-dessus du dernier seuil (ne devrait pas arriver avec None)
-        last = bareme_cn[-1]
-        cn = _r(last["fixe"] + (rni - seuil_prec) * last["taux"])
+    cn = calculer_cn(rni, bareme_cn)
 
     igr = calculer_igr(rni, employe.parts_fiscales(), taux_igr, abatt_igr)
 

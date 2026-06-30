@@ -48,8 +48,8 @@
 
 | # | Tâche | Statut |
 |---|-------|--------|
-| 20 | Retenues sur salaire (CNPS) | ❌ |
-| 21 | Export CNPS | ❌ |
+| 20 | Retenues sur salaire (CNPS) | ✅ |
+| 21 | Export CNPS | ✅ |
 | 22 | Alertes et anomalies | ✅ |
 | 23 | Workflow validation pointage | ✅ |
 
