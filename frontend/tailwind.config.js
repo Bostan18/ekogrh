@@ -53,18 +53,21 @@ export default {
                 ink: "#1a1814",
                 "ink-secondary": "#5c5950",
 
-                // ▸ Fonctionnelles — sémantique claire
-                success: "#2d9f4e",
-                warning: "#d69e2e",
-                danger: "#e53e3e",
-                info: "#3182ce",
-
                 // ▸ Sidebar dark
                 "sidebar-dark": "#181824",
                 "sidebar-light": "#ffffff",
 
-                // ▸ Alias sémantiques
-                primary: "#181824",
+                // ▸ Thème boutons — Connect Plus (Nordic UI)
+                btn: {
+                    primary: "#0062ff",
+                    secondary: "#8e94a9",
+                    success: "#44ce42",
+                    info: "#a461d8",
+                    warning: "#ffc542",
+                    danger: "#fc5a5a",
+                    light: "#aab2bd",
+                    dark: "#001737",
+                },
 
                 // ▸ Backgrounds applicatifs
                 "content-bg": "#f0f2f5",

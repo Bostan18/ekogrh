@@ -37,7 +37,7 @@
 
 /* ── Component layer ─────────────────────────────── */
 @layer components {
-    /* ▸ Bouton primaire */
+    /* ▸ Bouton primaire — brand */
     .btn-primary {
         @apply inline-flex items-center justify-center
            px-3 py-[0.775rem]
@@ -60,35 +60,49 @@
            disabled:opacity-50 disabled:cursor-not-allowed;
     }
 
-    /* ▸ Bouton danger */
+    /* ▸ Boutons thème — fond plein */
     .btn-danger {
         @apply inline-flex items-center justify-center
            px-3 py-[0.775rem]
-           bg-danger hover:bg-red-600 active:bg-red-600
+           bg-btn-danger hover:bg-[#e04e4e] active:bg-[#d94444]
            text-white font-bold text-xs leading-none
-           rounded-btn border border-danger
+           rounded-btn border border-btn-danger
            transition-all duration-fast
            disabled:opacity-50 disabled:cursor-not-allowed;
     }
-
-    /* ▸ Bouton warning */
     .btn-warning {
         @apply inline-flex items-center justify-center
            px-3 py-[0.775rem]
-           bg-gold-500 hover:bg-gold-600 active:bg-gold-600
+           bg-btn-warning hover:bg-[#e6b23b] active:bg-[#dba834]
            text-white font-bold text-xs leading-none
-           rounded-btn border border-gold-500
+           rounded-btn border border-btn-warning
            transition-all duration-fast
            disabled:opacity-50 disabled:cursor-not-allowed;
     }
-
-    /* ▸ Bouton success */
     .btn-success {
         @apply inline-flex items-center justify-center
            px-3 py-[0.775rem]
-           bg-success hover:bg-green-600 active:bg-green-600
+           bg-btn-success hover:bg-[#3db93b] active:bg-[#36a835]
            text-white font-bold text-xs leading-none
-           rounded-btn border border-success
+           rounded-btn border border-btn-success
+           transition-all duration-fast
+           disabled:opacity-50 disabled:cursor-not-allowed;
+    }
+    .btn-info {
+        @apply inline-flex items-center justify-center
+           px-3 py-[0.775rem]
+           bg-btn-info hover:bg-[#9357c2] active:bg-[#854eb0]
+           text-white font-bold text-xs leading-none
+           rounded-btn border border-btn-info
+           transition-all duration-fast
+           disabled:opacity-50 disabled:cursor-not-allowed;
+    }
+    .btn-secondary {
+        @apply inline-flex items-center justify-center
+           px-3 py-[0.775rem]
+           bg-btn-secondary hover:bg-[#7e8497] active:bg-[#717688]
+           text-white font-bold text-xs leading-none
+           rounded-btn border border-btn-secondary
            transition-all duration-fast
            disabled:opacity-50 disabled:cursor-not-allowed;
     }
@@ -118,6 +132,189 @@
     .btn-icon {
         @apply w-[42px] h-[42px] p-0 inline-flex items-center justify-center text-xs;
     }
+
+    /* ▸ Bouton base — padding, font, border-radius partagés */
+    .btn {
+        @apply inline-flex items-center justify-center
+           px-3 py-[0.775rem]
+           text-sm font-bold leading-none
+           rounded-btn border
+           transition-all duration-fast
+           disabled:opacity-50 disabled:cursor-not-allowed;
+    }
+
+    /* ═══════════════════════════════════════════════════
+       ▸ Boutons inverses — fond transparent, texte coloré
+         hover → fond plein, texte blanc
+       ═══════════════════════════════════════════════════ */
+    .btn-inverse-primary {
+        background-color: rgba(0, 98, 255, 0.2);
+        background-image: none;
+        border-color: rgba(0, 98, 255, 0);
+        color: #0062ff; }
+    .btn-inverse-primary:not(.btn-inverse-light) { color: #0062ff; }
+    .btn-inverse-primary:hover {
+        color: #ffffff;
+        background-color: #0062ff;
+        border-color: #0062ff; }
+    .btn-inverse-primary:focus {
+        box-shadow: 0 0 0 3px rgba(0, 98, 255, 0.5); }
+    .btn-inverse-primary.disabled,
+    .btn-inverse-primary:disabled {
+        color: #0062ff;
+        background-color: transparent; }
+    .btn-inverse-primary.active,
+    .btn-inverse-primary:active {
+        color: #ffffff;
+        background-color: #0062ff;
+        border-color: #0062ff; }
+
+    .btn-inverse-secondary {
+        background-color: rgba(142, 148, 169, 0.2);
+        background-image: none;
+        border-color: rgba(142, 148, 169, 0);
+        color: #8e94a9; }
+    .btn-inverse-secondary:hover {
+        color: #ffffff;
+        background-color: #8e94a9;
+        border-color: #8e94a9; }
+    .btn-inverse-secondary:focus {
+        box-shadow: 0 0 0 3px rgba(142, 148, 169, 0.5); }
+    .btn-inverse-secondary.disabled,
+    .btn-inverse-secondary:disabled {
+        color: #8e94a9;
+        background-color: transparent; }
+    .btn-inverse-secondary.active,
+    .btn-inverse-secondary:active {
+        color: #ffffff;
+        background-color: #8e94a9;
+        border-color: #8e94a9; }
+
+    .btn-inverse-success {
+        background-color: rgba(68, 206, 66, 0.2);
+        background-image: none;
+        border-color: rgba(68, 206, 66, 0);
+        color: #44ce42; }
+    .btn-inverse-success:hover {
+        color: #ffffff;
+        background-color: #44ce42;
+        border-color: #44ce42; }
+    .btn-inverse-success:focus {
+        box-shadow: 0 0 0 3px rgba(68, 206, 66, 0.5); }
+    .btn-inverse-success.disabled,
+    .btn-inverse-success:disabled {
+        color: #44ce42;
+        background-color: transparent; }
+    .btn-inverse-success.active,
+    .btn-inverse-success:active {
+        color: #ffffff;
+        background-color: #44ce42;
+        border-color: #44ce42; }
+
+    .btn-inverse-info {
+        background-color: rgba(164, 97, 216, 0.2);
+        background-image: none;
+        border-color: rgba(164, 97, 216, 0);
+        color: #a461d8; }
+    .btn-inverse-info:hover {
+        color: #ffffff;
+        background-color: #a461d8;
+        border-color: #a461d8; }
+    .btn-inverse-info:focus {
+        box-shadow: 0 0 0 3px rgba(164, 97, 216, 0.5); }
+    .btn-inverse-info.disabled,
+    .btn-inverse-info:disabled {
+        color: #a461d8;
+        background-color: transparent; }
+    .btn-inverse-info.active,
+    .btn-inverse-info:active {
+        color: #ffffff;
+        background-color: #a461d8;
+        border-color: #a461d8; }
+
+    .btn-inverse-warning {
+        background-color: rgba(255, 197, 66, 0.2);
+        background-image: none;
+        border-color: rgba(255, 197, 66, 0);
+        color: #ffc542; }
+    .btn-inverse-warning:hover {
+        color: #ffffff;
+        background-color: #ffc542;
+        border-color: #ffc542; }
+    .btn-inverse-warning:focus {
+        box-shadow: 0 0 0 3px rgba(255, 197, 66, 0.5); }
+    .btn-inverse-warning.disabled,
+    .btn-inverse-warning:disabled {
+        color: #ffc542;
+        background-color: transparent; }
+    .btn-inverse-warning.active,
+    .btn-inverse-warning:active {
+        color: #ffffff;
+        background-color: #ffc542;
+        border-color: #ffc542; }
+
+    .btn-inverse-danger {
+        background-color: rgba(252, 90, 90, 0.2);
+        background-image: none;
+        border-color: rgba(252, 90, 90, 0);
+        color: #fc5a5a; }
+    .btn-inverse-danger:hover {
+        color: #ffffff;
+        background-color: #fc5a5a;
+        border-color: #fc5a5a; }
+    .btn-inverse-danger:focus {
+        box-shadow: 0 0 0 3px rgba(252, 90, 90, 0.5); }
+    .btn-inverse-danger.disabled,
+    .btn-inverse-danger:disabled {
+        color: #fc5a5a;
+        background-color: transparent; }
+    .btn-inverse-danger.active,
+    .btn-inverse-danger:active {
+        color: #ffffff;
+        background-color: #fc5a5a;
+        border-color: #fc5a5a; }
+
+    .btn-inverse-light {
+        background-color: rgba(170, 178, 189, 0.2);
+        background-image: none;
+        border-color: rgba(170, 178, 189, 0);
+        color: #aab2bd; }
+    .btn-inverse-light:hover {
+        color: #ffffff;
+        background-color: #aab2bd;
+        border-color: #aab2bd; }
+    .btn-inverse-light:focus {
+        box-shadow: 0 0 0 3px rgba(170, 178, 189, 0.5); }
+    .btn-inverse-light.disabled,
+    .btn-inverse-light:disabled {
+        color: #aab2bd;
+        background-color: transparent; }
+    .btn-inverse-light.active,
+    .btn-inverse-light:active {
+        color: #ffffff;
+        background-color: #aab2bd;
+        border-color: #aab2bd; }
+
+    .btn-inverse-dark {
+        background-color: rgba(0, 23, 55, 0.2);
+        background-image: none;
+        border-color: rgba(0, 23, 55, 0);
+        color: #001737; }
+    .btn-inverse-dark:hover {
+        color: #ffffff;
+        background-color: #001737;
+        border-color: #001737; }
+    .btn-inverse-dark:focus {
+        box-shadow: 0 0 0 3px rgba(0, 23, 55, 0.5); }
+    .btn-inverse-dark.disabled,
+    .btn-inverse-dark:disabled {
+        color: #001737;
+        background-color: transparent; }
+    .btn-inverse-dark.active,
+    .btn-inverse-dark:active {
+        color: #ffffff;
+        background-color: #001737;
+        border-color: #001737; }
 
     /* ▸ Form group — espacement vertical */
     .form-group {
